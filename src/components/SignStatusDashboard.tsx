@@ -3,12 +3,11 @@ import React from 'react'
 import AvailablityLineChart from './AvailbilityLineChart';
 import dynamic from 'next/dynamic';
 
-export interface Props {}
 
 const MapChart = dynamic(() => import("./MapChart"), { ssr:false })
 
 
-const SignStatusDashboard: React.FC<Props> = (props) => {
+const SignStatusDashboard: React.FC = () => {
 
     return (
         <>

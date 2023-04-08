@@ -9,12 +9,11 @@ import AvailablityLineChart from './AvailbilityLineChart';
 import dynamic from 'next/dynamic';
 import ActiveSigns from './ActiveSigns';
 
-export interface Props {}
 
 const MapChart = dynamic(() => import("./MapChart"), { ssr:false })
 
 
-const Overview: React.FC<Props> = (props) => {
+const Overview: React.FC = () => {
 
     return (
         <>
