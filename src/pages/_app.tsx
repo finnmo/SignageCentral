@@ -26,10 +26,7 @@ function MyApp({
         {layout}
       </SignedIn>
       <SignedOut>
-        {/* 
-          Non-authenticated visitors will be redirected
-          to the sign in page.
-        */}
+
         <RedirectToSignIn />
       </SignedOut>
     </ClerkProvider>
