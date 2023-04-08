@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from 'next/link'
+import { api } from "~/utils/api";
 
 
 
@@ -11,6 +12,10 @@ type Props = {
 
 
 const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: boolean, openSettingsPanel: any}> = (props: Props) =>{
+  
+
+  const {data} = api.sign.getAll.useQuery();
+
   
   const [openDashboards, setOpenDashboards] = useState(true);
   const [openComponents, setOpenComponents] = useState(false);
@@ -134,12 +139,14 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
             </span>
         </a>
         <div className={`mt-2 space-y-2 px-7 ${openComponents ? "" : "hidden"}`} role="menu" arial-label="Components">
-            <Link
-            href="/sign"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700"
-            >
-            University Blvd and Hayman Rd (soon)
-            </Link>
+            {data?.map((sign) => (
+                        <Link
+                            href={`/${sign.id}`}
+                            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700"
+                            key={sign.id}>
+                        {sign.name}
+                        </Link>
+                    ))} 
             <a
             href="#"
             role="menuitem"
