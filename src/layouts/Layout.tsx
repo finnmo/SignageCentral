@@ -33,7 +33,7 @@ function Layout({ children }: Props) {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(color) || null;
     if(saved){
-      value = typeof saved === "string" ? JSON.parse(saved) : "cyan";
+      value = typeof saved === "string" ? JSON.parse(saved)! : "cyan";
     }
   }
     return value;
