@@ -1,0 +1,183 @@
+
+import React, { useRef, useState } from "react";
+import classNames from "classnames";
+import Link from "next/link";
+import Image from "next/image";
+//import { useOnClickOutside } from "usehooks-ts";
+
+type Props = {
+    isDark: boolean;
+    setDarkMode: any;
+    setColors: any;
+    isSettingsPanelOpen: boolean;
+    openSettingsPanel: any;
+  }; 
+  
+const SettingsPanel: React.FunctionComponent<{ isDark: boolean, setDarkMode: any, setColors: any, isSettingsPanelOpen: boolean, openSettingsPanel: any}> = (props: Props) =>{
+    
+    const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        console.log(event.code);
+        if (event.code === "Escape") {
+          props.openSettingsPanel(false);
+        }
+      }
+  return (
+    <>
+    <div
+        // x-transition:enter="transition duration-300 ease-in-out"
+        // x-transition:enter-start="opacity-0"
+        // x-transition:enter-end="opacity-100"
+        // x-transition:leave="transition duration-300 ease-in-out"
+        // x-transition:leave-start="opacity-100"
+        //transition:leave-end="opacity-0"
+        onClick={() => props.openSettingsPanel(false)}
+        className={`fixed inset-0 z-10 bg-primary-darker opacity-50 ${
+            props.isSettingsPanelOpen ? "" : "hidden"}`}
+        aria-hidden="true"
+    ></div>
+    <section
+        // x-transition:enter="transition duration-300 ease-in-out transform sm:duration-500"
+        // x-transition:enter-start="translate-x-full"
+        // x-transition:enter-end="translate-x-0"
+        // x-transition:leave="transition duration-300 ease-in-out transform sm:duration-500"
+        // x-transition:leave-start="translate-x-0"
+        // x-transition:leave-end="translate-x-full"
+        tabIndex={-1}
+        //onKeyDown={keyDownHandler}
+        className={`fixed inset-y-0 right-0 z-20 w-full max-w-xs bg-white shadow-xl dark:bg-darker dark:text-light sm:max-w-md focus:outline-none ${
+            props.isSettingsPanelOpen ? "" : "hidden"}`}
+        aria-labelledby="settinsPanelLabel"
+    >
+        <div className="absolute left-0 p-2 transform -translate-x-full">
+        <button
+             onClick={() => props.openSettingsPanel(false)}
+            className="p-2 text-white rounded-md focus:outline-none focus:ring"
+        >
+            <svg
+            className="w-5 h-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        </div>
+        <div className="flex flex-col h-screen">
+        <div
+            className="flex flex-col items-center justify-center flex-shrink-0 px-4 py-8 space-y-4 border-b dark:border-primary-dark"
+        >
+            <span aria-hidden="true" className="text-gray-500 dark:text-primary">
+            <svg
+                className="w-8 h-8"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                />
+            </svg>
+            </span>
+            <h2 id="settinsPanelLabel" className="text-xl font-medium text-gray-500 dark:text-light">Settings</h2>
+        </div>
+        <div className="flex-1 overflow-hidden hover:overflow-y-auto">
+            <div className="p-4 space-y-4 md:p-8">
+            <h6 className="text-lg font-medium text-gray-400 dark:text-light">Mode</h6>
+            <div className="flex items-center space-x-8">
+                <button
+                onClick={() => props.setDarkMode(false)}
+                className={`flex items-center justify-center px-4 py-2 space-x-4 transition-colors border rounded-md hover:text-gray-900 hover:border-gray-900 dark:border-primary dark:hover:text-primary-100 dark:hover:border-primary-light focus:outline-none focus:ring focus:ring-primary-lighter focus:ring-offset-2 dark:focus:ring-offset-dark dark:focus:ring-primary-dark ${
+                    props.isDark ? "text-gray-500 dark:text-primary-light" : "border-gray-900 text-gray-900 dark:border-primary-light dark:text-primary-100"}`}
+                >
+                <span>
+                    <svg
+                    className="w-6 h-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                    />
+                    </svg>
+                </span>
+                <span>Light</span>
+                </button>
+
+                <button
+                onClick={() => props.setDarkMode(true)}
+                className={`flex items-center justify-center px-4 py-2 space-x-4 transition-colors border rounded-md hover:text-gray-900 hover:border-gray-900 dark:border-primary dark:hover:text-primary-100 dark:hover:border-primary-light focus:outline-none focus:ring focus:ring-primary-lighter focus:ring-offset-2 dark:focus:ring-offset-dark dark:focus:ring-primary-dark ${
+                    props.isDark ? "border-gray-900 text-gray-900 dark:border-primary-light dark:text-primary-100" : "text-gray-500 dark:text-primary-light"}`}
+                >
+                <span>
+                    <svg
+                    className="w-6 h-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                    />
+                    </svg>
+                </span>
+                <span>Dark</span>
+                </button>
+            </div>
+            </div>
+
+            <div className="p-4 space-y-4 md:p-8">
+            <h6 className="text-lg font-medium text-gray-400 dark:text-light">Colors</h6>
+            <div>
+                <button
+                onClick={() => {props.setColors('cyan'); localStorage.setItem("name", JSON.stringify(name));}}
+                className="w-10 h-10 rounded-full bg-cyan-500"
+                ></button>
+                <button
+                onClick={() => props.setColors('teal')}
+                className="w-10 h-10 rounded-full bg-teal-500"
+                ></button>
+                <button
+                onClick={() => props.setColors('green')}
+
+                className="w-10 h-10 rounded-full bg-green-500"
+                ></button>
+                <button
+                onClick={() => props.setColors('fuchsia')}
+
+                className="w-10 h-10 rounded-full bg-fuchsia-500"
+                ></button>
+                <button
+                onClick={() => props.setColors('blue')}
+
+                className="w-10 h-10 rounded-full bg-blue-500"
+                ></button>
+                <button
+                onClick={() => props.setColors('violet')}
+
+                className="w-10 h-10 rounded-full bg-violet-500"
+                ></button>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    </>
+
+)
+}
+export default SettingsPanel;
