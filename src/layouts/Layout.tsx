@@ -33,8 +33,8 @@ function Layout({ children }: Props) {
     let initial = "cyan";
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(color) || null;
-    if(saved){
-      initial = JSON.parse(saved).toString();
+    if(saved && typeof saved === 'string'){
+      initial = JSON.parse(saved);
     }else{
       initial = defaultValue
     }

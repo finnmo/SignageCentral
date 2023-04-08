@@ -1,5 +1,5 @@
 
-import React, {type Dispatch, type SetStateAction, useRef, useState } from "react";
+import React, {type Dispatch, type SetStateAction } from "react";
 
 //import { useOnClickOutside } from "usehooks-ts";
 import {UserButton } from "@clerk/nextjs";

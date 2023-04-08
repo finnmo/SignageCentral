@@ -11,7 +11,7 @@ const TwoColums = () => {
     let initial = false;
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(dark) || null;
-    if(saved){
+    if(saved && typeof saved === 'boolean'){
       initial = ((saved) === 'true');
     }else{
       initial = defaultValue
