@@ -1,4 +1,4 @@
-import React, {type Dispatch, SetStateAction, useState } from "react";
+import React, {type Dispatch, type SetStateAction, useState } from "react";
 //import { defaultNavItems } from "./defaultNavItems";
 //import { useOnClickOutside } from "usehooks-ts";
 import Image from "next/image";

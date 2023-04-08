@@ -30,11 +30,11 @@ function Layout({ children }: Props) {
   }
   function getColor(color: string, defaultValue: string) {
     // getting stored value
-    let initial: string = "cyan";
+    let initial = "cyan";
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(color) || null;
     if(saved){
-      initial = JSON.parse(saved);
+      initial = JSON.parse(saved).toString();
     }else{
       initial = defaultValue
     }

@@ -2,8 +2,7 @@
 import React, {type Dispatch, type SetStateAction, useRef, useState } from "react";
 
 //import { useOnClickOutside } from "usehooks-ts";
-import { useClerk, UserButton } from "@clerk/nextjs";
-import Image from "next/image";
+import {UserButton } from "@clerk/nextjs";
 
 type Props = {
     isDark: boolean;
@@ -18,15 +17,6 @@ type Props = {
 
 const Navbar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (isDark: boolean) => void, isNotificationPanelOpen: boolean, openNotificationPanel: Dispatch<SetStateAction<boolean>>, isSearchPanelOpen: boolean, openSearchPanel:Dispatch<SetStateAction<boolean>>, isSettingsPanelOpen: boolean, openSettingsPanel:Dispatch<SetStateAction<boolean>>}> = (props: Props) =>{
     
-    const { signOut } = useClerk();
-    
-    const ref = useRef<HTMLDivElement>(null);
-    // useOnClickOutside(ref, (e) => {
-    //     setUserMenu(false);
-    // });
-    
-    
-    const [userMenu, setUserMenu] = useState(false);
 
     return (
         <>

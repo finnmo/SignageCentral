@@ -8,7 +8,7 @@ const TwoColums = () => {
 
   function getTheme(dark: string, defaultValue: boolean) {
     // getting stored value
-    let initial: boolean = false;
+    let initial = false;
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(dark) || null;
     if(saved){
@@ -26,7 +26,7 @@ const TwoColums = () => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(color) || null;
     if(saved){
-      initial = JSON.parse(saved);
+      initial = JSON.parse(saved).toString();
     }else{
       initial = defaultValue
     }

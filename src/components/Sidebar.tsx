@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, Dispatch, SetStateAction } from "react";
+import React, {useState, type Dispatch, type SetStateAction } from "react";
 import Link from 'next/link'
 import { api } from "~/utils/api";
 
@@ -30,7 +30,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
     <>
     <div className="flex-shrink-0 hidden w-64 bg-white border-r dark:border-primary-darker dark:bg-darker md:block">
     <div className="flex flex-col h-full">
-    <nav aria-label="Main" className="flex-1 px-2 py-4 space-y-2 overflow-y-hidden hover:overflow-y-auto">
+    <nav className="flex-1 px-2 py-4 space-y-2 overflow-y-hidden hover:overflow-y-auto">
         <div>
         <a
             href="#"
@@ -107,7 +107,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
               }`}
             role="button"
             aria-haspopup="true"
-            aria-expanded={`${openComponents ? "true" : "false"}`}
+            //aria-expanded={`${openComponents ? "true" : "false"}`}
         >
             <span aria-hidden="true">
             <svg
@@ -187,7 +187,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
               }`}
             role="button"
             aria-haspopup="true"
-            aria-expanded={`${openComponents ? "true" : "false"}`}
+            //aria-expanded={`${openComponents ? "true" : "false"}`}
         >
             <span aria-hidden="true">
             <svg
@@ -271,7 +271,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
               }`}
             role="button"
             aria-haspopup="true"
-            aria-expanded={`${openAuthentication ? "true" : "false"}`}
+            //aria-expanded={`${openAuthentication ? "true" : "false"}`}
         >
             <span aria-hidden="true">
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -367,7 +367,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
               }`}
             role="button"
             aria-haspopup="true"
-            aria-expanded={`${openAuthentication ? "true" : "false"}`}
+            //aria-expanded={`${openAuthentication ? "true" : "false"}`}
         >
             <span aria-hidden="true">
             <svg
@@ -435,7 +435,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
               }`}
             role="button"
             aria-haspopup="true"
-            aria-expanded={`${openLayouts ? "true" : "false"}`}
+            //aria-expanded={`${openLayouts ? "true" : "false"}`}
         >
             <span aria-hidden="true">
             <svg
