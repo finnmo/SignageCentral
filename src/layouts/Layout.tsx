@@ -13,7 +13,7 @@ import Footer from "~/components/Footer";
 interface Props {
   children: React.ReactNode;
 }
-
+//force git commit
 function Layout({ children }: Props) {
 
   function getTheme(dark: string, defaultValue: boolean) {
