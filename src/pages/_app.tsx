@@ -30,8 +30,7 @@ function MyApp({
       </SignedOut>
     </ClerkProvider>
   );
-};
-
+}
 export default api.withTRPC(MyApp);
 
 

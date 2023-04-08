@@ -34,7 +34,7 @@ const LineChart: React.FunctionComponent=() =>{
     const computedStyle = getComputedStyle(document.documentElement);
     setBackgroundColor(computedStyle.getPropertyValue('--color-primary'));
 
-     })
+     }, [])
      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
      const preMadeData = months.map(() => faker.datatype.number({ min: 0, max: 100 }));
     const data = {
