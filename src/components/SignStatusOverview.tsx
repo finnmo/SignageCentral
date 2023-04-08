@@ -3,6 +3,8 @@ export interface Props {
     signName: string;
     signNumber: number;
 }
+
+
 const SignStatusOverview: React.FunctionComponent<{ signName: string, signNumber: number}> = (props: Props) =>{
     const [isOnline, setStatus] = useState("Online");
     
