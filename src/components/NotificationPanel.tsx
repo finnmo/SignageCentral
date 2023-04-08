@@ -1,7 +1,6 @@
 import React, {type Dispatch, SetStateAction, useState } from "react";
 //import { defaultNavItems } from "./defaultNavItems";
 //import { useOnClickOutside } from "usehooks-ts";
-import imageToAdd from "./../assets/images/avatar.jpg";
 import Image from "next/image";
 
 
@@ -181,7 +180,7 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
                     </div>
                     <div className="flex-1 overflow-hidden">
                         <h5 className="text-sm font-semibold text-gray-600 dark:text-light">
-                            New project "KWD Dashboard" created
+                            New project KWD Dashboard created
                         </h5>
                         <p className="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">
                             Looks like there might be a new theme soon
@@ -199,9 +198,10 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
             <div className="relative flex-shrink-0">
                 <span className="relative z-10 inline-block overflow-visible rounded-ful">
                 <Image
-                    className="object-cover rounded-full w-9 h-9"
-                    src={String(imageToAdd.src)}
+                    className="object-cover rounded-full "
+                    src={"/avatar.jpg"}
                     alt="Ahmed kamel"
+                    width={36} height={36} 
                 />
                 </span>
                 <div className="absolute h-24 p-px -mt-3 -ml-px bg-primary-50 left-1/2 dark:bg-primary-darker"></div>
@@ -220,9 +220,10 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
             <div className="relative flex-shrink-0">
                 <span className="relative z-10 inline-block overflow-visible rounded-ful">
                 <Image
-                    className="object-cover rounded-full w-9 h-9"
-                    src={String(imageToAdd.src)}
+                    className="object-cover rounded-full"
+                    src={"/avatar.jpg"}
                     alt="Ahmed kamel"
+                    width={36} height={36} 
                 />
                 </span>
                 <div className="absolute h-24 p-px -mt-3 -ml-px bg-primary-50 left-1/2 dark:bg-primary-darker"></div>
@@ -241,9 +242,10 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
             <div className="relative flex-shrink-0">
                 <span className="relative z-10 inline-block overflow-visible rounded-ful">
                 <Image
-                    className="object-cover rounded-full w-9 h-9"
-                    src={String(imageToAdd.src)}
+                    className="object-cover rounded-full "
+                    src={"/avatar.jpg"}
                     alt="Ahmed kamel"
+                    width={36} height={36} 
                 />
                 </span>
                 <div className="absolute h-24 p-px -mt-3 -ml-px bg-primary-50 left-1/2 dark:bg-primary-darker"></div>
@@ -263,9 +265,10 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
                       <div className="relative flex-shrink-0">
                         <span className="relative z-10 inline-block overflow-visible rounded-ful">
                           <Image
-                            className="object-cover rounded-full w-9 h-9"
-                            src={String(imageToAdd.src)}
+                            className="object-cover rounded-full"
+                            src={"/avatar.jpg"}
                             alt="Ahmed kamel"
+                            width={36} height={36} 
                           />
                         </span>
                         <div

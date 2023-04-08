@@ -1,8 +1,7 @@
 
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, { type Dispatch, type SetStateAction, useRef, useState } from "react";
 
 //import { useOnClickOutside } from "usehooks-ts";
-import imageToAdd from "~/assets/images/avatar.jpg";
 import Image from "next/image";
 
 type Props = {
@@ -199,7 +198,7 @@ const MobileSubMenu: React.FunctionComponent<{ isDark: boolean, setDarkMode: (is
         >
             <span className="sr-only">User menu</span>
             
-            <Image className="w-10 h-10 rounded-full" src={String(imageToAdd.src)} alt="Ahmed Kamel" />
+            <Image className="rounded-full" width={40} height={40} src={"/avatar-1.jpg"} alt="Ahmed Kamel" />
         </button>
 
         <div

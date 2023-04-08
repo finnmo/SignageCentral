@@ -1,9 +1,8 @@
 
 import React, {type Dispatch, type SetStateAction, useRef, useState } from "react";
 
-import imageToAdd from "~/assets/images/avatar.jpg";
 //import { useOnClickOutside } from "usehooks-ts";
-import { useClerk } from "@clerk/nextjs";
+import { useClerk, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 
 type Props = {
@@ -28,6 +27,7 @@ const Navbar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (isDark: b
     
     
     const [userMenu, setUserMenu] = useState(false);
+
     return (
         <>
         <a
@@ -148,60 +148,14 @@ const Navbar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (isDark: b
           />
       </svg>
       </button>
-  
-      <div className="relative" x-data="{ open: false }">
-      <button
-          onClick={() => setUserMenu(!userMenu)}
-          type="button"
-          aria-haspopup="true"
-          //:aria-expanded="open ? 'true' : 'false'"
-          className="transition-opacity duration-200 rounded-full dark:opacity-75 dark:hover:opacity-100 focus:outline-none focus:ring dark:focus:opacity-100"
-      >
-          <span className="sr-only">User menu</span>
-          <Image className="w-10 h-10 rounded-full" src={String(imageToAdd.src)} alt="Ahmed Kamel" />
-      </button>
-  
-      <div
-          //x-transition:enter="transition-all transform ease-out"
-          //x-transition:enter-start="translate-y-1/2 opacity-0"
-          //x-transition:enter-end="translate-y-0 opacity-100"
-          //x-transition:leave="transition-all transform ease-in"
-          //x-transition:leave-start="translate-y-0 opacity-100"
-          //x-transition:leave-end="translate-y-1/2 opacity-0"
-          //@keydown.escape="open = false"
-          ref={ref}
-          className={`absolute right-0 w-48 py-1 bg-white rounded-md shadow-lg top-12 ring-1 ring-black ring-opacity-5 dark:bg-dark focus:outline-none ${
-            userMenu ? "" : "hidden"
-          }`}
-          tabIndex={-1}
-          role="menu"
-          aria-orientation="vertical"
-          aria-label="User menu"
-      >
-          <a
-          href="#"
-          role="menuitem"
-          className="block px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:text-light dark:hover:bg-primary"
-          >
-          Your Profile
-          </a>
-          <a
-          href="#"
-          role="menuitem"
-          className="block px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:text-light dark:hover:bg-primary"
-          >
-          Settings
-          </a>
-          <a
-          href="#"
-          role="menuitem"
-          onClick={() => signOut()}
-          className="block px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:text-light dark:hover:bg-primary"
-          >
-          Logout
-          </a>
-      </div>
-      </div>
+      <UserButton 
+      appearance={{
+        elements: {
+            rootBox: 'p-2 transition-colors duration-200 rounded-full text-primary-lighter bg-primary-50 hover:text-primary hover:bg-primary-100 dark:hover:text-light dark:hover:bg-primary-dark dark:bg-dark focus:outline-none focus:bg-primary-100 dark:focus:bg-primary-dark focus:ring-primary-darker'
+        }
+
+      }
+      } />
       </nav>
       </>
 )

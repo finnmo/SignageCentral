@@ -105,7 +105,8 @@ const ActiveUsersChart: React.FunctionComponent=() =>{
           }
   
     const activeUsersChart = useRef<ChartJS>(null);
-    let randomUserCount = useRef(0);
+    const randomUserCount = useRef(0);
+    randomUserCount.current = faker.datatype.number({ min: 0, max: 100 });
 
     useEffect(() => {
       const computedStyle = getComputedStyle(document.documentElement);

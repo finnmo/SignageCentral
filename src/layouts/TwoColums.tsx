@@ -8,7 +8,7 @@ const TwoColums = () => {
 
   function getTheme(dark: string, defaultValue: boolean) {
     // getting stored value
-    let initial = false;
+    let initial: boolean = false;
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(dark) || null;
     if(saved){

@@ -1,8 +1,6 @@
-import React, { Dispatch } from "react";
+import React, { type Dispatch } from "react";
 //import { defaultNavItems } from "./defaultNavItems";
 //import { useOnClickOutside } from "usehooks-ts";
-import imageToAdd from "./../assets/images/avatar.jpg";
-import cover from "./../assets/images/cover.jpg";
 import Image from "next/image";
 
 type Props = {
@@ -84,7 +82,7 @@ const SearchPanel: React.FunctionComponent<{ isSearchPanelOpen: boolean, openSea
             <h3 className="py-2 text-sm font-semibold text-gray-600 dark:text-light">History</h3>
             <a href="#" className="flex space-x-4">
             <div className="flex-shrink-0">
-                <Image className="w-10 h-10 rounded-lg" src={String(cover)} alt="Post cover" />
+                <Image width={40} height={40} className="rounded-lg" src={"/cover.jpg"} alt="Post cover" />
             </div>
             <div className="flex-1 max-w-xs overflow-hidden">
                 <h4 className="text-sm font-semibold text-gray-600 dark:text-light">Header</h4>
@@ -96,7 +94,7 @@ const SearchPanel: React.FunctionComponent<{ isSearchPanelOpen: boolean, openSea
             </a>
             <a href="#" className="flex space-x-4">
             <div className="flex-shrink-0">
-                <Image className="w-10 h-10 rounded-lg" src={String(imageToAdd)} alt="Ahmed Kamel" />
+                <Image width={40} height={40} className="rounded-lg" src={"/avatar.jpg"} alt="Ahmed Kamel" />
             </div>
             <div className="flex-1 max-w-xs overflow-hidden">
                 <h4 className="text-sm font-semibold text-gray-600 dark:text-light">Ahmed Kamel</h4>
@@ -108,7 +106,7 @@ const SearchPanel: React.FunctionComponent<{ isSearchPanelOpen: boolean, openSea
             </a>
             <a href="#" className="flex space-x-4">
             <div className="flex-shrink-0">
-                <Image className="w-10 h-10 rounded-lg" src={String(cover)} alt="K-WD Dashboard" />
+                <Image width={40} height={40}  className="rounded-lg" src={"/cover-2.jpg"} alt="K-WD Dashboard" />
             </div>
             <div className="flex-1 max-w-xs overflow-hidden">
                 <h4 className="text-sm font-semibold text-gray-600 dark:text-light">K-WD Dashboard</h4>
@@ -121,7 +119,7 @@ const SearchPanel: React.FunctionComponent<{ isSearchPanelOpen: boolean, openSea
             <div x-for="i in 10" x-key="i">
             <a href="#" className="flex space-x-4">
                 <div className="flex-shrink-0">
-                <Image className="w-10 h-10 rounded-lg" src={String(cover)} alt="K-WD Dashboard" />
+                <Image width={40} height={40} className="rounded-lg" src={"/cover-3.jpg"} alt="K-WD Dashboard" />
                 </div>
                 <div className="flex-1 max-w-xs overflow-hidden">
                 <h4 className="text-sm font-semibold text-gray-600 dark:text-light">K-WD Dashboard</h4>

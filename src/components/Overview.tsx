@@ -1,4 +1,3 @@
-
 import React from 'react'
 import SignStatusOverview from './SignStatusOverview';
 import AvailablityLineChart from './AvailbilityLineChart';

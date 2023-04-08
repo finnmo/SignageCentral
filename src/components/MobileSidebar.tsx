@@ -1,5 +1,5 @@
 
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, { type Dispatch, type SetStateAction, useRef, useState } from "react";
 import Link from "next/link";
 //import { useOnClickOutside } from "usehooks-ts";
 

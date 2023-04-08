@@ -30,7 +30,7 @@ function Layout({ children }: Props) {
   }
   function getColor(color: string, defaultValue: string) {
     // getting stored value
-    let initial = "cyan";
+    let initial: string = "cyan";
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(color) || null;
     if(saved){
