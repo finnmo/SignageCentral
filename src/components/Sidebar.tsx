@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, Dispatch, SetStateAction } from "react";
 import Link from 'next/link'
 import { api } from "~/utils/api";
 
@@ -7,11 +7,11 @@ import { api } from "~/utils/api";
 type Props = {
     isDark: boolean;
     isSettingsPanelOpen: boolean;
-    openSettingsPanel: any;
+    openSettingsPanel: Dispatch<SetStateAction<boolean>>;
   }; 
 
 
-const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: boolean, openSettingsPanel: any}> = (props: Props) =>{
+const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: boolean, openSettingsPanel: Dispatch<SetStateAction<boolean>>;}> = (props: Props) =>{
   
 
   const {data} = api.sign.getAll.useQuery();
@@ -40,7 +40,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
               }`}
             role="button"
             aria-haspopup="true"
-            aria-expanded={`${openDashboards ? "true" : "false"}`}
+            //aria-expanded={${openDashboards}}
         >
             <span aria-hidden="true">
             <svg

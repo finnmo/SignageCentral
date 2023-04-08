@@ -4,9 +4,8 @@ export interface Props {
     signNumber: number;
 }
 
-
 const SignStatusOverview: React.FunctionComponent<{ signName: string, signNumber: number}> = (props: Props) =>{
-    const [isOnline, setStatus] = useState("Online");
+    const [isOnline] = useState("Online");
     
     return (
 <div className="flex items-center justify-between p-4 bg-white rounded-md dark:bg-darker">

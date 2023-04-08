@@ -8,7 +8,7 @@ const TwoColums = (props: PropsWithChildren) => {
 
   function getTheme(dark: string, defaultValue: boolean) {
     // getting stored value
-    var initial = false;
+    let initial = false;
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(dark) || null;
     if(saved){
@@ -22,7 +22,7 @@ const TwoColums = (props: PropsWithChildren) => {
   }
   function getColor(color: string, defaultValue: string) {
     // getting stored value
-    var initial = "cyan";
+    let initial = "cyan";
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(color) || null;
     if(saved){
@@ -37,15 +37,8 @@ const TwoColums = (props: PropsWithChildren) => {
 
   const [isDark, setDarkMode] = useState(getTheme('dark', false));
   const [loading, setLoading] = useState(true);
-  const [isNotificationPanelOpen, openNotificationPanel] = useState(false);
   const [isSettingsPanelOpen, openSettingsPanel] = useState(false);
   const [isSearchPanelOpen, openSearchPanel] = useState(false);
-  const [isMobileSubMenuOpen, openMobileSubMenu] = useState(false);
-  const [isMobileMainMenuOpen, openMobileMainMenu] = useState(false);
-
-
-  const [isOnLineChart, setIsOnLineChart] = useState(true);
-  const [isOnDoughnutChart, setIsOnDoughnutChart] = useState(true);
 
 
   const setColors = (color: string) => {
@@ -61,22 +54,6 @@ const TwoColums = (props: PropsWithChildren) => {
       localStorage.setItem('color', JSON.stringify(color));
     }
     //
-  }
-
-  const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log(event.code);
-    if (event.code === "Escape") {
-      openNotificationPanel(false);
-    }
-  }
-
-  const handleLineChartButton = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setIsOnLineChart(!isOnLineChart);
-    //$parent.updateDoughnutChart(isOn)
-  }
-  const handleDoughnutChartButton = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setIsOnDoughnutChart(!isOnDoughnutChart);
-    //$parent.updateDoughnutChart(isOn)
   }
   
   function handleDarkModeChange(isDark: boolean){
@@ -213,7 +190,7 @@ return (
           </div>
         </main>
         <SettingsPanel isDark={isDark} setDarkMode={handleDarkModeChange} setColors={setColors} isSettingsPanelOpen={isSettingsPanelOpen} openSettingsPanel={openSettingsPanel}/>
-        <SeachPanel isSearchPanelOpen={isSearchPanelOpen} openSearchPanel={openSearchPanel} keyDownHandler={keyDownHandler}></SeachPanel>
+        <SeachPanel isSearchPanelOpen={isSearchPanelOpen} openSearchPanel={openSearchPanel}></SeachPanel>
 
       </div>
     </div>

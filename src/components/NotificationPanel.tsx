@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, {Dispatch, SetStateAction, useState } from "react";
 //import { defaultNavItems } from "./defaultNavItems";
 //import { useOnClickOutside } from "usehooks-ts";
 import imageToAdd from "./../assets/images/avatar.jpg";
@@ -6,11 +6,11 @@ import imageToAdd from "./../assets/images/avatar.jpg";
 
 type Props = {
     isNotificationPanelOpen: boolean;
-    openNotificationPanel: any;
-    keyDownHandler: any;
+    openNotificationPanel: Dispatch<SetStateAction<boolean>>;
+    keyDownHandler: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   }; 
 
-const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: boolean, openNotificationPanel: any, keyDownHandler: any}> = (props: Props) =>{
+const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: boolean, openNotificationPanel: Dispatch<SetStateAction<boolean>>, keyDownHandler: (event: React.KeyboardEvent<HTMLDivElement>) => void}> = (props: Props) =>{
     const [activeTab, setActiveTab] = useState("action");
     return (
     <>
@@ -208,7 +208,7 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
             <div className="flex-1 overflow-hidden">
                 <h5 className="text-sm font-semibold text-gray-600 dark:text-light">Ahmed Kamel</h5>
                 <p className="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">
-                Shared new project "K-WD Dashboard"
+                Shared new project K-WD Dashboard
                 </p>
                 <span className="text-sm font-normal text-gray-400 dark:text-primary-light"> 1d ago </span>
             </div>
@@ -250,7 +250,7 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
             <div className="flex-1 overflow-hidden">
                 <h5 className="text-sm font-semibold text-gray-600 dark:text-light">Ahmed Kamel</h5>
                 <p className="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">
-                Release new version "K-WD Dashboard"
+                Release new version K-WD Dashboard
                 </p>
                 <span className="text-sm font-normal text-gray-400 dark:text-primary-light"> 20d ago </span>
             </div>

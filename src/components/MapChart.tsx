@@ -1,21 +1,15 @@
-import React, { Component, useState, useEffect } from "react";
-import { render } from "react-dom";
+import React, {useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
-import Leaflet from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 
 const MapChart: React.FunctionComponent=() =>{
     
     
-    const [isOnLineChart, setIsOnLineChart] = useState(true);
-    const [backgroundColor, setBackgroundColor] = useState<string>('');
-
+    const [isOnLineChart] = useState(true);
     useEffect(() => {
       // Client-side-only code
         const computedStyle = getComputedStyle(document.documentElement);
-        setBackgroundColor(computedStyle.getPropertyValue('--color-primary'));
-
-     })
+     }, [])
      
   
     const handleLineChartButton = (e: React.MouseEvent<HTMLButtonElement>) => {

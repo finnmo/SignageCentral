@@ -40,7 +40,7 @@ const ActiveUsersChart: React.FunctionComponent=() =>{
     setHoverBackgroundColor(computedStyle.getPropertyValue('--color-primary-dark'));
     setPrevYearBackgroundColor(computedStyle.getPropertyValue('--color-primary-100'));
 
-     })
+     }, [])
     
     function randomData(){
         return [faker.datatype.number({ min: 0, max: 100 }),
@@ -118,7 +118,7 @@ const ActiveUsersChart: React.FunctionComponent=() =>{
           }
   
     const activeUsersChart = useRef<ChartJS>(null);
-    var randomUserCount = 0;
+    let randomUserCount = 0;
 
     useEffect(() => {
       const interval = setInterval(() => {

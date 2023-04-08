@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { Dispatch } from "react";
 //import { defaultNavItems } from "./defaultNavItems";
 //import { useOnClickOutside } from "usehooks-ts";
 import imageToAdd from "./../assets/images/avatar.jpg";
@@ -6,11 +6,10 @@ import cover from "./../assets/images/cover.jpg";
 
 type Props = {
     isSearchPanelOpen: boolean;
-    openSearchPanel: any;
-    keyDownHandler: any;
+    openSearchPanel: Dispatch<React.SetStateAction<boolean>>;
   }; 
 
-const SearchPanel: React.FunctionComponent<{ isSearchPanelOpen: boolean, openSearchPanel: any, keyDownHandler: any}> = (props: Props) =>{
+const SearchPanel: React.FunctionComponent<{ isSearchPanelOpen: boolean, openSearchPanel: Dispatch<React.SetStateAction<boolean>>,}> = (props: Props) =>{
     return (
     <>
         <div

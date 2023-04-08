@@ -13,9 +13,6 @@ import {
 } from 'chart.js';
 import {
   Chart,
-  getDatasetAtEvent,
-  getElementAtEvent,
-  getElementsAtEvent,
 } from 'react-chartjs-2';
 
 
@@ -36,7 +33,7 @@ const AvailablityLineChart: React.FunctionComponent=() =>{
     const computedStyle = getComputedStyle(document.documentElement);
     setBackgroundColor(computedStyle.getPropertyValue('--color-primary'));
 
-     })
+     }, [])
      const months = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
      const preMadeData =  [5,5,5,4,5,3,5]
     const data = {
@@ -107,7 +104,7 @@ const AvailablityLineChart: React.FunctionComponent=() =>{
   
     const lineRef = useRef<ChartJS>(null);
   
-    const handleLineChartButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleLineChartButton = () => {
         const { current: chart } = lineRef;
         if(chart){
             setIsOnLineChart(!isOnLineChart);

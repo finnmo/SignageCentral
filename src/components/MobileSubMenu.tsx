@@ -1,21 +1,21 @@
 
-import React, { useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 
 //import { useOnClickOutside } from "usehooks-ts";
 import imageToAdd from "~/assets/images/avatar.jpg";
 
 type Props = {
     isDark: boolean;
-    setDarkMode: any;
+    setDarkMode: (isDark: boolean) => void;
     isMobileSubMenuOpen: boolean;
-    openMobileSubMenu: any;
+    openMobileSubMenu: Dispatch<SetStateAction<boolean>>;
     isNotificationPanelOpen: boolean;
-    openNotificationPanel: any;
-    openSettingsPanel: any;
-    openSearchPanel: any;
+    openNotificationPanel: Dispatch<SetStateAction<boolean>>;
+    openSettingsPanel: Dispatch<SetStateAction<boolean>>;
+    openSearchPanel: Dispatch<SetStateAction<boolean>>;
   }; 
   
-const MobileSubMenu: React.FunctionComponent<{ isDark: boolean, setDarkMode: any, isMobileSubMenuOpen: boolean, openMobileSubMenu: any, isNotificationPanelOpen: boolean, openNotificationPanel: any, openSettingsPanel: any, openSearchPanel:any}> = (props: Props) =>{
+const MobileSubMenu: React.FunctionComponent<{ isDark: boolean, setDarkMode: (isDark: boolean) => void, isMobileSubMenuOpen: boolean, openMobileSubMenu: Dispatch<SetStateAction<boolean>>, isNotificationPanelOpen: boolean, openNotificationPanel: Dispatch<SetStateAction<boolean>>, openSettingsPanel: Dispatch<SetStateAction<boolean>>, openSearchPanel: Dispatch<SetStateAction<boolean>>}> = (props: Props) =>{
     const [openUserMenu, setOpenUserMenu] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);

@@ -26,10 +26,7 @@ const ActiveSigns: React.FunctionComponent=() =>{
         Tooltip,
         Legend
       );
-    const [isOnDoughnutChart, setDoughnutChart] = useState(true);
     const [backgroundColor, setBackgroundColor] = useState<string>('');
-    const [hoverBackgroundColor, setHoverBackgroundColor] = useState<string>('');
-    const [prevYearBackgroundColor, setPrevYearBackgroundColor] = useState<string>('');
     const [usersCount, setUsersCount] = useState<string>('0');
 
 
@@ -37,8 +34,6 @@ const ActiveSigns: React.FunctionComponent=() =>{
       // Client-side-only code
     const computedStyle = getComputedStyle(document.documentElement);
     setBackgroundColor(computedStyle.getPropertyValue('--color-primary'));
-    setHoverBackgroundColor(computedStyle.getPropertyValue('--color-primary-dark'));
-    setPrevYearBackgroundColor(computedStyle.getPropertyValue('--color-primary-100'));
 
      })
     
@@ -118,7 +113,7 @@ const ActiveSigns: React.FunctionComponent=() =>{
           }
   
     const activeUsersChart = useRef<ChartJS>(null);
-    var randomUserCount = 0;
+    let randomUserCount = 0;
 
     useEffect(() => {
       const interval = setInterval(() => {

@@ -1,27 +1,18 @@
 
 import React, { useRef, useState, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import Layout from "~/layouts/Layout"
 //import { useOnClickOutside } from "usehooks-ts";
 import { faker } from '@faker-js/faker';
-import type { InteractionItem } from 'chart.js';
 
 import {
   Chart as ChartJS,
   LinearScale,
   CategoryScale,
   BarElement,
-  PointElement,
-  LineElement,
   Legend,
   Tooltip,
 } from 'chart.js';
 import {
   Chart,
-  getDatasetAtEvent,
-  getElementAtEvent,
-  getElementsAtEvent,
 } from 'react-chartjs-2';
 
 
@@ -48,7 +39,7 @@ import {
     setPrevYearBackgroundColor(computedStyle.getPropertyValue('--color-primary-100'));
     setPrevHoverYearBackgroundColor(computedStyle.getPropertyValue('--color-primary-100'));
 
-     })
+     }, [])
     
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
@@ -110,7 +101,7 @@ import {
 
   const chartRef = useRef<ChartJS>(null);
 
-  const handleBarChartButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleBarChartButton = () => {
     const { current: chart } = chartRef;
     if(chart){
       setPrevYear(!isPrevYear);

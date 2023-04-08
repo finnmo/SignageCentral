@@ -17,7 +17,7 @@ function Layout({ children }: Props) {
 
   function getTheme(dark: string, defaultValue: boolean) {
     // getting stored value
-    var initial = false;
+    let initial = false;
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(dark) || null;
     if(saved){
@@ -30,7 +30,7 @@ function Layout({ children }: Props) {
   }
   function getColor(color: string, defaultValue: string) {
     // getting stored value
-    var initial = "cyan";
+    let initial = "cyan";
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(color) || null;
     if(saved){
@@ -50,10 +50,6 @@ function Layout({ children }: Props) {
   const [isSearchPanelOpen, openSearchPanel] = useState<boolean>(false);
   const [isMobileSubMenuOpen, openMobileSubMenu] = useState<boolean>(false);
   const [isMobileMainMenuOpen, openMobileMainMenu] = useState<boolean>(false);
-
-
-  const [isOnLineChart, setIsOnLineChart] = useState<boolean>(true);
-  const [isOnDoughnutChart, setIsOnDoughnutChart] = useState<boolean>(true);
 
 
   const setColors = (color: string) => {
@@ -76,15 +72,6 @@ function Layout({ children }: Props) {
     if (event.code === "Escape") {
       openNotificationPanel(false);
     }
-  }
-
-  const handleLineChartButton = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setIsOnLineChart(!isOnLineChart);
-    //$parent.updateDoughnutChart(isOn)
-  }
-  const handleDoughnutChartButton = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setIsOnDoughnutChart(!isOnDoughnutChart);
-    //$parent.updateDoughnutChart(isOn)
   }
   
   function handleDarkModeChange(isDark: boolean){
@@ -152,7 +139,7 @@ function Layout({ children }: Props) {
             </div>
             <SettingsPanel isDark={isDark} setDarkMode={handleDarkModeChange} setColors={setColors} isSettingsPanelOpen={isSettingsPanelOpen} openSettingsPanel={openSettingsPanel}/>
             <NotificationPanel isNotificationPanelOpen={isNotificationPanelOpen} openNotificationPanel={openNotificationPanel} keyDownHandler={keyDownHandler}></NotificationPanel>
-            <SeachPanel isSearchPanelOpen={isSearchPanelOpen} openSearchPanel={openSearchPanel} keyDownHandler={keyDownHandler}></SeachPanel>
+            <SeachPanel isSearchPanelOpen={isSearchPanelOpen} openSearchPanel={openSearchPanel}></SeachPanel>
          </div>
         </div>
     </>

@@ -1,5 +1,5 @@
 
-import React, { useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 
 import imageToAdd from "~/assets/images/avatar.jpg";
 //import { useOnClickOutside } from "usehooks-ts";
@@ -7,16 +7,16 @@ import { useClerk } from "@clerk/nextjs";
 
 type Props = {
     isDark: boolean;
-    setDarkMode: any;
-    isNotificationPanelOpen: any;
-    openNotificationPanel: any;
+    setDarkMode: (isDark: boolean) => void;
+    isNotificationPanelOpen: boolean;
+    openNotificationPanel: Dispatch<SetStateAction<boolean>>;
     isSearchPanelOpen: boolean;
-    openSearchPanel: any;
+    openSearchPanel: Dispatch<SetStateAction<boolean>>;
     isSettingsPanelOpen: boolean;
-    openSettingsPanel: any;
+    openSettingsPanel: Dispatch<SetStateAction<boolean>>;
   }; 
 
-const Navbar: React.FunctionComponent<{ isDark: boolean, setDarkMode: any, isNotificationPanelOpen: boolean, openNotificationPanel: any, isSearchPanelOpen: boolean, openSearchPanel:any, isSettingsPanelOpen: boolean, openSettingsPanel:any}> = (props: Props) =>{
+const Navbar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (isDark: boolean) => void, isNotificationPanelOpen: boolean, openNotificationPanel: Dispatch<SetStateAction<boolean>>, isSearchPanelOpen: boolean, openSearchPanel:Dispatch<SetStateAction<boolean>>, isSettingsPanelOpen: boolean, openSettingsPanel:Dispatch<SetStateAction<boolean>>}> = (props: Props) =>{
     
     const { signOut } = useClerk();
     
