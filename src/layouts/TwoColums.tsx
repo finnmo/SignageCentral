@@ -20,18 +20,15 @@ const TwoColums = () => {
   
     return initial;
   }
-  function getColor(color: string, defaultValue: string) {
+  function getColor(color: string, value: string) {
     // getting stored value
-    let initial = "cyan";
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(color) || null;
     if(saved){
-      initial = JSON.parse(saved).toString();
-    }else{
-      initial = defaultValue
+      value = typeof saved === "string" ? JSON.parse(saved) : "cyan";
     }
   }
-    return initial;
+    return value;
   }
 
 

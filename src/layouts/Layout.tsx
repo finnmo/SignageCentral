@@ -28,18 +28,15 @@ function Layout({ children }: Props) {
   }
     return initial;
   }
-  function getColor(color: string, defaultValue: string) {
+  function getColor(color: string, value: string) {
     // getting stored value
-    let initial = "cyan";
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(color) || null;
-    if(saved && typeof saved === 'string'){
-      initial = JSON.parse(saved);
-    }else{
-      initial = defaultValue
+    if(saved){
+      value = typeof saved === "string" ? JSON.parse(saved) : "cyan";
     }
   }
-    return initial;
+    return value;
   }
 
 
