@@ -1,16 +1,16 @@
 
-import React from "react";
+import React, { type Dispatch, type SetStateAction } from "react";
 //import { useOnClickOutside } from "usehooks-ts";
 
 type Props = {
     isDark: boolean;
-    setDarkMode: any;
-    setColors: any;
+    setDarkMode: (isDark: boolean) => void;
+    setColors: (color: string) => void;
     isSettingsPanelOpen: boolean;
-    openSettingsPanel: any;
+    openSettingsPanel: Dispatch<SetStateAction<boolean>>;
   }; 
   
-const SettingsPanel: React.FunctionComponent<{ isDark: boolean, setDarkMode: any, setColors: any, isSettingsPanelOpen: boolean, openSettingsPanel: any}> = (props: Props) =>{
+const SettingsPanel: React.FunctionComponent<{ isDark: boolean, setDarkMode: (isDark: boolean) => void, setColors: (color: string) => void, isSettingsPanelOpen: boolean, openSettingsPanel: Dispatch<SetStateAction<boolean>>;}> = (props: Props) =>{
     
     const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
         console.log(event.code);
@@ -40,7 +40,7 @@ const SettingsPanel: React.FunctionComponent<{ isDark: boolean, setDarkMode: any
         // x-transition:leave-start="translate-x-0"
         // x-transition:leave-end="translate-x-full"
         tabIndex={-1}
-        //onKeyDown={keyDownHandler}
+        onKeyDown={keyDownHandler}
         className={`fixed inset-y-0 right-0 z-20 w-full max-w-xs bg-white shadow-xl dark:bg-darker dark:text-light sm:max-w-md focus:outline-none ${
             props.isSettingsPanelOpen ? "" : "hidden"}`}
         aria-labelledby="settinsPanelLabel"

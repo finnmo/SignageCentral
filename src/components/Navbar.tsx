@@ -1,9 +1,10 @@
 
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, {type Dispatch, type SetStateAction, useRef, useState } from "react";
 
 import imageToAdd from "~/assets/images/avatar.jpg";
 //import { useOnClickOutside } from "usehooks-ts";
 import { useClerk } from "@clerk/nextjs";
+import Image from "next/image";
 
 type Props = {
     isDark: boolean;
@@ -157,7 +158,7 @@ const Navbar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (isDark: b
           className="transition-opacity duration-200 rounded-full dark:opacity-75 dark:hover:opacity-100 focus:outline-none focus:ring dark:focus:opacity-100"
       >
           <span className="sr-only">User menu</span>
-          <img className="w-10 h-10 rounded-full" src={String(imageToAdd.src)} alt="Ahmed Kamel" />
+          <Image className="w-10 h-10 rounded-full" src={String(imageToAdd.src)} alt="Ahmed Kamel" />
       </button>
   
       <div

@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 //import { useOnClickOutside } from "usehooks-ts";
 import { faker } from '@faker-js/faker';
-import { ArcElement, InteractionItem } from 'chart.js';
+import { ArcElement } from 'chart.js';
 
 import {
     Chart as ChartJS,
@@ -26,21 +26,8 @@ const ActiveUsersChart: React.FunctionComponent=() =>{
         Tooltip,
         Legend
       );
-    const [isOnDoughnutChart, setDoughnutChart] = useState(true);
     const [backgroundColor, setBackgroundColor] = useState<string>('');
-    const [hoverBackgroundColor, setHoverBackgroundColor] = useState<string>('');
-    const [prevYearBackgroundColor, setPrevYearBackgroundColor] = useState<string>('');
     const [usersCount, setUsersCount] = useState<string>('0');
-
-
-    useEffect(() => {
-      // Client-side-only code
-    const computedStyle = getComputedStyle(document.documentElement);
-    setBackgroundColor(computedStyle.getPropertyValue('--color-primary'));
-    setHoverBackgroundColor(computedStyle.getPropertyValue('--color-primary-dark'));
-    setPrevYearBackgroundColor(computedStyle.getPropertyValue('--color-primary-100'));
-
-     }, [])
     
     function randomData(){
         return [faker.datatype.number({ min: 0, max: 100 }),
@@ -118,14 +105,17 @@ const ActiveUsersChart: React.FunctionComponent=() =>{
           }
   
     const activeUsersChart = useRef<ChartJS>(null);
-    let randomUserCount = 0;
+    let randomUserCount = useRef(0);
 
     useEffect(() => {
+      const computedStyle = getComputedStyle(document.documentElement);
+      setBackgroundColor(computedStyle.getPropertyValue('--color-primary'));
+  
       const interval = setInterval(() => {
         const { current: chart } = activeUsersChart;
         if(chart && chart.data.datasets[0]){
-          randomUserCount = faker.datatype.number({ min: 0, max: 100 });
-          setUsersCount(randomUserCount.toString());
+          randomUserCount.current = faker.datatype.number({ min: 0, max: 100 });
+          setUsersCount(randomUserCount.current.toString());
           chart.data.datasets[0].data.splice(0, 1)
           chart.update()
 

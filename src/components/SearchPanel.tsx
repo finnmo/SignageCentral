@@ -3,6 +3,7 @@ import React, { Dispatch } from "react";
 //import { useOnClickOutside } from "usehooks-ts";
 import imageToAdd from "./../assets/images/avatar.jpg";
 import cover from "./../assets/images/cover.jpg";
+import Image from "next/image";
 
 type Props = {
     isSearchPanelOpen: boolean;
@@ -83,7 +84,7 @@ const SearchPanel: React.FunctionComponent<{ isSearchPanelOpen: boolean, openSea
             <h3 className="py-2 text-sm font-semibold text-gray-600 dark:text-light">History</h3>
             <a href="#" className="flex space-x-4">
             <div className="flex-shrink-0">
-                <img className="w-10 h-10 rounded-lg" src={String(cover)} alt="Post cover" />
+                <Image className="w-10 h-10 rounded-lg" src={String(cover)} alt="Post cover" />
             </div>
             <div className="flex-1 max-w-xs overflow-hidden">
                 <h4 className="text-sm font-semibold text-gray-600 dark:text-light">Header</h4>
@@ -95,7 +96,7 @@ const SearchPanel: React.FunctionComponent<{ isSearchPanelOpen: boolean, openSea
             </a>
             <a href="#" className="flex space-x-4">
             <div className="flex-shrink-0">
-                <img className="w-10 h-10 rounded-lg" src={String(imageToAdd)} alt="Ahmed Kamel" />
+                <Image className="w-10 h-10 rounded-lg" src={String(imageToAdd)} alt="Ahmed Kamel" />
             </div>
             <div className="flex-1 max-w-xs overflow-hidden">
                 <h4 className="text-sm font-semibold text-gray-600 dark:text-light">Ahmed Kamel</h4>
@@ -107,7 +108,7 @@ const SearchPanel: React.FunctionComponent<{ isSearchPanelOpen: boolean, openSea
             </a>
             <a href="#" className="flex space-x-4">
             <div className="flex-shrink-0">
-                <img className="w-10 h-10 rounded-lg" src={String(cover)} alt="K-WD Dashboard" />
+                <Image className="w-10 h-10 rounded-lg" src={String(cover)} alt="K-WD Dashboard" />
             </div>
             <div className="flex-1 max-w-xs overflow-hidden">
                 <h4 className="text-sm font-semibold text-gray-600 dark:text-light">K-WD Dashboard</h4>
@@ -120,7 +121,7 @@ const SearchPanel: React.FunctionComponent<{ isSearchPanelOpen: boolean, openSea
             <div x-for="i in 10" x-key="i">
             <a href="#" className="flex space-x-4">
                 <div className="flex-shrink-0">
-                <img className="w-10 h-10 rounded-lg" src={String(cover)} alt="K-WD Dashboard" />
+                <Image className="w-10 h-10 rounded-lg" src={String(cover)} alt="K-WD Dashboard" />
                 </div>
                 <div className="flex-1 max-w-xs overflow-hidden">
                 <h4 className="text-sm font-semibold text-gray-600 dark:text-light">K-WD Dashboard</h4>

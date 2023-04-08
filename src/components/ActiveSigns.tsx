@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 //import { useOnClickOutside } from "usehooks-ts";
 import { faker } from '@faker-js/faker';
-import { ArcElement, InteractionItem } from 'chart.js';
+import { ArcElement } from 'chart.js';
 
 import {
     Chart as ChartJS,
@@ -28,14 +28,6 @@ const ActiveSigns: React.FunctionComponent=() =>{
       );
     const [backgroundColor, setBackgroundColor] = useState<string>('');
     const [usersCount, setUsersCount] = useState<string>('0');
-
-
-    useEffect(() => {
-      // Client-side-only code
-    const computedStyle = getComputedStyle(document.documentElement);
-    setBackgroundColor(computedStyle.getPropertyValue('--color-primary'));
-
-     })
     
     function randomData(){
         return [faker.datatype.number({ min: 0, max: 100 }),
@@ -113,14 +105,18 @@ const ActiveSigns: React.FunctionComponent=() =>{
           }
   
     const activeUsersChart = useRef<ChartJS>(null);
-    let randomUserCount = 0;
+    const randomUserCount = useRef(0);
 
     useEffect(() => {
+            // Client-side-only code
+      const computedStyle = getComputedStyle(document.documentElement);
+      setBackgroundColor(computedStyle.getPropertyValue('--color-primary'));
+
       const interval = setInterval(() => {
         const { current: chart } = activeUsersChart;
         if(chart && chart.data.datasets[0]){
-          randomUserCount = faker.datatype.number({ min: 0, max: 100 });
-          setUsersCount(randomUserCount.toString());
+          randomUserCount.current = faker.datatype.number({ min: 0, max: 100 });
+          setUsersCount(randomUserCount.current.toString());
           chart.data.datasets[0].data.splice(0, 1)
           chart.update()
 

@@ -1,7 +1,8 @@
-import React, {Dispatch, SetStateAction, useState } from "react";
+import React, {type Dispatch, SetStateAction, useState } from "react";
 //import { defaultNavItems } from "./defaultNavItems";
 //import { useOnClickOutside } from "usehooks-ts";
 import imageToAdd from "./../assets/images/avatar.jpg";
+import Image from "next/image";
 
 
 type Props = {
@@ -109,7 +110,7 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
             </div>
             <div className="flex-1 overflow-hidden">
                 <h5 className="text-sm font-semibold text-gray-600 dark:text-light">
-                New project "KWD Dashboard" created
+                New project KWD Dashboard created
                 </h5>
                 <p className="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">
                 Looks like there might be a new theme soon
@@ -197,7 +198,7 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
             <div className="flex px-4 space-x-4">
             <div className="relative flex-shrink-0">
                 <span className="relative z-10 inline-block overflow-visible rounded-ful">
-                <img
+                <Image
                     className="object-cover rounded-full w-9 h-9"
                     src={String(imageToAdd.src)}
                     alt="Ahmed kamel"
@@ -218,7 +219,7 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
             <div className="flex px-4 space-x-4">
             <div className="relative flex-shrink-0">
                 <span className="relative z-10 inline-block overflow-visible rounded-ful">
-                <img
+                <Image
                     className="object-cover rounded-full w-9 h-9"
                     src={String(imageToAdd.src)}
                     alt="Ahmed kamel"
@@ -239,7 +240,7 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
             <div className="flex px-4 space-x-4">
             <div className="relative flex-shrink-0">
                 <span className="relative z-10 inline-block overflow-visible rounded-ful">
-                <img
+                <Image
                     className="object-cover rounded-full w-9 h-9"
                     src={String(imageToAdd.src)}
                     alt="Ahmed kamel"
@@ -261,7 +262,7 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
                     <div className="flex px-4 space-x-4">
                       <div className="relative flex-shrink-0">
                         <span className="relative z-10 inline-block overflow-visible rounded-ful">
-                          <img
+                          <Image
                             className="object-cover rounded-full w-9 h-9"
                             src={String(imageToAdd.src)}
                             alt="Ahmed kamel"
@@ -274,7 +275,7 @@ const NotificationPanel: React.FunctionComponent<{ isNotificationPanelOpen: bool
                       <div className="flex-1 overflow-hidden">
                         <h5 className="text-sm font-semibold text-gray-600 dark:text-light">Ahmed Kamel</h5>
                         <p className="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">
-                          Release new version "K-WD Dashboard"
+                          Release new version K-WD Dashboard
                         </p>
                         <span className="text-sm font-normal text-gray-400 dark:text-primary-light"> 20d ago </span>
                       </div>

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState, useEffect} from "react";
+import React, { useState, useEffect} from "react";
 import SettingsPanel from "~/components/SettingsPanel";
 import MobileSubMenu from "~/components/MobileSubMenu";
 import Sidebar from "~/components/Sidebar";
@@ -85,7 +85,6 @@ function Layout({ children }: Props) {
   useEffect(() => {
     setColors(getColor('color', 'cyan'));
     setLoading(false);
-    console.log(isDark);
   }, []);
 
 
@@ -97,7 +96,7 @@ function Layout({ children }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-        <div x-data="setup()" /*x-init="$refs.loading.classList.add('hidden');"*/ className={`dark: ${isDark}`}>
+        <div x-data="setup()" /*x-init="$refs.loading.classList.add('hidden');"*/ className={`${isDark ? 'dark' : '' }`}>
           <div className="flex h-screen antialiased text-gray-900 bg-gray-100 dark:bg-dark dark:text-light">
             <div
               id="loading"
@@ -144,7 +143,7 @@ function Layout({ children }: Props) {
         </div>
     </>
   );
-};
+}
 
 export default Layout;
 

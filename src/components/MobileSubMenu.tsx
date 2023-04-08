@@ -3,6 +3,7 @@ import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 
 //import { useOnClickOutside } from "usehooks-ts";
 import imageToAdd from "~/assets/images/avatar.jpg";
+import Image from "next/image";
 
 type Props = {
     isDark: boolean;
@@ -22,15 +23,15 @@ const MobileSubMenu: React.FunctionComponent<{ isDark: boolean, setDarkMode: (is
     // useOnClickOutside(ref, (e) => {
     //     props.openMobileSubMenu(false);
     // });
-    const handleNotificationClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleNotificationClick = () => {
         props.openNotificationPanel(true);
         props.openMobileSubMenu(false);
     }
-    const handleSettingsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleSettingsClick = () => {
         props.openSettingsPanel(true);
         props.openMobileSubMenu(false);
     }
-    const handleSearchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleSearchClick = () => {
         props.openSearchPanel(true);
         props.openMobileSubMenu(false);
     }
@@ -198,7 +199,7 @@ const MobileSubMenu: React.FunctionComponent<{ isDark: boolean, setDarkMode: (is
         >
             <span className="sr-only">User menu</span>
             
-            <img className="w-10 h-10 rounded-full" src={String(imageToAdd.src)} alt="Ahmed Kamel" />
+            <Image className="w-10 h-10 rounded-full" src={String(imageToAdd.src)} alt="Ahmed Kamel" />
         </button>
 
         <div

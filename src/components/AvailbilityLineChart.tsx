@@ -7,7 +7,6 @@ import {
   LinearScale,
   CategoryScale,
   LineElement,
-  LineHoverOptions,
   Legend,
   Tooltip,
 } from 'chart.js';

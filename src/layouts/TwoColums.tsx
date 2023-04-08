@@ -1,10 +1,10 @@
-import React, { PropsWithChildren, useState, useEffect} from "react";
+import React, { useState, useEffect} from "react";
 import SettingsPanel from "~/components/SettingsPanel";
 import Sidebar from "~/components/Sidebar";
 import SeachPanel from "~/components/SearchPanel";
 
 
-const TwoColums = (props: PropsWithChildren) => {
+const TwoColums = () => {
 
   function getTheme(dark: string, defaultValue: boolean) {
     // getting stored value

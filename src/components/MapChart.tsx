@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from "react";
+import React, {useState } from "react";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 
@@ -6,13 +6,8 @@ const MapChart: React.FunctionComponent=() =>{
     
     
     const [isOnLineChart] = useState(true);
-    useEffect(() => {
-      // Client-side-only code
-        const computedStyle = getComputedStyle(document.documentElement);
-     }, [])
      
-  
-    const handleLineChartButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleLineChartButton = () => {
         console.log("");
       }
     const position = [51.505, -0.09]
