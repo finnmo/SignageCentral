@@ -1,6 +1,6 @@
 
 import React, { useRef, useState, useEffect } from "react";
-import {PointElement } from 'chart.js';
+import {LineController, PointElement } from 'chart.js';
 
 import {
   Chart as ChartJS,
@@ -18,6 +18,7 @@ import {
 const AvailablityLineChart: React.FunctionComponent=() =>{
     ChartJS.register(
         CategoryScale,
+        LineController,
         LinearScale,
         LineElement,
         PointElement,

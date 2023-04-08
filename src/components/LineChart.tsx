@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 //import { useOnClickOutside } from "usehooks-ts";
 import { faker } from '@faker-js/faker';
-import { PointElement } from 'chart.js';
+import { LineController, PointElement } from 'chart.js';
 
 import {
   Chart as ChartJS,
@@ -19,6 +19,7 @@ import {
 
 const LineChart: React.FunctionComponent=() =>{
     ChartJS.register(
+        LineController,
         CategoryScale,
         LinearScale,
         LineElement,

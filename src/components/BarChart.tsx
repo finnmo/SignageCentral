@@ -10,6 +10,7 @@ import {
   BarElement,
   Legend,
   Tooltip,
+  BarController,
 } from 'chart.js';
 import {
   Chart,
@@ -18,6 +19,7 @@ import {
 
   const BarChart: React.FunctionComponent=() =>{
     ChartJS.register(
+        BarController,
         CategoryScale,
         LinearScale,
         BarElement,

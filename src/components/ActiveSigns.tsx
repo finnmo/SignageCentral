@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 //import { useOnClickOutside } from "usehooks-ts";
 import { faker } from '@faker-js/faker';
-import { ArcElement } from 'chart.js';
+import { ArcElement, BarController } from 'chart.js';
 
 import {
     Chart as ChartJS,
@@ -20,6 +20,7 @@ import {
 const ActiveSigns: React.FunctionComponent=() =>{
     ChartJS.register(
         CategoryScale,
+        BarController,
         LinearScale,
         BarElement,
         ArcElement,
