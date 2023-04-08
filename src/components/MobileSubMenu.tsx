@@ -1,9 +1,8 @@
 
 import React, { useRef, useState } from "react";
+
 //import { useOnClickOutside } from "usehooks-ts";
 import imageToAdd from "~/assets/images/avatar.jpg";
-
-
 
 type Props = {
     isDark: boolean;

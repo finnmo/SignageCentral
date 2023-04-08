@@ -1,7 +1,7 @@
-import { ReactElement } from "react";
+import type { ReactElement } from "react";
 import Dashboards from "~/components/Dashboards";
 import Layout from "~/layouts/Layout";
-import { NextPageWithLayout } from "./_app";
+import type { NextPageWithLayout } from "./_app";
 
 const Page: NextPageWithLayout = () => {
   return <Dashboards></Dashboards>

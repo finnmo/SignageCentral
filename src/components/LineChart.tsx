@@ -9,7 +9,6 @@ import {
   LinearScale,
   CategoryScale,
   LineElement,
-  LineHoverOptions,
   Legend,
   Tooltip,
 } from 'chart.js';
@@ -105,7 +104,7 @@ const LineChart: React.FunctionComponent=() =>{
   
     const lineRef = useRef<ChartJS>(null);
   
-    const handleLineChartButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleLineChartButton = () => {
         const { current: chart } = lineRef;
         if(chart){
             setIsOnLineChart(!isOnLineChart);

@@ -16,7 +16,7 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({
   Component,
-  pageProps: { session, ...pageProps },
+  pageProps: {...pageProps },
 }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const layout = getLayout(<Component {...pageProps} />);

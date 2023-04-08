@@ -43,17 +43,17 @@ function Layout({ children }: Props) {
   }
 
 
-  const [isDark, setDarkMode] = useState(getTheme('dark', false));
-  const [loading, setLoading] = useState(true);
-  const [isNotificationPanelOpen, openNotificationPanel] = useState(false);
-  const [isSettingsPanelOpen, openSettingsPanel] = useState(false);
-  const [isSearchPanelOpen, openSearchPanel] = useState(false);
-  const [isMobileSubMenuOpen, openMobileSubMenu] = useState(false);
-  const [isMobileMainMenuOpen, openMobileMainMenu] = useState(false);
+  const [isDark, setDarkMode] = useState<boolean>(getTheme('dark', false));
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isNotificationPanelOpen, openNotificationPanel] = useState<boolean>(false);
+  const [isSettingsPanelOpen, openSettingsPanel] = useState<boolean>(false);
+  const [isSearchPanelOpen, openSearchPanel] = useState<boolean>(false);
+  const [isMobileSubMenuOpen, openMobileSubMenu] = useState<boolean>(false);
+  const [isMobileMainMenuOpen, openMobileMainMenu] = useState<boolean>(false);
 
 
-  const [isOnLineChart, setIsOnLineChart] = useState(true);
-  const [isOnDoughnutChart, setIsOnDoughnutChart] = useState(true);
+  const [isOnLineChart, setIsOnLineChart] = useState<boolean>(true);
+  const [isOnDoughnutChart, setIsOnDoughnutChart] = useState<boolean>(true);
 
 
   const setColors = (color: string) => {

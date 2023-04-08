@@ -1,17 +1,17 @@
 
-import React, { useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import Link from "next/link";
 //import { useOnClickOutside } from "usehooks-ts";
 
 
 type Props = {
     isDark: boolean;
-    setDarkMode: any;
+    setDarkMode: (isDark: boolean) => void;
     isMobileMainMenuOpen: boolean;
-    openMobileMainMenu: any;
+    openMobileMainMenu: Dispatch<SetStateAction<boolean>>;
   }; 
   
-const MobileSidebar: React.FunctionComponent<{ isDark: boolean, setDarkMode: any, isMobileMainMenuOpen: boolean, openMobileMainMenu: any}> = (props: Props) =>{
+const MobileSidebar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (isDark: boolean) => void, isMobileMainMenuOpen: boolean, openMobileMainMenu: Dispatch<SetStateAction<boolean>>}> = (props: Props) =>{
     const [openDashboards, setOpenDashboards] = useState(true);
     const [openComponents, setOpenComponents] = useState(false);
     const [openPages, setOpenPages] = useState(false);

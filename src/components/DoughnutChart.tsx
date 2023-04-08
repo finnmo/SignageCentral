@@ -60,9 +60,8 @@ const DoughnutChart: React.FunctionComponent=() =>{
   
     const doughnutRef = useRef<ChartJS>(null);
   
-    const handleDoughnutChartButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleDoughnutChartButton = () => {
         const { current: chart } = doughnutRef;
-        const color = 'rgb(207, 250, 254)'
         const data = faker.datatype.number({ min: 0, max: 100 });
         if(chart){
           setDoughnutChart(!isOnDoughnutChart);

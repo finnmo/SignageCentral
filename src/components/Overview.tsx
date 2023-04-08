@@ -1,9 +1,5 @@
 
 import React from 'react'
-import BarChart from "./BarChart"
-import DynamicNumber from "./DynamicNumber";
-import LineChart from "./LineChart";
-import DoughnutChart from "./DoughnutChart";
 import SignStatusOverview from './SignStatusOverview';
 import AvailablityLineChart from './AvailbilityLineChart';
 import dynamic from 'next/dynamic';
