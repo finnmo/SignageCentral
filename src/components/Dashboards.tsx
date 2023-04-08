@@ -5,9 +5,8 @@ import DynamicNumber from "./DynamicNumber";
 import LineChart from "./LineChart";
 import DoughnutChart from "./DoughnutChart";
 
-export interface Props {}
 
-const Dashboards: React.FC<Props> = (props) => {
+const Dashboards: React.FC= () => {
 
     return (
         <>
