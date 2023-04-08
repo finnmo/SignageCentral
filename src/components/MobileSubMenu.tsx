@@ -1,8 +1,5 @@
 
 import React, { useRef, useState } from "react";
-import classNames from "classnames";
-import Link from "next/link";
-import Image from "next/image";
 //import { useOnClickOutside } from "usehooks-ts";
 import imageToAdd from "~/assets/images/avatar.jpg";
 

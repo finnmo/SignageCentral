@@ -1,18 +1,7 @@
 import React, { PropsWithChildren, useState, useEffect} from "react";
-import SettingsPanel from "../../components/SettingsPanel";
-import MobileSubMenu from "../../components/MobileSubMenu";
-import Sidebar from "../../components/Sidebar";
-import Head from "next/head";
-import Navbar from "../../components/Navbar";
-import classNames from "classnames";
-import NotificationPanel from "../../components/NotificationPanel";
-import SeachPanel from "../../components/SearchPanel";
-import MobileSidebar from "../../components/MobileSidebar";
-import BarChart from "../../components/BarChart"
-import DynamicNumber from "../../components/DynamicNumber";
-import LineChart from "../../components/LineChart";
-import DoughnutChart from "../../components/DoughnutChart";
-import Link from "next/link";
+import SettingsPanel from "~/components/SettingsPanel";
+import Sidebar from "~/components/Sidebar";
+import SeachPanel from "~/components/SearchPanel";
 
 
 const TwoColums = (props: PropsWithChildren) => {

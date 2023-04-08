@@ -1,10 +1,9 @@
 
 import React, { useRef, useState, useEffect } from "react";
-import classNames from "classnames";
 import Link from "next/link";
 import Image from "next/image";
-import Layout from "../pages/layouts/Layout"
-import { useOnClickOutside } from "usehooks-ts";
+import Layout from "~/layouts/Layout"
+//import { useOnClickOutside } from "usehooks-ts";
 import { faker } from '@faker-js/faker';
 import type { InteractionItem } from 'chart.js';
 

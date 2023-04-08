@@ -1,9 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import classNames from "classnames";
 import Link from 'next/link'
-import { signIn, signOut, useSession } from "next-auth/react";
 
-import { api } from "~/utils/api";
 
 
 type Props = {
@@ -59,13 +56,12 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
             <span className="ml-2 text-sm"> Dashboards </span>
             <span className="ml-auto" aria-hidden="true">
             <svg
-                className={classNames({
-                    "rotate-180": openDashboards,
-                    "w-4": true,
-                    "h-4": true, 
-                    "transition-transform": true,
-                    "transform": true, 
-                })}
+                className={`${openDashboards ? "rotate-180": ""}
+                    "w-4",
+                    "h-4", 
+                    "transition-transform",
+                    "transform", 
+                }`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -521,20 +517,3 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
 )
 }
 export default Sidebar;
-
-const Sign: React.FC = () => {
-  
-    const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-      undefined, // no input
-    );
-  
-    return (
-        <Link
-            href="/sign"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700"
-            >
-             {secretMessage && <span> - {secretMessage}</span>}
-        </Link>
-
-    );
-  };

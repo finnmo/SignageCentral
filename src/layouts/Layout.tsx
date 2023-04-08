@@ -4,7 +4,6 @@ import MobileSubMenu from "~/components/MobileSubMenu";
 import Sidebar from "~/components/Sidebar";
 import Head from "next/head";
 import Navbar from "~/components/Navbar";
-import classNames from "classnames";
 import NotificationPanel from "~/components/NotificationPanel";
 import SeachPanel from "~/components/SearchPanel";
 import MobileSidebar from "~/components/MobileSidebar";
@@ -111,7 +110,7 @@ function Layout({ children }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-        <div x-data="setup()" /*x-init="$refs.loading.classList.add('hidden');"*/ className={classNames({"dark": isDark})}>
+        <div x-data="setup()" /*x-init="$refs.loading.classList.add('hidden');"*/ className={`dark: ${isDark}`}>
           <div className="flex h-screen antialiased text-gray-900 bg-gray-100 dark:bg-dark dark:text-light">
             <div
               id="loading"

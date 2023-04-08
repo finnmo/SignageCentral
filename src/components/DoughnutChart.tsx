@@ -1,29 +1,19 @@
 
 import React, { useRef, useState, useEffect } from "react";
-import classNames from "classnames";
-import Link from "next/link";
-import Image from "next/image";
-import Layout from "../layouts/Layout"
 //import { useOnClickOutside } from "usehooks-ts";
 import { faker } from '@faker-js/faker';
-import { ArcElement, InteractionItem, PointElement } from 'chart.js';
+import { ArcElement } from 'chart.js';
 
 import {
   Chart as ChartJS,
   LinearScale,
   CategoryScale,
-  LineElement,
   Legend,
   Tooltip,
 } from 'chart.js';
 import {
   Chart,
-  getDatasetAtEvent,
-  getElementAtEvent,
-  getElementsAtEvent,
-  Doughnut,
 } from 'react-chartjs-2';
-import { isDataView } from "util/types";
 
 
 const DoughnutChart: React.FunctionComponent=() =>{

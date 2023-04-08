@@ -1,13 +1,8 @@
 
 import React, { useRef, useState } from "react";
-import classNames from "classnames";
-import Link from "next/link";
-import Image from "next/image";
-import imageToAdd from "~/assets/images/avatar.jpg";
-import Layout from "../layouts/Layout"
-//import { useOnClickOutside } from "usehooks-ts";
 
-import { api } from "~/utils/api";
+import imageToAdd from "~/assets/images/avatar.jpg";
+//import { useOnClickOutside } from "usehooks-ts";
 import { useClerk } from "@clerk/nextjs";
 
 type Props = {
