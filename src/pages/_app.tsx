@@ -4,6 +4,7 @@ import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import "~/styles/globals.css";
 import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
+import Head from "next/head";
 
 export type NextPageWithLayout<P = {[k: string | number | symbol]: never}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -21,7 +22,14 @@ function MyApp({
   const getLayout = Component.getLayout ?? ((page) => page);
   const layout = getLayout(<Component {...pageProps} />);
   return (
+    
     <ClerkProvider {...pageProps} >
+      <Head>
+        <title>Digital Signage Manager</title>
+        <meta name="description" content="Made by Finn" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <SignedIn>
         {layout}
       </SignedIn>

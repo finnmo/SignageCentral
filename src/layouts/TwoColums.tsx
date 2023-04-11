@@ -2,6 +2,7 @@ import React, { useState, useEffect} from "react";
 import SettingsPanel from "~/components/SettingsPanel";
 import Sidebar from "~/components/Sidebar";
 import SeachPanel from "~/components/SearchPanel";
+import { Loading } from "~/components/Loading";
 
 
 const TwoColums = () => {
@@ -34,7 +35,6 @@ const TwoColums = () => {
 
 
   const [isDark, setDarkMode] = useState(getTheme('dark', false));
-  const [loading, setLoading] = useState(true);
   const [isSettingsPanelOpen, openSettingsPanel] = useState(false);
   const [isSearchPanelOpen, openSearchPanel] = useState(false);
 
@@ -64,7 +64,6 @@ const TwoColums = () => {
   //On load run once
   useEffect(() => {
     setColors(getColor('color', 'cyan'));
-    setLoading(false);
   }, []);
 
 return (
@@ -78,13 +77,7 @@ return (
       
     >
       <div className="flex h-screen antialiased text-gray-900 bg-gray-100 dark:bg-dark dark:text-light">
-        <div
-          x-ref="loading"
-          className={`fixed inset-0 z-50 flex items-center justify-center text-2xl font-semibold text-white bg-primary-darker ${loading ? "" : "hidden"}`}
-        >
-          Loading.....
-        </div>
-
+        <Loading/>
         <Sidebar isDark={isDark} isSettingsPanelOpen={isSettingsPanelOpen} openSettingsPanel={openSettingsPanel}></Sidebar>
 
         <div

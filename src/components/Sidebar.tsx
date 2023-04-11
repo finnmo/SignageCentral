@@ -84,7 +84,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
             Dashboards
             </Link>
             <Link
-            href="/overview"
+            href="/dashboards/overview"
             className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700"
             >
             Overview
@@ -140,13 +140,13 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
         </a>
         <div className={`mt-2 space-y-2 px-7 ${openComponents ? "" : "hidden"}`} role="menu" arial-label="Components">
             {data?.map((sign) => (
-                        <Link
-                            href={`/${sign.id}`}
-                            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700"
-                            key={sign.id}>
-                        {sign.name}
-                        </Link>
-                    ))} 
+                <Link
+                    href={`/sign/${sign.id}`}
+                    className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700"
+                    key={sign.id}>
+                {sign.name}
+                </Link>
+            ))} 
             <a
             href="#"
             role="menuitem"
