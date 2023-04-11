@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { ReactElement   } from "react";
 import Layout from "~/layouts/Layout";
 import type { NextPageWithLayout } from "../_app";
 import React from 'react'
@@ -8,11 +8,13 @@ import { api } from "~/utils/api";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { prisma } from "~/server/db";
+import "leaflet/dist/leaflet.css";
 
-
-const MapChart = dynamic(() => import("~/components/MapChart"), { ssr:false })
 
 const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
+
+  const MapChartWithEdit = dynamic(() => import("~/components/MapChartWithEdit"), { ssr:false })
+
 
   const { data } = api.sign.getById.useQuery({
     id,
@@ -46,12 +48,13 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   </div>
 
   <div className="grid grid-cols-1 p-4 space-y-8 lg:gap-8 lg:space-y-0 lg:grid-cols-2">
-    <MapChart></MapChart>
+    <MapChartWithEdit></MapChartWithEdit>
   </div>
 </div>
 </>
 )
 }
+
 
 export const getStaticProps: GetStaticProps =  async  (
   context,

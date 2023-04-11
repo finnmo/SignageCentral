@@ -5,7 +5,10 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const signRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.sign.findMany();
+    return ctx.prisma.sign.findMany({
+      take: 100,
+      orderBy: { number: "asc" },
+    });
   }),
   
   getById: publicProcedure

@@ -125,7 +125,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
                 />
             </svg>
             </span>
-            <span className="ml-2 text-sm"> Sign Configuration</span>
+            <span className="ml-2 text-sm"> Signs</span>
             <span aria-hidden="true" className="ml-auto">
             <svg
                 className={`w-4 h-4 transition-transform transform ${openComponents ? "rotate-180" : ""}`}
@@ -147,34 +147,12 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
                 {sign.name}
                 </Link>
             ))} 
-            <a
-            href="#"
-            role="menuitem"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700"
-            >
-            University Blvd and Kent St (soon)
-            </a>
-            <a
-            href="#"
-            role="menuitem"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700"
-            >
-            Stadium Entrance (soon)
-            </a>
-            <a
-            href="#"
-            role="menuitem"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700"
-            >
-            Beazley Ave and Kent St (soon)
-            </a>
-            <a
-            href="#"
-            role="menuitem"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700"
-            >
-            South Entrance (soon)
-            </a>
+            <Link
+                href={`/sign/addSign`}
+                    className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700"
+                    >
+                        Add new sign +
+                </Link>
         </div>
         </div>
 
@@ -279,7 +257,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
             preserveAspectRatio="xMidYMid meet">
 
             <g transform="translate(0.000000,818.000000) scale(0.100000,-0.100000)"
-            fill="#6B7280" stroke="#6B7280">
+            fill="currentColor" stroke="currentColor">
             <path d="M2916 8154 c-643 -100 -1234 -595 -1436 -1203 -26 -79 -111 -456
             -266 -1186 l-227 -1071 -94 -49 c-404 -213 -693 -610 -772 -1060 -13 -74 -121
             -1491 -121 -1588 0 -172 59 -412 140 -570 129 -253 347 -467 596 -585 l70 -34
