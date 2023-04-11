@@ -5,10 +5,9 @@ import React from 'react'
 import AvailablityLineChart from '~/components/AvailbilityLineChart';
 import dynamic from 'next/dynamic';
 import { api } from "~/utils/api";
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType } from "next";
+import type { GetStaticPaths, GetStaticProps } from "next";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { prisma } from "~/server/db";
-import superjson from "superjson";
 
 
 const MapChart = dynamic(() => import("~/components/MapChart"), { ssr:false })

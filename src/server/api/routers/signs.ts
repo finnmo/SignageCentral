@@ -17,8 +17,7 @@ export const signRouter = createTRPCRouter({
 
       if (!sign) throw new TRPCError({ code: "NOT_FOUND" });
 
-      return (await sign);
+      return (sign);
     }),
 
 });
-  
