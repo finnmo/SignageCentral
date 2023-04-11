@@ -63,7 +63,7 @@ export const getStaticProps: GetStaticProps =  async  (
 
   if(typeof id !== "string") throw new Error("Invalid id");
 
-  await ssg.sign.getSignById.prefetch({ id }); 
+  await ssg.sign.getById.prefetch({ id }); 
   
   return {
     props: {
