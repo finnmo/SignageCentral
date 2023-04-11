@@ -66,7 +66,7 @@ export const getStaticProps: GetStaticProps =  async  (
   
   return {
     props: {
-      trpcState: JSON.parse(JSON.stringify(ssg.dehydrate())),
+      trpcState: JSON.parse(JSON.stringify(ssg.dehydrate())) as string,
       id,
     },
     revalidate: 1,
