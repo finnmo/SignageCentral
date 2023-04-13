@@ -1,4 +1,4 @@
-import React, {useState, type Dispatch, type SetStateAction } from "react";
+import React, {useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import Link from 'next/link'
 import { api } from "~/utils/api";
 
@@ -23,8 +23,6 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
   const [openAuthentication, setOpenAuthentication] = useState(false);
   const [openLayouts, setOpenLayouts] = useState(false);
   const [openParkingMap, setOpenParkingMap] = useState(false);
-
-
 
   return (
     <>
@@ -78,16 +76,17 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
         </a>
         <div role="menu" className={`mt-2 space-y-2 px-7 ${openDashboards ? "" : "hidden"}`} aria-label="Dashboards">
             <Link
-            href="/"
-            className="block p-2 text-sm text-gray-700 transition-colors duration-200 rounded-md dark:text-light dark:hover:text-light hover:text-gray-700"
-            >
-            Dashboards
-            </Link>
-            <Link
             href="/dashboards/overview"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700"
+            className={` block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700`}
             >
             Overview
+            </Link>
+            <Link
+            href="/"
+            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-light dark:hover:text-light hover:text-gray-700"
+            //if active: text-gray-700
+            >
+            Dashboard Template
             </Link>
             <Link
             href="/"
@@ -95,6 +94,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
             >
             TBD (soon)
             </Link>
+
         </div>
         </div>
 
@@ -148,7 +148,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
                 </Link>
             ))} 
             <Link
-                href={`/sign/addSign`}
+                href={`/sign/AddSign`}
                     className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700"
                     >
                         Add new sign +
