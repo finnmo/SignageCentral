@@ -26,16 +26,19 @@ export const signRouter = createTRPCRouter({
     create: privateProcedure
     .input(
       z.object({
-        content: z.string().min(1).max(280),
+        signName: z.string().min(1).max(280),
+        signNumber: z.number().min(1).max(100),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const sign = await ctx.prisma.sign.create({
         data: {
-          name: input.content,
-          number: 10,
+          name: input.signName,
+          number: input.signNumber,
           createdAt: new Date(),
           updatedAt: new Date(),
+          width: 1080,
+          height: 1920,
         },
       });
 

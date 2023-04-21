@@ -1,4 +1,4 @@
-import React, {useState, type ReactNode, type Dispatch, type SetStateAction } from "react";
+import React, {useState, type ReactNode, type Dispatch, type SetStateAction, ChangeEvent } from "react";
 import Link from 'next/link'
 import { api } from "~/utils/api";
 import useModal from "~/server/helpers/useModal";
@@ -516,7 +516,18 @@ interface ModalType {
 export function AddSign(props: ModalType) {
     const [isOnParkingMap, setIsOnParkingMap] = useState(false);
     const [isOnEmergency, setIsOnEmergency] = useState(false);
-    const [signName] = useState("");
+    const [signName, setSignName] = useState("");
+
+    const [signNumber, setValue] = useState<number>(0);
+
+    const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+      // In general, use Number.isNaN over global isNaN as isNaN will coerce the value to a number first
+      // which likely isn't desired
+      const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 0;
+    
+      setValue(value);
+    }
+    
 
     const { mutate } = api.sign.create.useMutation();
 
@@ -547,11 +558,11 @@ export function AddSign(props: ModalType) {
                                 <div className="flex flex-row">
                                     <div> 
                                         <label  className="text-gray-800 dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Name</label>
-                                        <input value={signName} type="text" id="name" className="mb-5 mr-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-80 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Enter sign name" />
+                                        <input value={signName} onChange={(e) => setSignName(e.target.value)} defaultValue="Test 2" type="text" id="name" className="mb-5 mr-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-80 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Enter sign name" />
                                     </div>
                                     <div>
                                         <label className="text-gray-800dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Number</label>
-                                        <input id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
+                                        <input value={signNumber ?? ''} onChange={onNumberChange} type="number" id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
                                     </div>
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Sign Type</label>
@@ -629,7 +640,7 @@ export function AddSign(props: ModalType) {
                                 
                                 <div className="flex items-center justify-start w-full">
                                 <button
-                                    onClick={() => mutate({content: signName})}
+                                    onClick={() => mutate({signName, signNumber})}
                                     className="px-8 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
                                     >
                                     Submit
@@ -656,3 +667,7 @@ export function AddSign(props: ModalType) {
         
     )
 }
+function setValue(value: number | null) {
+    throw new Error("Function not implemented.");
+}
+
