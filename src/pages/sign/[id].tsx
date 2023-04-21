@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useState   } from "react";
+import { type ReactElement, type ReactNode, useState   } from "react";
 import Layout from "~/layouts/Layout";
 import type { NextPageWithLayout } from "../_app";
 import React from 'react'

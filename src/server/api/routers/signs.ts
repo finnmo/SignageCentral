@@ -1,7 +1,7 @@
 
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"; 
+import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc"; 
 
 export const signRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -23,4 +23,22 @@ export const signRouter = createTRPCRouter({
       return (sign);
     }),
 
+    create: privateProcedure
+    .input(
+      z.object({
+        content: z.string().min(1).max(280),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const sign = await ctx.prisma.sign.create({
+        data: {
+          name: input.content,
+          number: 10,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+
+      return sign;
+    }),
 });
