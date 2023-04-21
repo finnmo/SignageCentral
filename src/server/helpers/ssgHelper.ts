@@ -6,6 +6,6 @@ import { prisma } from '../db';
 export const generateSSGHelper = () => 
 createServerSideHelpers({
   router: appRouter,
-  ctx: { prisma },
+  ctx: { prisma, userId: '0' },
   transformer: superjson, // optional - adds superjson serialization
 });
