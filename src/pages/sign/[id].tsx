@@ -26,7 +26,7 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
   return  (
   <>
-  <div className="flex items-center justify-between px-4 py-4 border-b lg:py-6 dark:border-primary-darker">
+  <div className="flex items-center justify-between px-4 py-4 border-b lg:py-6 dark:border-primary-darker z-10">
   <h1 className="text-2xl font-semibold">{`Sign ${data.number} - ${data.name}`}</h1>
   <button
     onClick={toggle}
@@ -119,7 +119,7 @@ export function EditSign(props: ModalType) {
     return (
         <> 
             {props.isOpen && (
-                <div>
+                <div className="z-10">
                     <div className="py-12 bg-gray-500/50 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 dark:bg-darker/50" id="modal">
                         <div role="alert" className="container mx-auto w-11/12 md:w-2/3 max-w-lg">
                             <div className="relative py-8 px-5 md:px-10 bg-white dark:bg-dark dark:border-gray-700 shadow-md rounded-md border border-gray-400">

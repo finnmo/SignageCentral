@@ -520,7 +520,7 @@ export function AddSign(props: ModalType) {
     return (
         <> 
             {props.isOpen && (
-                <div>
+                <div className="z-20">
                     <div className="py-12 bg-gray-500/50 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 dark:bg-darker/50" id="modal">
                         <div role="alert" className="container mx-auto w-11/12 md:w-2/3 max-w-lg">
                             <div className="relative py-8 px-5 md:px-10 bg-white dark:bg-dark dark:border-gray-700 shadow-md rounded-md border border-gray-400">
@@ -544,7 +544,7 @@ export function AddSign(props: ModalType) {
                                 <div className="flex flex-row">
                                     <div> 
                                         <label  className="text-gray-800 dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Name</label>
-                                        <input id="name" className="mb-5 mt-2 text-gray-400 dark:bg-primary placeholder-gray-200 dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-80 mr-5 focus:outline-none focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Enter sign name" />
+                                        <input id="name" className="mb-5 mr-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-80 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Enter sign name" />
                                     </div>
                                     <div>
                                         <label className="text-gray-800dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Number</label>
@@ -578,6 +578,27 @@ export function AddSign(props: ModalType) {
                                     ></div>
                                     </button>
                                 </div>
+                                <div  className={`${isOnParkingMap ? '' : 'hidden'} flex items-center justify-center mb-5`}>
+                                        <div className="space-y-2">
+                                            <label  className="inline-block text-sm font-medium text-gray-800 dark:text-light dark:text-gray-200">
+                                            Upload Map Image
+                                            </label>
+
+                                            <label  className="group p-4 sm:p-7 block cursor-pointer text-center border-2 border-dashed border-gray-200 rounded-lg focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:border-gray-700">
+                                            <input id="af-submit-app-upload-images" name="af-submit-app-upload-images" type="file" className="sr-only"/>
+                                            <svg className="w-10 h-10 mx-auto text-gray-400 dark:text-gray-600" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z"/>
+                                                <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
+                                            </svg>
+                                            <span className="mt-2 block text-sm text-gray-800 dark:text-gray-200">
+                                                Browse your device or <span className="group-hover:text-blue-700 text-blue-600">drag 'n drop'</span>
+                                            </span>
+                                            <span className="mt-1 block text-xs text-gray-500">
+                                                Maximum file size is 2 MB
+                                            </span>
+                                            </label>
+                                        </div>
+                                    </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Emergency Notifiaction </label>
                                 <div className="flex items-center w-full h-10 mb-3">
                                     <button

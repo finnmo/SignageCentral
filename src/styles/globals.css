@@ -5,6 +5,7 @@
 .leaflet-container {
   width: 100wh; 
   height: 100vh;
+  z-index: 1;
 }
 
 @media (prefers-color-scheme: dark) {
