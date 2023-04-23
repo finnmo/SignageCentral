@@ -26,7 +26,7 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
   return  (
   <>
-  <div className="flex items-center justify-between px-4 py-4 border-b lg:py-6 dark:border-primary-darker z-10">
+<div className="flex items-center justify-between px-4 py-4 border-b lg:py-6 dark:border-primary-darker z-10">
   <h1 className="text-2xl font-semibold">{`Sign ${data.number} - ${data.name}`}</h1>
   <button
     onClick={toggle}

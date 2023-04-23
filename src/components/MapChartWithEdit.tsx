@@ -14,17 +14,11 @@ const MapChartWithEdit: React.FunctionComponent=() =>{
             <h4 className="text-lg font-semibold text-gray-500 dark:text-light">Map</h4>
             <div className="flex items-center">
                 <button
-                className="relative focus:outline-none"
-                //x-cloak
+                    className="px-4 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
+                    //x-cloak
                 onClick={handleLineChartButton}
                 >
-                 <a
-                    href="/"
-                    target="_blank"
-                    className="px-4 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
-                    >
                     Edit
-                </a>
                 </button>
             </div>
             </div>
