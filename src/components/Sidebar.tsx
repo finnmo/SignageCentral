@@ -1,4 +1,4 @@
-import React, {useState, type ReactNode, type Dispatch, type SetStateAction, ChangeEvent } from "react";
+import React, {useState, type ReactNode, type Dispatch, type SetStateAction, type ChangeEvent } from "react";
 import Link from 'next/link'
 import { api } from "~/utils/api";
 import useModal from "~/server/helpers/useModal";
@@ -675,7 +675,3 @@ export function AddSign(props: ModalType) {
         
     )
 }
-function setValue(value: number | null) {
-    throw new Error("Function not implemented.");
-}
-
