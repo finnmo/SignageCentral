@@ -28,6 +28,9 @@ export const signRouter = createTRPCRouter({
       z.object({
         signName: z.string().min(1).max(280),
         signNumber: z.number().min(1).max(100),
+        signWidth: z.number().min(1).max(10000),
+        signHeight: z.number().min(1).max(10000),
+        signType: z.string().min(5).max(20),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -37,8 +40,10 @@ export const signRouter = createTRPCRouter({
           number: input.signNumber,
           createdAt: new Date(),
           updatedAt: new Date(),
-          width: 1080,
-          height: 1920,
+          width: input.signWidth,
+          height: input.signHeight,
+          type: input.signType,
+          customContentId: "customContentId",
         },
       });
 

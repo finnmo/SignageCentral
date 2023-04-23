@@ -516,16 +516,24 @@ interface ModalType {
 export function AddSign(props: ModalType) {
     const [isOnParkingMap, setIsOnParkingMap] = useState(false);
     const [isOnEmergency, setIsOnEmergency] = useState(false);
-    const [signName, setSignName] = useState("");
 
-    const [signNumber, setValue] = useState<number>(0);
+    const [signName, setSignName] = useState("");
+    const [signNumber, setSignNumber] = useState<number>(0);
+    const [signHeight, setSignHeight] = useState<number>(0);
+    const [signWidth, setSignWidth] = useState<number>(0);
+    const [signType] = useState("general");
 
     const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-      // In general, use Number.isNaN over global isNaN as isNaN will coerce the value to a number first
-      // which likely isn't desired
       const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 0;
-    
-      setValue(value);
+      setSignNumber(value);
+    }
+    const onWidthChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 0;
+        setSignWidth(value);
+    }
+    const onHeightChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 0;
+        setSignHeight(value);
     }
     
 
@@ -566,14 +574,14 @@ export function AddSign(props: ModalType) {
                                     </div>
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Sign Type</label>
-                                <select className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-50 focus:outline-none  focus:ring focus:ring-primary  font-normal h-7 flex items-center pl-3 text-sm border-gray-300 rounded border" id="cars" name="cars">
+                                <select value={signType} className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-50 focus:outline-none  focus:ring focus:ring-primary  font-normal h-7 flex items-center pl-3 text-sm border-gray-300 rounded border" id="cars" name="cars">
                                     <option value="general">General</option>
                                     <option value="pole_mounted">Pole Mounted</option>
                                 </select>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Screen Dimensions</label>
                                 <div className="flex flex-row">
-                                    <input id="name" className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
-                                    <input id="name" className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
+                                    <input value={signWidth ?? ''} onChange={onWidthChange} type="number" id="name" className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
+                                    <input value={signHeight ?? ''} onChange={onHeightChange} type="number" id="name" className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Parking Map</label>
                                 <div className="flex items-center w-full h-10">
@@ -640,7 +648,7 @@ export function AddSign(props: ModalType) {
                                 
                                 <div className="flex items-center justify-start w-full">
                                 <button
-                                    onClick={() => mutate({signName, signNumber})}
+                                    onClick={() => mutate({signName, signNumber, signWidth, signHeight, signType})}
                                     className="px-8 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
                                     >
                                     Submit
