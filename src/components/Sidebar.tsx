@@ -521,13 +521,28 @@ interface ModalType {
 }
 
 export function AddSignModal(props: ModalType) {
+    const ctx = api.useContext();
+
+    const {data} = api.sign.getLastSign.useQuery();
+
+
+    const { mutate } = api.sign.create.useMutation(
+        {
+            onSuccess: () => {
+                handleCancel();
+                void ctx.sign.invalidate();
+            }
+        }
+    );
+
+
     const [isOnParkingMap, setIsOnParkingMap] = useState(false);
     const [isOnEmergency, setIsOnEmergency] = useState(false);
 
     const [signName, setSignName] = useState("");
     const [signNumber, setSignNumber] = useState<number>(0);
-    const [signHeight, setSignHeight] = useState<number>(0);
-    const [signWidth, setSignWidth] = useState<number>(0);
+    const [signHeight, setSignHeight] = useState<number>(443);
+    const [signWidth, setSignWidth] = useState<number>(192);
     const [signType] = useState("general");
 
     const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -542,18 +557,6 @@ export function AddSignModal(props: ModalType) {
         const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 0;
         setSignHeight(value);
     }
-    
-    const ctx = api.useContext();
-
-
-    const { mutate, isLoading: isAddingSign } = api.sign.create.useMutation(
-        {
-            onSuccess: () => {
-                handleCancel();
-                void ctx.sign.invalidate();
-            }
-        }
-    );
 
     const handleCancel = () => {
         props.toggle();
@@ -596,7 +599,7 @@ export function AddSignModal(props: ModalType) {
                                     </div>
                                     <div>
                                         <label className="text-gray-800dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Number</label>
-                                        <input value={signNumber ?? ''} onChange={onNumberChange} type="number" id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
+                                        <input value={signNumber || data!.number+1} onChange={onNumberChange} type="number" id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
                                     </div>
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Sign Type</label>

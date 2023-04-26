@@ -22,7 +22,12 @@ export const signRouter = createTRPCRouter({
 
       return (sign);
     }),
-
+    getLastSign: publicProcedure.query(({ ctx }) => {
+      return ctx.prisma.sign.findFirst({
+        take: 1,
+        orderBy: { number: "desc" },
+      });
+    }),
     create: privateProcedure
     .input(
       z.object({
