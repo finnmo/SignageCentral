@@ -543,8 +543,17 @@ export function AddSignModal(props: ModalType) {
         setSignHeight(value);
     }
     
+    const ctx = api.useContext();
 
-    const { mutate } = api.sign.create.useMutation();
+
+    const { mutate, isLoading: isAddingSign } = api.sign.create.useMutation(
+        {
+            onSuccess: () => {
+                handleCancel();
+                void ctx.sign.invalidate();
+            }
+        }
+    );
 
     const handleCancel = () => {
         props.toggle();

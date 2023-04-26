@@ -46,7 +46,7 @@ const Page: NextPageWithLayout = () => {
 const StatusBlockMap = () => {
   const {data, isLoading} = api.sign.getAll.useQuery();
 
-  if (isLoading) return <LoadingSpinner/>
+  if (isLoading) return <LoadingSpinner size={40}/>
 
   if(!data) return <div>Something went wrong...</div>
 
