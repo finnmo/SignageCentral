@@ -7,40 +7,28 @@ import Layout from "~/layouts/Layout";
 import { api } from "~/utils/api";
 import type { NextPageWithLayout } from "../_app";
 import React, {useState} from "react";
-
+import { LoadingSpinner } from "~/components/LoadingSpinner";
 
 
 const Page: NextPageWithLayout = () => {
   
   const MapChart = dynamic(() => import("~/components/MapChart"), { ssr:false })
 
-  const {data} = api.sign.getAll.useQuery();
-
-
   return (        
   <>
     <div className="flex items-center justify-between px-4 py-4 border-b lg:py-6 dark:border-primary-darker">
     <h1 className="text-2xl font-semibold">Overview</h1>
     <a
-      href="https://github.com/Kamona-WD/kwd-dashboard"
+      href="https://github.com/finnmo/SignageCentral"
       target="_blank"
       className="px-4 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
     >
       View on github
     </a>
   </div>
-
   <div className="mt-2">
   <h1 className="text-1xl font-semibold text-gray-500 px-4">Signs</h1>
-    <div className="grid grid-cols-1 gap-8 p-4 lg:grid-cols-2 xl:grid-cols-4">
-    {data?.map((sign) => (
-        <Link
-            href={`/sign/${sign.id}`}
-            key={sign.id}>
-          <SignStatusOverview signName={sign.name} signNumber={sign.number} ></SignStatusOverview>
-        </Link>
-    ))} 
-    </div>
+      <StatusBlockMap></StatusBlockMap>
 
     <div className="grid grid-cols-1 p-4 space-y-8 lg:gap-8 lg:space-y-0 lg:grid-cols-3">
     <AvailablityLineChart></AvailablityLineChart>
@@ -54,6 +42,26 @@ const Page: NextPageWithLayout = () => {
 </>
 
 )}
+
+const StatusBlockMap = () => {
+  const {data, isLoading} = api.sign.getAll.useQuery();
+
+  if (isLoading) return <LoadingSpinner/>
+
+  if(!data) return <div>Something went wrong...</div>
+
+  return (
+    <div className="grid grid-cols-1 gap-8 p-4 lg:grid-cols-2 xl:grid-cols-4">
+      {...data?.map((sign) => (
+        <Link
+            href={`/sign/${sign.id}`}
+            key={sign.id}>
+          <SignStatusOverview signName={sign.name} signNumber={sign.number} ></SignStatusOverview>
+        </Link>
+      ))} 
+    </div>
+  )
+}
 
 
 export interface Props {
@@ -121,15 +129,12 @@ export const SignStatusOverview: React.FunctionComponent<{ signName: string, sig
     </div>
 </div>
     )
-} 
-
-
-
-
+};
 
 
 
 Page.getLayout = function getLayout(page: ReactElement) {
+  api.sign.getAll.useQuery() //Start fetching asap 
   return (
     <Layout>
       {page}

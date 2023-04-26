@@ -9,7 +9,7 @@ className="flex items-center justify-between p-4 bg-white border-t dark:bg-darke
 <div>
     Made by
     <a href="https://github.com/finnmo" target="_blank" className="text-blue-500 hover:underline"
-    >Finn Morris
+    > Finn Morris
     </a>
 </div>
 </footer>
