@@ -28,8 +28,7 @@ const Page: NextPageWithLayout = () => {
   </div>
   <div className="mt-2">
   <h1 className="text-1xl font-semibold text-gray-500 px-4">Signs</h1>
-      <StatusBlockMap></StatusBlockMap>
-
+    <StatusBlockMap></StatusBlockMap>
     <div className="grid grid-cols-1 p-4 space-y-8 lg:gap-8 lg:space-y-0 lg:grid-cols-3">
     <AvailablityLineChart></AvailablityLineChart>
     <ActiveSigns></ActiveSigns>
@@ -46,7 +45,11 @@ const Page: NextPageWithLayout = () => {
 const StatusBlockMap = () => {
   const {data, isLoading} = api.sign.getAll.useQuery();
 
-  if (isLoading) return <LoadingSpinner size={40}/>
+  if (isLoading) return (
+      <div className="top-0 right-0 ml-6 mt-3">
+      <LoadingSpinner size={40}/>
+      </div>
+  )
 
   if(!data) return <div>Something went wrong...</div>
 
