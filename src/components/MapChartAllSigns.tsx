@@ -48,6 +48,7 @@ const MapChartAllSigns: React.FunctionComponent<{allSigns: Sign[]}>=( props: Pro
                 />
                 {...props.allSigns?.map((sign: Sign) => (
                 <Marker
+                    key={sign.id}
                     position={[sign.latitude, sign.longitude]}
                     icon={DefaultIcon}>
                     <Popup>
