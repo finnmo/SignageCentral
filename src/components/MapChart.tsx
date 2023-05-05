@@ -8,7 +8,7 @@ type Props = {
     longitude: number,
 }; 
 
-let DefaultIcon = L.icon({
+const DefaultIcon = L.icon({
     iconUrl: '/assets/marker-icon.png',
     shadowUrl: '/assets/marker-shadow.png'
 });
