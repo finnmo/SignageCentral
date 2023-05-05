@@ -4,7 +4,6 @@ import { api } from "~/utils/api";
 import useModal from "~/server/helpers/useModal";
 import useModalIntegration from "~/server/helpers/useModalIntegration";
 import { useRouter } from "next/router";
-import MapChartAddSign from "./MapChartAddSign";
 import dynamic from "next/dynamic";
 
 
