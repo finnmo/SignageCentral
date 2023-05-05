@@ -27,13 +27,11 @@ const MapChart: React.FunctionComponent<{latitude: number, longitude: number}>=(
     function CustomMarker() {
         L.Marker.prototype.options.icon = DefaultIcon;
         
-        const markerRef = useRef<any>(null)
         return (
 
           <Marker
             draggable={false}
-            position={[latitude, longitude]}
-            ref={markerRef}>
+            position={[latitude, longitude]}>
           </Marker>
         )
     }

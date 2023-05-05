@@ -26,19 +26,12 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
 
-  useEffect(() => {
-    if(data){
-    if(data.latitude){
-      setLatitude(data.latitude);
-    }
-    if(data.longitude){
-      setLongitude(data.longitude);
-    }
-  }
-  }, []);
-  
+  if(data){
+    setLatitude(data.latitude);
+    setLongitude(data.longitude);
+  }  
   if(!data) return <div>404 Not found</div>
-  
+
   return  (
   <>
 <div className="flex items-center justify-between px-4 py-4 border-b lg:py-6 dark:border-primary-darker z-10">

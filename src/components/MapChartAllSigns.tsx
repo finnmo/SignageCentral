@@ -2,7 +2,7 @@ import React, {useState } from "react";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from "leaflet";
-import { Sign } from "@prisma/client";
+import { type Sign } from "@prisma/client";
 
 
 const DefaultIcon = L.icon({
