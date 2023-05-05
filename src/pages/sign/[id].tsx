@@ -1,4 +1,4 @@
-import { type ReactElement, type ReactNode, useState   } from "react";
+import { type ReactElement, type ReactNode, useState, useEffect   } from "react";
 import Layout from "~/layouts/Layout";
 import type { NextPageWithLayout } from "../_app";
 import React from 'react'
@@ -26,10 +26,15 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
 
-  if(data){
-    setLatitude(data.latitude);
-    setLongitude(data.longitude);
-  }  
+  useEffect(() => {
+    // put the fetchData inside the effect
+    if(data){
+      setLatitude(data.latitude);
+      setLongitude(data.longitude);
+    }
+  },[]);
+
+
   if(!data) return <div>404 Not found</div>
 
   return  (
