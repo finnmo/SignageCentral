@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import L from "leaflet";
 
-let DefaultIcon = L.icon({
+const DefaultIcon = L.icon({
     iconUrl: '/assets/marker-icon.png',
     shadowUrl: '/assets/marker-shadow.png'
 });

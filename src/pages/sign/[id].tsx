@@ -1,4 +1,4 @@
-import { type ReactElement, type ReactNode, useState   } from "react";
+import { type ReactElement, type ReactNode, useState, useEffect   } from "react";
 import Layout from "~/layouts/Layout";
 import type { NextPageWithLayout } from "../_app";
 import React from 'react'
@@ -24,9 +24,17 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
   if(!data) return <div>404 Not found</div>
 
-  const [latitude] = useState(data.latitude? data.latitude : 0);
-  const [longitude] = useState(data.longitude? data.longitude : 0);
-  
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+
+  useEffect(() => {
+    if(data.latitude){
+      setLatitude(data.latitude);
+    }
+    if(data.longitude){
+      setLongitude(data.longitude);
+    }
+  }, []);
 
   return  (
   <>

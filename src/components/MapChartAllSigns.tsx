@@ -5,7 +5,7 @@ import L from "leaflet";
 import { Sign } from "@prisma/client";
 
 
-let DefaultIcon = L.icon({
+const DefaultIcon = L.icon({
     iconUrl: '/assets/marker-icon.png',
     shadowUrl: '/assets/marker-shadow.png'
 });
