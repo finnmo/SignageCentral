@@ -12,7 +12,10 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 
 const Page: NextPageWithLayout = () => {
   
-  const MapChart = dynamic(() => import("~/components/MapChart"), { ssr:false })
+  const MapChartAllSigns = dynamic(() => import("~/components/MapChartAllSigns"), { ssr:false })
+  const {data} = api.sign.getAll.useQuery();
+
+  if(!data) return <div className="top-0 right-0 ml-6 mt-3" >Something went wrong...</div>
 
   return (        
   <>
@@ -35,7 +38,7 @@ const Page: NextPageWithLayout = () => {
     </div>
 
     <div className="grid grid-cols-1 p-4 space-y-8 lg:gap-8 lg:space-y-0 lg:grid-cols-2">
-      <MapChart></MapChart>
+      <MapChartAllSigns allSigns={data}></MapChartAllSigns>
     </div>
   </div>
 </>
@@ -51,7 +54,7 @@ const StatusBlockMap = () => {
       </div>
   )
 
-  if(!data) return <div>Something went wrong...</div>
+  if(!data) return <div className="top-0 right-0 ml-6 mt-3" >Something went wrong...</div>
 
   return (
     <div className="grid grid-cols-1 gap-8 p-4 lg:grid-cols-2 xl:grid-cols-4">

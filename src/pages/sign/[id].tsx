@@ -14,7 +14,7 @@ import useModal from "~/server/helpers/useModal";
 
 const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
-  const MapChartWithEdit = dynamic(() => import("~/components/MapChartWithEdit"), { ssr:false })
+  const MapChart = dynamic(() => import("~/components/MapChart"), { ssr:false })
 
   const { isOpen, toggle } = useModal();
 
@@ -23,6 +23,10 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   });
 
   if(!data) return <div>404 Not found</div>
+
+  const [latitude] = useState(data.latitude? data.latitude : 0);
+  const [longitude] = useState(data.longitude? data.longitude : 0);
+  
 
   return  (
   <>
@@ -50,7 +54,7 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   </div>
 
   <div className="grid grid-cols-1 p-4 space-y-8 lg:gap-8 lg:space-y-0 lg:grid-cols-2">
-    <MapChartWithEdit></MapChartWithEdit>
+    <MapChart latitude={latitude} longitude={longitude}></MapChart>
   </div>
 </div>
 </>

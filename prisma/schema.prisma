@@ -23,6 +23,8 @@ model Sign {
   customContentEnabled         Boolean       @default(false)
   emergencyNotificationEnabled Boolean       @default(false)
   customContentId              String
+  latitude                     Float
+  longitude                    Float
 }
 
 model CustomContent {

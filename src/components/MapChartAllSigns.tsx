@@ -1,42 +1,22 @@
-import React, {useRef, useState } from "react";
+import React, {useState } from "react";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import L from "leaflet";
+import { api } from "~/utils/api";
+import { Sign } from "@prisma/client";
 
-type Props = {
-    latitude: number, 
-    longitude: number,
-}; 
 
 let DefaultIcon = L.icon({
     iconUrl: '/assets/marker-icon.png',
     shadowUrl: '/assets/marker-shadow.png'
 });
- 
-const MapChart: React.FunctionComponent<{latitude: number, longitude: number}>=(props: Props) =>{
+type Props = {
+    allSigns: Sign[]
+}; 
 
-    const [isOnLineChart] = useState(true);
-     
-    const handleLineChartButton = () => {
-        console.log("");
-      }
+const MapChartAllSigns: React.FunctionComponent<{allSigns: Sign[]}>=( props: Props) =>{
 
-    const [latitude] = useState(props.latitude? props.latitude : 0);
-    const [longitude] = useState(props.longitude? props.longitude : 0);
-
-    function CustomMarker() {
-        L.Marker.prototype.options.icon = DefaultIcon;
-        
-        const markerRef = useRef<any>(null)
-        return (
-
-          <Marker
-            draggable={false}
-            position={[latitude, longitude]}
-            ref={markerRef}>
-          </Marker>
-        )
-    }
+    const [isOnLineChart, setIsOnLineChart] = useState(false);
 
     return (
         <div className="col-span-2 bg-white rounded-md dark:bg-darker" x-data="{ isOn: false }">
@@ -46,7 +26,7 @@ const MapChart: React.FunctionComponent<{latitude: number, longitude: number}>=(
                 <button
                 className="relative focus:outline-none"
                 //x-cloak
-                onClick={handleLineChartButton}
+                onClick={()=>setIsOnLineChart}
                 >
                 <div
                     className="w-12 h-6 transition rounded-full outline-none bg-primary-100 dark:bg-primary-darker"
@@ -61,17 +41,22 @@ const MapChart: React.FunctionComponent<{latitude: number, longitude: number}>=(
             </div>
             <div className="block overflow-hidden p-4 h-72" id="map">
 
-            <MapContainer className="h-full w-full" center={[latitude, longitude]} zoom={15} scrollWheelZoom={false}>
+            <MapContainer className="h-full w-full" center={[-32.005760548213935,115.8936261719052]} zoom={15} scrollWheelZoom={false}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     className='map-tiles'
                 />
-                <CustomMarker></CustomMarker>
-                </MapContainer>
-
+                {...props.allSigns?.map((sign: Sign) => (
+                <Marker
+                    position={[sign.latitude, sign.longitude]}
+                    icon={DefaultIcon}>
+                </Marker>
+                ))}
+            </MapContainer>
+            
             </div>
         </div>
     )
 }
-export default MapChart
+export default MapChartAllSigns

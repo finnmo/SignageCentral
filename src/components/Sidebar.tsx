@@ -4,6 +4,8 @@ import { api } from "~/utils/api";
 import useModal from "~/server/helpers/useModal";
 import useModalIntegration from "~/server/helpers/useModalIntegration";
 import { useRouter } from "next/router";
+import MapChartAddSign from "./MapChartAddSign";
+import dynamic from "next/dynamic";
 
 
 type Props = {
@@ -77,12 +79,6 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
         </a>
         <div role="menu" className={`mt-2 space-y-2 px-7 ${openDashboards ? "" : "hidden"}`} aria-label="Dashboards">
             <Link
-            href="/dashboards/overview"
-            className={`${router.pathname == "/dashboards/overview" ? "text-gray-700" : ""} block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700`}
-            >
-            Overview
-            </Link>
-            <Link
             href="/"
             className={`${router.pathname == "/" ? "text-gray-700" : ""} block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-light dark:hover:text-light hover:text-gray-700`}
             //if active: text-gray-700
@@ -90,7 +86,13 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
             Dashboard Template
             </Link>
             <Link
-            href="/"
+            href="/dashboards/overview"
+            className={`${router.pathname == "/dashboards/overview" ? "text-gray-700" : ""} block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700`}
+            >
+            Overview
+            </Link>
+            <Link
+            href="/dashboard/tbd"
             className={`${router.pathname == "/dashboard/TBD" ? "text-gray-700" : ""} block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700`}
             >
             TBD (soon)
@@ -535,26 +537,30 @@ export function AddSignModal(props: ModalType) {
         }
     );
 
+    const MapChartAddSign = dynamic(() => import("~/components/MapChartAddSign"), { ssr:false })
+
 
     const [isOnParkingMap, setIsOnParkingMap] = useState(false);
     const [isOnEmergency, setIsOnEmergency] = useState(false);
 
     const [signName, setSignName] = useState("");
-    const [signNumber, setSignNumber] = useState<number>(0);
+    const [signNumber, setSignNumber] = useState<number>(data?.number ? data.number + 1 : 1);
     const [signHeight, setSignHeight] = useState<number>(443);
     const [signWidth, setSignWidth] = useState<number>(192);
     const [signType] = useState("general");
+    const [latitude, setLatitude] = useState(-32.005760548213935);
+    const [longitude, setLongitude] = useState(115.8936261719052);
 
     const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 0;
+      const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 1;
       setSignNumber(value);
     }
     const onWidthChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 0;
+        const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 192;
         setSignWidth(value);
     }
     const onHeightChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 0;
+        const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 443;
         setSignHeight(value);
     }
 
@@ -563,19 +569,21 @@ export function AddSignModal(props: ModalType) {
         setIsOnParkingMap(false);
         setIsOnEmergency(false);
         setSignName("");
-        setSignNumber(0);
-        setSignWidth(0);
-        setSignHeight(0);
+        setSignNumber(1);
+        setSignWidth(192);
+        setSignHeight(443);
+        setLatitude(-32.005760548213935);
+        setLongitude(115.8936261719052);
     }
 
     return (
         <> 
             {props.isOpen && (
                 <div className="z-20">
-                    <div className="py-12 bg-gray-500/50 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 dark:bg-darker/50" id="modal">
-                        <div role="alert" className="container mx-auto w-11/12 md:w-2/3 max-w-lg">
-                            <div className="relative py-8 px-5 md:px-10 bg-white dark:bg-dark dark:border-gray-700 shadow-md rounded-md border border-gray-400">
-                                <div className="w-full flex justify-start text-gray-600 mb-3">
+                    <div className="overflow-y-hidden h-full py-12 bg-gray-500/50 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 dark:bg-darker/50" id="modal">
+                        <div role="alert" className="h-full overflow-y-auto mx-auto w-11/12 md:w-2/3 max-w-lg">
+                            <div className="py-8 px-5 md:px-10 bg-white dark:bg-dark dark:border-gray-700 shadow-md rounded-md border border-gray-400">
+                                <div className=" w-full flex justify-start text-gray-600 mb-3">
                                 <svg
                                     className="w-5 h-5"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -599,7 +607,7 @@ export function AddSignModal(props: ModalType) {
                                     </div>
                                     <div>
                                         <label className="text-gray-800dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Number</label>
-                                        <input value={signNumber || data!.number+1} onChange={onNumberChange} type="number" id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
+                                        <input value={signNumber} onChange={onNumberChange} type="number" id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-24 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
                                     </div>
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Sign Type</label>
@@ -612,6 +620,11 @@ export function AddSignModal(props: ModalType) {
                                     <input value={signWidth ?? ''} onChange={onWidthChange} type="number" id="name" className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
                                     <input value={signHeight ?? ''} onChange={onHeightChange} type="number" id="name" className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
                                 </div>
+                                <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Location</label>
+                                <div className="block p-4 w-50 h-48" id="map">
+                                    <MapChartAddSign latitude={latitude} setLatitude={setLatitude} longitude={longitude} setLongitude={setLongitude}></MapChartAddSign>
+                                </div>
+                                <div></div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Parking Map</label>
                                 <div className="flex items-center w-full h-10">
                                     <button
@@ -677,7 +690,7 @@ export function AddSignModal(props: ModalType) {
                                 
                                 <div className="flex items-center justify-start w-full">
                                 <button
-                                    onClick={() => mutate({signName, signNumber, signWidth, signHeight, signType})}
+                                    onClick={() => mutate({signName, signNumber, signWidth, signHeight, signType, latitude, longitude})}
                                     className="px-8 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
                                     >
                                     Submit
@@ -719,6 +732,7 @@ interface ModalTypeIntegration {
       const handleCancel = () => {
           props.toggleIntegration();
       }
+
   
       return (
           <> 
