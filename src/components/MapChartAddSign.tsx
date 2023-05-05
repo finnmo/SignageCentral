@@ -22,7 +22,7 @@ const MapChartAddSign: React.FunctionComponent<{latitude: number, setLatitude: R
       function DraggableMarker() {
         L.Marker.prototype.options.icon = DefaultIcon;
         
-        const markerRef = useRef<any>(null)
+        const markerRef = useRef<L.Marker>(null)
         const eventHandlers = useMemo(
           () => ({
             dragend() {
