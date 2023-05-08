@@ -11,11 +11,13 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 
 
 const Page: NextPageWithLayout = () => {
-  
-  const MapChartAllSigns = dynamic(() => import("~/components/MapChartAllSigns"), { ssr:false })
-  const {data} = api.sign.getAll.useQuery();
+    const {data, isLoading} = api.sign.getAll.useQuery();
+
+  if(isLoading) return <LoadingSpinner></LoadingSpinner>
 
   if(!data) return <div className="top-0 right-0 ml-6 mt-3" >Something went wrong...</div>
+
+  const MapChartAllSigns = dynamic(() => import("~/components/MapChartAllSigns"), { ssr:false })
 
   return (        
   <>

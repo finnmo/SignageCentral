@@ -1,10 +1,13 @@
-import React, {useState, type ReactNode, type Dispatch, type SetStateAction, type ChangeEvent } from "react";
+import React, {useState, type ReactNode, type Dispatch, type SetStateAction, useEffect } from "react";
 import Link from 'next/link'
 import { api } from "~/utils/api";
 import useModal from "~/server/helpers/useModal";
 import useModalIntegration from "~/server/helpers/useModalIntegration";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import { ChangeEvent } from "react";
+import { useRef } from "react";
+import { number } from "zod";
 
 
 type Props = {
@@ -526,7 +529,6 @@ export function AddSignModal(props: ModalType) {
 
     const {data} = api.sign.getLastSign.useQuery();
 
-
     const { mutate } = api.sign.create.useMutation(
         {
             onSuccess: () => {
@@ -538,21 +540,21 @@ export function AddSignModal(props: ModalType) {
 
     const MapChartAddSign = dynamic(() => import("~/components/MapChartAddSign"), { ssr:false })
 
-
     const [isOnParkingMap, setIsOnParkingMap] = useState(false);
     const [isOnEmergency, setIsOnEmergency] = useState(false);
 
     const [signName, setSignName] = useState("");
-    const [signNumber, setSignNumber] = useState<number>(data?.number ? data.number + 1 : 1);
+    const [signNumber, setSignNumber] = useState<number>(0);
     const [signHeight, setSignHeight] = useState<number>(443);
     const [signWidth, setSignWidth] = useState<number>(192);
     const [signType] = useState("general");
     const [latitude, setLatitude] = useState(-32.005760548213935);
     const [longitude, setLongitude] = useState(115.8936261719052);
 
+
     const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 1;
-      setSignNumber(value);
+        const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 0;
+        setSignNumber(value);
     }
     const onWidthChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 192;
@@ -574,6 +576,7 @@ export function AddSignModal(props: ModalType) {
         setLatitude(-32.005760548213935);
         setLongitude(115.8936261719052);
     }
+    
 
     return (
         <> 
@@ -602,11 +605,11 @@ export function AddSignModal(props: ModalType) {
                                 <div className="flex flex-row">
                                     <div> 
                                         <label  className="text-gray-800 dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Name</label>
-                                        <input value={signName} onChange={(e) => setSignName(e.target.value)} defaultValue="Test 2" type="text" id="name" className="mb-5 mr-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-80 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Enter sign name" />
+                                        <input onChange={(e) => setSignName(e.target.value)} type="text" id="name" className="mb-5 mr-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-80 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Enter sign name" />
                                     </div>
                                     <div>
                                         <label className="text-gray-800dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Number</label>
-                                        <input value={signNumber} onChange={onNumberChange} type="number" id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-24 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
+                                        <input onChange={onNumberChange} type="number" id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-24 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
                                     </div>
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Sign Type</label>
@@ -616,8 +619,8 @@ export function AddSignModal(props: ModalType) {
                                 </select>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Screen Dimensions</label>
                                 <div className="flex flex-row">
-                                    <input value={signWidth ?? ''} onChange={onWidthChange} type="number" id="name" className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
-                                    <input value={signHeight ?? ''} onChange={onHeightChange} type="number" id="name" className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
+                                    <input onChange={onWidthChange} type="number" id="name" className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
+                                    <input onChange={onHeightChange} type="number" id="name" className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Location</label>
                                 <div className="block p-4 w-50 h-48" id="map">
@@ -732,7 +735,6 @@ interface ModalTypeIntegration {
           props.toggleIntegration();
       }
 
-  
       return (
           <> 
               {props.isOpenIntegration && (

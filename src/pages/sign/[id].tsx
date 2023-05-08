@@ -1,4 +1,4 @@
-import { type ReactElement, type ReactNode, useState, useEffect   } from "react";
+import { type ReactElement, type ReactNode, useState, useEffect, ChangeEvent, useRef   } from "react";
 import Layout from "~/layouts/Layout";
 import type { NextPageWithLayout } from "../_app";
 import React from 'react'
@@ -10,7 +10,7 @@ import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { prisma } from "~/server/db";
 import "leaflet/dist/leaflet.css";
 import useModal from "~/server/helpers/useModal";
-
+import { Sign } from "@prisma/client";
 
 const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
@@ -22,7 +22,6 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
     id,
   });
 
-
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
 
@@ -31,7 +30,10 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
     if(data){
       setLatitude(data.latitude);
       setLongitude(data.longitude);
+      console.log(data)
     }
+
+
   },[]);
 
 
@@ -48,7 +50,7 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
     Edit
   </button>
 </div>
-<EditSign number={data.number} isOpen={isOpen} toggle={toggle}></EditSign>
+<EditSign data={data} isOpen={isOpen} toggle={toggle}></EditSign>
 
 <div className="mt-2">
 <h1 className="text-1xl font-semibold text-gray-500 px-4">Signs</h1>
@@ -115,20 +117,58 @@ SignPage.getLayout = function getLayout(page: ReactElement) {
   )
   }
 
-  export default SignPage
+export default SignPage
 
 
 interface ModalType {
   children?: ReactNode;
   isOpen: boolean;
   toggle: () => void;
-  number: number;
+  data: Sign;
 }
 
 export function EditSign(props: ModalType) {
-    const [isOnParkingMap, setIsOnParkingMap] = useState(false);
-    const [isOnEmergency, setIsOnEmergency] = useState(false);
 
+    const [isOnParkingMap, setIsOnParkingMap] = useState(props.data.customContentEnabled ? props.data.customContentEnabled: false);
+    const [isOnEmergency, setIsOnEmergency] = useState(props.data.emergencyNotificationEnabled ? props.data.emergencyNotificationEnabled: false);
+
+    const [signName, setSignName] = useState<string>("");
+    const [signNumber, setSignNumber] = useState<number>(props.data.number ? props.data.number : 1);
+    const [signWidth, setSignWidth] = useState<number>(props.data.width ? props.data.width : 1);
+    const [signHeight, setSignHeight] = useState<number>(props.data.height ? props.data.height : 1);
+    const [signLatitude, setLatitude] = useState<number>(props.data.latitude ? props.data.latitude : 0);
+    const [signLongitude, setLongitude] = useState<number>(props.data.longitude ? props.data.longitude : 0);
+    
+
+    const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 1;
+      setSignNumber(value);
+    }
+    const onWidthChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 1;
+      setSignWidth(value);
+    }
+    const onHeightChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 1;
+      setSignHeight(value);
+    }
+
+
+    useEffect(() => {
+      if(props.data){
+          if(props.data.latitude && props.data.longitude){
+              setLatitude(props.data.latitude);
+              setLongitude(props.data.longitude);
+          }
+          if(props.data.emergencyNotificationEnabled == true){
+              setIsOnEmergency(true);
+          }
+          if(props.data.customContentEnabled == true){
+              setIsOnParkingMap(true);
+          }
+      }
+
+  }, []);
     return (
         <> 
             {props.isOpen && (
@@ -152,15 +192,15 @@ export function EditSign(props: ModalType) {
                                     />
                                 </svg>
                                 </div>
-                                <h1 className="text-gray-800 dark:text-light font-lg font-bold tracking-normal leading-tight mb-4">Edit Sign {props.number}</h1>
+                                <h1 className="text-gray-800 dark:text-light font-lg font-bold tracking-normal leading-tight mb-4">Edit Sign</h1>
                                 <div className="flex flex-row">
                                     <div> 
-                                        <label  className="text-gray-800 dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Name</label>
-                                        <input id="name" className="mb-5 mt-2 text-gray-400 dark:bg-primary placeholder-gray-200 dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-80 mr-5 focus:outline-none focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Enter sign name" />
+                                        <label className="text-gray-800 dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Name</label>
+                                        <input id="name" defaultValue={props.data.name} onChange={(e) => setSignName(e.target.value)}  className="mb-5 mt-2 text-gray-400 dark:bg-primary placeholder-gray-200 dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-80 mr-5 focus:outline-none focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Enter sign name" />
                                     </div>
                                     <div>
                                         <label className="text-gray-800dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Number</label>
-                                        <input id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
+                                        <input id="number"defaultValue={props.data.number} onChange={onNumberChange} className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
                                     </div>
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Sign Type</label>
@@ -170,8 +210,8 @@ export function EditSign(props: ModalType) {
                                 </select>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Screen Dimensions</label>
                                 <div className="flex flex-row">
-                                    <input id="name" className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
-                                    <input id="name" className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
+                                    <input id="name" defaultValue={props.data.width} onChange={onWidthChange} className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
+                                    <input id="name" defaultValue={props.data.width} onChange={onHeightChange} className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Parking Map</label>
                                 <div className="flex items-center w-full h-10">
@@ -219,7 +259,7 @@ export function EditSign(props: ModalType) {
                                 <button
                                     className="px-8 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
                                     >
-                                    Submit
+                                    Update
                                     </button>
                                 <button
                                     className="dark:bg-primary-darker dark:text-light px-8 py-2 ml-3 text-sm text-gray-700 hover:text-lighter hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 border rounded"
@@ -228,13 +268,13 @@ export function EditSign(props: ModalType) {
                                 </button>  
                                 </div>
                                 <button className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onClick={props.toggle} aria-label="close modal" role="button">
-                                    <svg  xmlns="http://www.w3.org/2000/svg"  className="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  className="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" />
                                         <line x1="18" y1="6" x2="6" y2="18" />
                                         <line x1="6" y1="6" x2="18" y2="18" />
                                     </svg>
                                 </button>
-                            </div>
+                            </div>  
                         </div>
                     </div>
             </div>
