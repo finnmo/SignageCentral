@@ -11,6 +11,7 @@ import { prisma } from "~/server/db";
 import "leaflet/dist/leaflet.css";
 import useModal from "~/server/helpers/useModal";
 import { Sign } from "@prisma/client";
+import { LoadingSpinner } from "~/components/LoadingSpinner";
 
 const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
@@ -18,7 +19,7 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
   const { isOpen, toggle } = useModal();
 
-  const { data } = api.sign.getById.useQuery({
+  const { data, isLoading } = api.sign.getById.useQuery({
     id,
   });
 
@@ -30,13 +31,10 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
     if(data){
       setLatitude(data.latitude);
       setLongitude(data.longitude);
-      console.log(data)
     }
-
-
   },[]);
 
-
+  if(isLoading) return <LoadingSpinner></LoadingSpinner>
   if(!data) return <div>404 Not found</div>
 
   return  (
@@ -128,47 +126,97 @@ interface ModalType {
 }
 
 export function EditSign(props: ModalType) {
+  const ctx = api.useContext();
 
-    const [isOnParkingMap, setIsOnParkingMap] = useState(props.data.customContentEnabled ? props.data.customContentEnabled: false);
-    const [isOnEmergency, setIsOnEmergency] = useState(props.data.emergencyNotificationEnabled ? props.data.emergencyNotificationEnabled: false);
+  const { mutate } = api.sign.update.useMutation(
+    {
+      onSuccess: () => {
+          handleCancel();
+          void ctx.sign.invalidate();
+      }
+    }
+  );
+    const handleCancel = () => {
+      props.toggle();
+      if(props.data){
+        setCustomContentEnabled(props.data.customContentEnabled);
+        setEmergencyNotificationEnabled(props.data.emergencyNotificationEnabled);
+        setSignName(props.data.name);
+        setSignNumber(props.data.number);
+        setSignWidth(props.data.width);
+        setSignHeight(props.data.height);
+        setLatitude(props.data.latitude);
+        setLongitude(props.data.longitude);
+      }
+    }
 
     const [signName, setSignName] = useState<string>("");
     const [signNumber, setSignNumber] = useState<number>(props.data.number ? props.data.number : 1);
     const [signWidth, setSignWidth] = useState<number>(props.data.width ? props.data.width : 1);
     const [signHeight, setSignHeight] = useState<number>(props.data.height ? props.data.height : 1);
-    const [signLatitude, setLatitude] = useState<number>(props.data.latitude ? props.data.latitude : 0);
-    const [signLongitude, setLongitude] = useState<number>(props.data.longitude ? props.data.longitude : 0);
-    
+    const [latitude, setLatitude] = useState<number>(props.data.latitude ? props.data.latitude : 0);
+    const [longitude, setLongitude] = useState<number>(props.data.longitude ? props.data.longitude : 0);
+    const [signType, setSignType] = useState<string>(props.data.type ? props.data.type : "general");
+    const [customContentEnabled, setCustomContentEnabled] = useState(props.data.customContentEnabled ? props.data.customContentEnabled : false);
+    const [emergencyNotificationEnabled, setEmergencyNotificationEnabled] = useState(props.data.emergencyNotificationEnabled ? props.data.emergencyNotificationEnabled : false);
 
     const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 1;
-      setSignNumber(value);
-    }
-    const onWidthChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 1;
-      setSignWidth(value);
-    }
-    const onHeightChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 1;
-      setSignHeight(value);
-    }
+      const value = e.target.value.trim();
+      if (value && !isNaN(Number(value))) {
+        const numberValue = Number(value);
+        setSignNumber(numberValue);
+      }
+    };
 
+    const onWidthChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value.trim();
+      if (value && !isNaN(Number(value))) {
+        const numberValue = Number(value);
+        setSignWidth(numberValue);
+      }
+    };
+
+    const onHeightChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value.trim();
+      if (value && !isNaN(Number(value))) {
+        const numberValue = Number(value);
+        setSignHeight(numberValue);
+      }
+    };
+    const onTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+      const value = e.target.value;
+      setSignType(value);
+    };
+    
 
     useEffect(() => {
+      const close = (e: any) => {
+        if(e.keyCode === 27 && props.isOpen){
+          handleCancel();
+        }
+      }
+      window.addEventListener('keydown', close)
+    return () => window.removeEventListener('keydown', close)
+    },[])
+
+    useEffect(() => {
+      console.log(props.data)
       if(props.data){
           if(props.data.latitude && props.data.longitude){
               setLatitude(props.data.latitude);
               setLongitude(props.data.longitude);
           }
-          if(props.data.emergencyNotificationEnabled == true){
-              setIsOnEmergency(true);
+          if(props.data.emergencyNotificationEnabled != null){
+              setEmergencyNotificationEnabled(props.data.emergencyNotificationEnabled);
           }
-          if(props.data.customContentEnabled == true){
-              setIsOnParkingMap(true);
+          if(props.data.customContentEnabled != null){
+              setCustomContentEnabled(props.data.customContentEnabled);
           }
       }
+  }, [props.data]);
 
-  }, []);
+    if(!props.data) return <LoadingSpinner></LoadingSpinner>
+
     return (
         <> 
             {props.isOpen && (
@@ -196,36 +244,36 @@ export function EditSign(props: ModalType) {
                                 <div className="flex flex-row">
                                     <div> 
                                         <label className="text-gray-800 dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Name</label>
-                                        <input id="name" defaultValue={props.data.name} onChange={(e) => setSignName(e.target.value)}  className="mb-5 mt-2 text-gray-400 dark:bg-primary placeholder-gray-200 dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-80 mr-5 focus:outline-none focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Enter sign name" />
+                                        <input id="name" defaultValue={props.data.name} onChange={(e) => setSignName(e.target.value)}  className="mb-5 mt-2 text-gray-600 dark:bg-primary placeholder-gray-200 dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-80 mr-5 focus:outline-none focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Enter sign name" />
                                     </div>
                                     <div>
-                                        <label className="text-gray-800dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Number</label>
-                                        <input id="number"defaultValue={props.data.number} onChange={onNumberChange} className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
+                                        <label className="text-gray-800 dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Number</label>
+                                        <input id="number" defaultValue={props.data.number} onChange={onNumberChange} className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
                                     </div>
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Sign Type</label>
-                                <select className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-50 focus:outline-none  focus:ring focus:ring-primary  font-normal h-7 flex items-center pl-3 text-sm border-gray-300 rounded border" id="cars" name="cars">
+                                <select defaultValue={props.data.type} onChange={onTypeChange} className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-50 focus:outline-none  focus:ring focus:ring-primary  font-normal h-7 flex items-center pl-3 text-sm border-gray-300 rounded border">
                                     <option value="general">General</option>
                                     <option value="pole_mounted">Pole Mounted</option>
                                 </select>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Screen Dimensions</label>
                                 <div className="flex flex-row">
                                     <input id="name" defaultValue={props.data.width} onChange={onWidthChange} className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
-                                    <input id="name" defaultValue={props.data.width} onChange={onHeightChange} className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
+                                    <input id="name" defaultValue={props.data.height} onChange={onHeightChange} className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Parking Map</label>
                                 <div className="flex items-center w-full h-10">
                                     <button
                                     className="relative focus:outline-none"
                                     //x-cloak
-                                    onClick={ () => setIsOnParkingMap(!isOnParkingMap)}
+                                    onClick={ () => setCustomContentEnabled(!customContentEnabled)}
                                     >
                                     <div
                                         className="w-12 h-6 transition rounded-full outline-none bg-primary-100 dark:bg-primary-darker"
                                     ></div>
                                     <div
                                         className={`absolute top-0 left-0 inline-flex items-center justify-center w-6 h-6 transition-all duration-200 ease-in-out transform scale-110 rounded-full shadow-sm ${
-                                        isOnParkingMap ? "translate-x-6 bg-primary-light dark:bg-primary" : "translate-x-0  bg-white dark:bg-primary-100"
+                                        customContentEnabled ? "translate-x-6 bg-primary-light dark:bg-primary" : "translate-x-0  bg-white dark:bg-primary-100"
                                         }`}   
                                     ></div>
                                     </button>
@@ -234,7 +282,7 @@ export function EditSign(props: ModalType) {
                                 <div className="flex items-center w-full h-10 mb-3">
                                     <button
                                     className="relative focus:outline-none"
-                                    onClick={ () => setIsOnEmergency(!isOnEmergency)}
+                                    onClick={ () => setEmergencyNotificationEnabled(!emergencyNotificationEnabled)}
                                     //x-cloak
                                     >
                                     <div
@@ -242,12 +290,12 @@ export function EditSign(props: ModalType) {
                                     ></div>
                                     <div
                                         className={`absolute top-0 left-0 inline-flex items-center justify-center w-6 h-6 transition-all duration-200 ease-in-out transform scale-110 rounded-full shadow-sm ${
-                                            isOnEmergency ? "translate-x-6 bg-primary-light dark:bg-primary" : "translate-x-0  bg-white dark:bg-primary-100"
+                                            emergencyNotificationEnabled ? "translate-x-6 bg-primary-light dark:bg-primary" : "translate-x-0  bg-white dark:bg-primary-100"
                                         }`}   
                                     ></div>
                                     </button>
                                 </div>
-                                <div className={`${isOnEmergency ? '' : 'hidden'} ml-5 mr-5`}>
+                                <div className={`${emergencyNotificationEnabled ? '' : 'hidden'} ml-5 mr-5`}>
                                     <label className="text-gray-600 dark:text-light  text-sm leading-tight tracking-normal">Data Source</label>
                                     <select className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-full focus:outline-none  focus:ring focus:ring-primary  font-normal h-7 flex items-center pl-3 text-sm border-gray-300 rounded border" id="cars" name="cars">
                                         <option value="general">Gallagher</option>
@@ -257,17 +305,18 @@ export function EditSign(props: ModalType) {
                                 
                                 <div className="flex items-center justify-start w-full">
                                 <button
+                                    onClick={() => mutate({id:props.data.id, signName, signNumber, signType, signWidth, signHeight, latitude, longitude, customContentEnabled, emergencyNotificationEnabled})}
                                     className="px-8 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
                                     >
                                     Update
                                     </button>
                                 <button
                                     className="dark:bg-primary-darker dark:text-light px-8 py-2 ml-3 text-sm text-gray-700 hover:text-lighter hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 border rounded"
-                                    onClick={props.toggle}>
+                                    onClick={handleCancel}>
                                     Cancel
                                 </button>  
                                 </div>
-                                <button className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onClick={props.toggle} aria-label="close modal" role="button">
+                                <button className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onClick={handleCancel} aria-label="close modal" role="button">
                                     <svg  xmlns="http://www.w3.org/2000/svg"  className="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" />
                                         <line x1="18" y1="6" x2="6" y2="18" />

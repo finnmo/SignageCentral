@@ -9,6 +9,6 @@ export default function useModal() {
 
   return {
     isOpen,
-    toggle
+    toggle,
   };
 }

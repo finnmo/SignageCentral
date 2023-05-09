@@ -7,8 +7,14 @@ export default function useModalIntegration() {
     setIsOpenIntegration(!isOpenIntegration);
   };
 
+  const closeIntegration = () =>{
+    setIsOpenIntegration(false);
+  }
+
+
   return {
     isOpenIntegration,
-    toggleIntegration
+    toggleIntegration,
+    closeIntegration,
   };
 }

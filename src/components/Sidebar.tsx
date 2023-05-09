@@ -6,9 +6,6 @@ import useModalIntegration from "~/server/helpers/useModalIntegration";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { ChangeEvent } from "react";
-import { useRef } from "react";
-import { number } from "zod";
-
 
 type Props = {
     isDark: boolean;
@@ -28,11 +25,12 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
 
   
   const [openDashboards, setOpenDashboards] = useState(true);
-  const [openComponents, setOpenComponents] = useState(false);
+  const [openSigns, setOpenSigns] = useState(router.pathname == "/sign/{id}" ? true : false);
   const [openPages, setOpenPages] = useState(false);
   const [openAuthentication, setOpenAuthentication] = useState(false);
   const [openLayouts, setOpenLayouts] = useState(false);
   const [openParkingMap, setOpenParkingMap] = useState(false);
+
 
   return (
     <>
@@ -106,9 +104,9 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
         <div>
         <a
             href="#"
-            onClick={() => setOpenComponents(!openComponents)}
+            onClick={() => setOpenSigns(!openSigns)}
             className={`flex items-center p-2 text-gray-500 transition-colors rounded-md dark:text-light hover:bg-primary-100 dark:hover:bg-primary ${
-                openComponents ? "bg-primary-100 dark:bg-primary" : ""
+                openSigns ? "bg-primary-100 dark:bg-primary" : ""
               }`}
             role="button"
             aria-haspopup="true"
@@ -133,7 +131,7 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
             <span className="ml-2 text-sm"> Signs</span>
             <span aria-hidden="true" className="ml-auto">
             <svg
-                className={`w-4 h-4 transition-transform transform ${openComponents ? "rotate-180" : ""}`}
+                className={`w-4 h-4 transition-transform transform ${openSigns ? "rotate-180" : ""}`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -143,11 +141,11 @@ const Sidebar: React.FunctionComponent<{ isDark: boolean, isSettingsPanelOpen: b
             </svg>
             </span>
         </a>
-        <div className={`mt-2 space-y-2 px-7 ${openComponents ? "" : "hidden"}`} role="menu" arial-label="Components">
+        <div className={`mt-2 space-y-2 px-7 ${openSigns ? "" : "hidden"}`} role="menu" arial-label="Components">
             {data?.map((sign) => (
                 <Link
                     href={`/sign/${sign.id}`}
-                    className={`${router.pathname == '/sign/'+sign.id ? "text-gray-700" : ""} block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700`}
+                    className={`${router.pathname == `/sign/`+sign.id ? "text-gray-700" : ""} block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700`}
                     key={sign.id}>
                 {sign.name}
                 </Link>
@@ -540,20 +538,19 @@ export function AddSignModal(props: ModalType) {
 
     const MapChartAddSign = dynamic(() => import("~/components/MapChartAddSign"), { ssr:false })
 
-    const [isOnParkingMap, setIsOnParkingMap] = useState(false);
-    const [isOnEmergency, setIsOnEmergency] = useState(false);
-
     const [signName, setSignName] = useState("");
     const [signNumber, setSignNumber] = useState<number>(0);
     const [signHeight, setSignHeight] = useState<number>(443);
     const [signWidth, setSignWidth] = useState<number>(192);
-    const [signType] = useState("general");
+    const [signType, setSignType] = useState("general");
     const [latitude, setLatitude] = useState(-32.005760548213935);
     const [longitude, setLongitude] = useState(115.8936261719052);
+    const [customContentEnabled, setCustomContentEnabled] = useState(false);
+    const [emergencyNotificationEnabled, setEmergencyNotificationEnabled] = useState(false);
 
 
     const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 0;
+        const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 1;
         setSignNumber(value);
     }
     const onWidthChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -564,11 +561,16 @@ export function AddSignModal(props: ModalType) {
         const value = !Number.isNaN(e.target.valueAsNumber) ? e.target.valueAsNumber : 443;
         setSignHeight(value);
     }
+    const onTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSignType(value);
+      };
+      
 
     const handleCancel = () => {
         props.toggle();
-        setIsOnParkingMap(false);
-        setIsOnEmergency(false);
+        setCustomContentEnabled(false);
+        setEmergencyNotificationEnabled(false);
         setSignName("");
         setSignNumber(1);
         setSignWidth(192);
@@ -576,12 +578,22 @@ export function AddSignModal(props: ModalType) {
         setLatitude(-32.005760548213935);
         setLongitude(115.8936261719052);
     }
-    
+
+
+    useEffect(() => {
+        const close = (e: any) => {
+          if(e.keyCode === 27 && props.isOpen){
+            handleCancel();
+          }
+        }
+        window.addEventListener('keydown', close)
+      return () => window.removeEventListener('keydown', close)
+      },[])
 
     return (
         <> 
             {props.isOpen && (
-                <div className="z-20">
+                <div className="z-20" >
                     <div className="overflow-y-hidden h-full py-12 bg-gray-500/50 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 dark:bg-darker/50" id="modal">
                         <div role="alert" className="h-full overflow-y-auto mx-auto w-11/12 md:w-2/3 max-w-lg">
                             <div className="py-8 px-5 md:px-10 bg-white dark:bg-dark dark:border-gray-700 shadow-md rounded-md border border-gray-400">
@@ -609,18 +621,20 @@ export function AddSignModal(props: ModalType) {
                                     </div>
                                     <div>
                                         <label className="text-gray-800dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Number</label>
-                                        <input onChange={onNumberChange} type="number" id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-24 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
+                                        <input onChange={onNumberChange}  type="number" id="number" className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-24 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder={data?.number ? (data.number+1).toString() : ''} />
                                     </div>
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Sign Type</label>
-                                <select value={signType} className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-50 focus:outline-none  focus:ring focus:ring-primary  font-normal h-7 flex items-center pl-3 text-sm border-gray-300 rounded border" id="cars" name="cars">
+                                <select onChange={onTypeChange} className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-50 focus:outline-none  focus:ring focus:ring-primary  font-normal h-7 flex items-center pl-3 text-sm border-gray-300 rounded border" id="cars" name="cars">
                                     <option value="general">General</option>
                                     <option value="pole_mounted">Pole Mounted</option>
+                                    <option value="other">Other</option>
+
                                 </select>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Screen Dimensions</label>
                                 <div className="flex flex-row">
-                                    <input onChange={onWidthChange} type="number" id="name" className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
-                                    <input onChange={onHeightChange} type="number" id="name" className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
+                                    <input onChange={onWidthChange} type="number" id="width" className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
+                                    <input onChange={onHeightChange} type="number" id="height" className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Location</label>
                                 <div className="block p-4 w-50 h-48" id="map">
@@ -632,19 +646,19 @@ export function AddSignModal(props: ModalType) {
                                     <button
                                     className="relative focus:outline-none"
                                     //x-cloak
-                                    onClick={ () => setIsOnParkingMap(!isOnParkingMap)}
+                                    onClick={ () => setCustomContentEnabled(!customContentEnabled)}
                                     >
                                     <div
                                         className="w-12 h-6 transition rounded-full outline-none bg-primary-100 dark:bg-primary-darker"
                                     ></div>
                                     <div
                                         className={`absolute top-0 left-0 inline-flex items-center justify-center w-6 h-6 transition-all duration-200 ease-in-out transform scale-110 rounded-full shadow-sm ${
-                                        isOnParkingMap ? "translate-x-6 bg-primary-light dark:bg-primary" : "translate-x-0  bg-white dark:bg-primary-100"
+                                        customContentEnabled ? "translate-x-6 bg-primary-light dark:bg-primary" : "translate-x-0  bg-white dark:bg-primary-100"
                                         }`}   
                                     ></div>
                                     </button>
                                 </div>
-                                <div  className={`${isOnParkingMap ? '' : 'hidden'} flex items-center justify-center mb-5`}>
+                                <div  className={`${customContentEnabled ? '' : 'hidden'} flex items-center justify-center mb-5`}>
                                         <div className="space-y-2">
                                             <label  className="inline-block text-sm font-medium text-gray-800 dark:text-light dark:text-gray-200">
                                             Upload Map Image
@@ -653,7 +667,7 @@ export function AddSignModal(props: ModalType) {
                                             <label  className="group p-4 sm:p-7 block cursor-pointer text-center border-2 border-dashed border-gray-200 rounded-lg focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:border-gray-700">
                                             <input id="af-submit-app-upload-images" name="af-submit-app-upload-images" type="file" className="sr-only"/>
                                             <svg className="w-10 h-10 mx-auto text-gray-400 dark:text-gray-600" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z"/>
+                                                <path fillRule="evenodd" d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z"/>
                                                 <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
                                             </svg>
                                             <span className="mt-2 block text-sm text-gray-800 dark:text-gray-200">
@@ -669,7 +683,7 @@ export function AddSignModal(props: ModalType) {
                                 <div className="flex items-center w-full h-10 mb-3">
                                     <button
                                     className="relative focus:outline-none"
-                                    onClick={ () => setIsOnEmergency(!isOnEmergency)}
+                                    onClick={ () => setEmergencyNotificationEnabled(!emergencyNotificationEnabled)}
                                     //x-cloak
                                     >
                                     <div
@@ -677,12 +691,12 @@ export function AddSignModal(props: ModalType) {
                                     ></div>
                                     <div
                                         className={`absolute top-0 left-0 inline-flex items-center justify-center w-6 h-6 transition-all duration-200 ease-in-out transform scale-110 rounded-full shadow-sm ${
-                                            isOnEmergency ? "translate-x-6 bg-primary-light dark:bg-primary" : "translate-x-0  bg-white dark:bg-primary-100"
+                                            emergencyNotificationEnabled ? "translate-x-6 bg-primary-light dark:bg-primary" : "translate-x-0  bg-white dark:bg-primary-100"
                                         }`}   
                                     ></div>
                                     </button>
                                 </div>
-                                <div className={`${isOnEmergency ? '' : 'hidden'} ml-5 mr-5`}>
+                                <div className={`${emergencyNotificationEnabled ? '' : 'hidden'} ml-5 mr-5`}>
                                     <label className="text-gray-600 dark:text-light  text-sm leading-tight tracking-normal">Data Source</label>
                                     <select className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 w-full focus:outline-none  focus:ring focus:ring-primary  font-normal h-7 flex items-center pl-3 text-sm border-gray-300 rounded border" id="cars" name="cars">
                                         <option value="general">Gallagher</option>
@@ -692,7 +706,7 @@ export function AddSignModal(props: ModalType) {
                                 
                                 <div className="flex items-center justify-start w-full">
                                 <button
-                                    onClick={() => mutate({signName, signNumber, signWidth, signHeight, signType, latitude, longitude})}
+                                    onClick={() => mutate({signName, signNumber, signWidth, signHeight, signType, latitude, longitude, emergencyNotificationEnabled, customContentEnabled})}
                                     className="px-8 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
                                     >
                                     Submit
@@ -704,7 +718,7 @@ export function AddSignModal(props: ModalType) {
                                 </button>  
                                 </div>
                                 <button className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onClick={props.toggle} aria-label="close modal" role="button">
-                                    <svg  xmlns="http://www.w3.org/2000/svg"  className="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  className="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" />
                                         <line x1="18" y1="6" x2="6" y2="18" />
                                         <line x1="6" y1="6" x2="18" y2="18" />
@@ -789,13 +803,13 @@ interface ModalTypeIntegration {
                                       Cancel
                                   </button>  
                                   </div>
-                                  <button className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onClick={props.toggleIntegration} aria-label="close modal" role="button">
-                                      <svg  xmlns="http://www.w3.org/2000/svg"  className="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                          <path stroke="none" d="M0 0h24v24H0z" />
-                                          <line x1="18" y1="6" x2="6" y2="18" />
-                                          <line x1="6" y1="6" x2="18" y2="18" />
-                                      </svg>
-                                  </button>
+                                  <button className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onClick={handleCancel} aria-label="close modal" role="button">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  className="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                        <line x1="18" y1="6" x2="6" y2="18" />
+                                        <line x1="6" y1="6" x2="18" y2="18" />
+                                    </svg>
+                                </button>
                               </div>
                           </div>
                       </div>

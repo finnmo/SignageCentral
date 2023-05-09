@@ -38,6 +38,8 @@ export const signRouter = createTRPCRouter({
         signType: z.string().min(5).max(20),
         latitude: z.number().min(-90).max(90),
         longitude: z.number().min(-180).max(180),
+        emergencyNotificationEnabled: z.boolean(),
+        customContentEnabled: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -53,9 +55,45 @@ export const signRouter = createTRPCRouter({
           customContentId: "customContentId",
           latitude: input.latitude,
           longitude: input.longitude,
+          emergencyNotificationEnabled: input.emergencyNotificationEnabled,
+          customContentEnabled: input.customContentEnabled,
         },
       });
-
       return sign;
     }),
+    update: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        signName: z.string().min(1).max(10000),
+        signNumber: z.number().min(1).max(100),
+        signWidth: z.number().min(1).max(10328),
+        signHeight: z.number().min(1).max(10328),
+        signType: z.string().min(5).max(20),
+        latitude: z.number().min(-90).max(90),
+        longitude: z.number().min(-180).max(180),
+        emergencyNotificationEnabled: z.boolean(),
+        customContentEnabled: z.boolean(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      console.log(input);
+      const sign = await ctx.prisma.sign.update({
+        where: { id: input.id },
+        data: {
+          name: input.signName,
+          number: input.signNumber,
+          updatedAt: new Date(),
+          width: input.signWidth,
+          height: input.signHeight,
+          type: input.signType,
+          customContentId: "customContentId",
+          latitude: input.latitude,
+          longitude: input.longitude,
+          emergencyNotificationEnabled: input.emergencyNotificationEnabled,
+          customContentEnabled: input.customContentEnabled,
+        },
+      });
+      return sign;
+    })
 });
