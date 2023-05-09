@@ -1,11 +1,12 @@
-import React, {useState, type ReactNode, type Dispatch, type SetStateAction, useEffect } from "react";
+import React, {useState, type ReactNode, type Dispatch, type SetStateAction } from "react";
 import Link from 'next/link'
 import { api } from "~/utils/api";
 import useModal from "~/server/helpers/useModal";
 import useModalIntegration from "~/server/helpers/useModalIntegration";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { ChangeEvent } from "react";
+import { type ChangeEvent, KeyboardEvent } from "react";
+
 
 type Props = {
     isDark: boolean;
@@ -579,16 +580,6 @@ export function AddSignModal(props: ModalType) {
         setLongitude(115.8936261719052);
     }
 
-
-    useEffect(() => {
-        const close = (e: any) => {
-          if(e.keyCode === 27 && props.isOpen){
-            handleCancel();
-          }
-        }
-        window.addEventListener('keydown', close)
-      return () => window.removeEventListener('keydown', close)
-      },[])
 
     return (
         <> 

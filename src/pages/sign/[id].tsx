@@ -1,4 +1,4 @@
-import { type ReactElement, type ReactNode, useState, useEffect, ChangeEvent, useRef   } from "react";
+import { type ReactElement, type ReactNode, useState, useEffect, type ChangeEvent   } from "react";
 import Layout from "~/layouts/Layout";
 import type { NextPageWithLayout } from "../_app";
 import React from 'react'
@@ -10,7 +10,7 @@ import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { prisma } from "~/server/db";
 import "leaflet/dist/leaflet.css";
 import useModal from "~/server/helpers/useModal";
-import { Sign } from "@prisma/client";
+import { type Sign } from "@prisma/client";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 
 const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
@@ -187,17 +187,7 @@ export function EditSign(props: ModalType) {
       const value = e.target.value;
       setSignType(value);
     };
-    
-
-    useEffect(() => {
-      const close = (e: any) => {
-        if(e.keyCode === 27 && props.isOpen){
-          handleCancel();
-        }
-      }
-      window.addEventListener('keydown', close)
-    return () => window.removeEventListener('keydown', close)
-    },[])
+  
 
     useEffect(() => {
       console.log(props.data)
