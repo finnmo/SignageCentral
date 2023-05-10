@@ -3,6 +3,7 @@ import React, {
   type ReactNode,
   type Dispatch,
   type SetStateAction,
+  useEffect,
 } from "react";
 import Link from "next/link";
 import { api } from "~/utils/api";
@@ -38,6 +39,18 @@ const Sidebar: React.FunctionComponent<{
   const [openAuthentication, setOpenAuthentication] = useState(false);
   const [openLayouts, setOpenLayouts] = useState(false);
   const [openParkingMap, setOpenParkingMap] = useState(false);
+
+  useEffect(() => {
+    const signRegex = /^[A-Za-z0-9#]+$/; // Regular expression to match the ID pattern
+
+    const id = Array.isArray(router.query.id) ? router.query.id[0] : router.query.id; // Extract the ID from the query parameters
+
+    if (id && signRegex.test(id)) {
+      setOpenSigns(true);
+    }
+  }, [router.query.id]);
+
+  // Rest of your component code
 
   return (
     <>
@@ -184,10 +197,7 @@ const Sidebar: React.FunctionComponent<{
                   <Link
                     href={`/sign/${sign.id}`}
                     className={`${
-                      router.pathname == `/sign/` + sign.id
-                        ? "text-gray-700"
-                        : ""
-                    } dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400`}
+                      router.query.id == sign.id ? "text-gray-700": ""} dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400`}
                     key={sign.id}
                   >
                     {sign.name}
@@ -664,8 +674,8 @@ export function AddSignModal(props: ModalType) {
   const [latitude, setLatitude] = useState(-32.005760548213935);
   const [longitude, setLongitude] = useState(115.8936261719052);
   const [customContentEnabled, setCustomContentEnabled] = useState(false);
-  const [emergencyNotificationEnabled, setEmergencyNotificationEnabled] =
-    useState(false);
+  const [emergencyNotificationEnabled, setEmergencyNotificationEnabled] = useState(false);
+  const [signIpAdress, setSignIpAdress] = useState("");
 
   const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = !Number.isNaN(e.target.valueAsNumber)
@@ -690,6 +700,7 @@ export function AddSignModal(props: ModalType) {
     setSignType(value);
   };
 
+
   const handleCancel = () => {
     props.toggle();
     setCustomContentEnabled(false);
@@ -700,6 +711,7 @@ export function AddSignModal(props: ModalType) {
     setSignHeight(443);
     setLatitude(-32.005760548213935);
     setLongitude(115.8936261719052);
+    setSignIpAdress("");
   };
 
 
@@ -806,6 +818,18 @@ export function AddSignModal(props: ModalType) {
                     placeholder="Height px"
                   />
                 </div>
+                <div>
+                    <label className="dark:text-light text-sm font-bold leading-tight tracking-normal text-gray-800">
+                      Ip Adress
+                    </label>
+                    <input
+                      onChange={(e) => setSignIpAdress(e.target.value)}
+                      type="text"
+                      id="name"
+                      className="dark:bg-primary dark:text-light focus:ring-primary mb-5 mr-5 mt-2 flex h-10 w-80 items-center rounded  border border-gray-300 pl-3 text-sm font-normal text-gray-600 placeholder-gray-400 focus:outline-none focus:ring dark:border-gray-700 dark:placeholder-gray-200"
+                      placeholder="Enter IP Adress"
+                    />
+                  </div>
                 <label className="dark:text-light text-sm  font-bold leading-tight tracking-normal text-gray-800">
                   Location
                 </label>
@@ -936,6 +960,7 @@ export function AddSignModal(props: ModalType) {
                         longitude,
                         emergencyNotificationEnabled,
                         customContentEnabled,
+                        signIpAdress,
                       })
                     }
                     className="bg-primary hover:bg-primary-dark focus:ring-primary dark:focus:ring-offset-dark rounded-md px-8 py-2 text-sm text-white focus:outline-none focus:ring focus:ring-offset-1 focus:ring-offset-white"

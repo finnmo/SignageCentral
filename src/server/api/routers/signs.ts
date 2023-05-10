@@ -1,4 +1,3 @@
-
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc"; 
@@ -51,6 +50,7 @@ export const signRouter = createTRPCRouter({
         longitude: z.number().min(-180).max(180),
         emergencyNotificationEnabled: z.boolean(),
         customContentEnabled: z.boolean(),
+        signIpAdress: z.string().min(1).max(280),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -68,6 +68,7 @@ export const signRouter = createTRPCRouter({
           longitude: input.longitude,
           emergencyNotificationEnabled: input.emergencyNotificationEnabled,
           customContentEnabled: input.customContentEnabled,
+          ipAddress: input.signIpAdress,
         },
       });
       return sign;
@@ -85,6 +86,7 @@ export const signRouter = createTRPCRouter({
         longitude: z.number().min(-180).max(180),
         emergencyNotificationEnabled: z.boolean(),
         customContentEnabled: z.boolean(),
+        signIpAdress: z.string().min(1).max(280),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -103,6 +105,7 @@ export const signRouter = createTRPCRouter({
           longitude: input.longitude,
           emergencyNotificationEnabled: input.emergencyNotificationEnabled,
           customContentEnabled: input.customContentEnabled,
+          ipAddress: input.signIpAdress,
         },
       });
       return sign;

@@ -148,7 +148,7 @@ export function EditSign(props: ModalType) {
         }else{
           toast.error("An error occured, failed to update");
         }
-      }
+      },
     }
     );
 
@@ -161,6 +161,8 @@ export function EditSign(props: ModalType) {
     const [signType, setSignType] = useState<string>(props.data.type ? props.data.type : "general");
     const [customContentEnabled, setCustomContentEnabled] = useState(props.data.customContentEnabled ? props.data.customContentEnabled : false);
     const [emergencyNotificationEnabled, setEmergencyNotificationEnabled] = useState(props.data.emergencyNotificationEnabled ? props.data.emergencyNotificationEnabled : false);
+    const [signIpAdress, setSignIpAdress] = useState("");
+
 
     const [validNumber, setValidNumber] = useState<boolean>(true);
 
@@ -176,6 +178,7 @@ export function EditSign(props: ModalType) {
         setSignHeight(props.data.height);
         setLatitude(props.data.latitude);
         setLongitude(props.data.longitude);
+        setSignIpAdress(props.data.ipAddress);
       }
       console.log(validNumber);
     }
@@ -227,7 +230,7 @@ export function EditSign(props: ModalType) {
     if(!validNumber){
       toast.error("Invalid sign number");
     }else{
-        mutate({id:props.data.id, signName, signNumber, signType, signWidth, signHeight, latitude, longitude, customContentEnabled, emergencyNotificationEnabled})
+        mutate({id:props.data.id, signName, signNumber, signType, signWidth, signHeight, latitude, longitude, customContentEnabled, emergencyNotificationEnabled, signIpAdress})
       }
     }
 
@@ -312,6 +315,19 @@ export function EditSign(props: ModalType) {
                           <input id="name" defaultValue={props.data.width} onChange={onWidthChange} className="mb-5 mr-2 mt-2 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Width px" />
                           <input id="name" defaultValue={props.data.height} onChange={onHeightChange} className="mb-5 mt-2 ml-5 text-gray-600 dark:bg-primary dark:text-light dark:placeholder-gray-200 dark:border-gray-700 focus:outline-none  focus:ring focus:ring-primary  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Height px" />
                       </div>
+                      <div>
+                    <label className="dark:text-light text-sm font-bold leading-tight tracking-normal text-gray-800">
+                      Ip Adress
+                    </label>
+                    <input
+                      onChange={(e) => setSignIpAdress(e.target.value)}
+                      type="text"
+                      id="name"
+                      defaultValue={props.data.ipAddress}
+                      className="dark:bg-primary dark:text-light focus:ring-primary mb-5 mr-5 mt-2 flex h-10 w-80 items-center rounded  border border-gray-300 pl-3 text-sm font-normal text-gray-600 placeholder-gray-400 focus:outline-none focus:ring dark:border-gray-700 dark:placeholder-gray-200"
+                      placeholder="Enter IP Adress"
+                    />
+                  </div>
                       <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Custom Content</label>
                       <div className="flex items-center w-full h-10">
                           <button

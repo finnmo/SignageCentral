@@ -1,5 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider     = "mysql"
@@ -7,24 +8,21 @@ datasource db {
   relationMode = "prisma"
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Sign {
-  id                           String        @id @default(cuid())
-  createdAt                    DateTime      @default(now())
-  updatedAt                    DateTime      @updatedAt
-  name                         String        @unique
-  number                       Int           @unique
+  id                           String   @id @default(cuid())
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+  name                         String   @unique
+  number                       Int      @unique
   type                         String
   width                        Int
   height                       Int
-  customContentEnabled         Boolean       @default(false)
-  emergencyNotificationEnabled Boolean       @default(false)
+  customContentEnabled         Boolean  @default(false)
+  emergencyNotificationEnabled Boolean  @default(false)
   customContentId              String
   latitude                     Float
   longitude                    Float
+  ipAddress                    String
 }
 
 model CustomContent {
