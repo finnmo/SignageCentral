@@ -4,8 +4,10 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import L from "leaflet";
 
 const DefaultIcon = L.icon({
-    iconUrl: '/assets/marker-icon.png',
-    shadowUrl: '/assets/marker-shadow.png'
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  iconUrl: '/assets/marker-icon.png',
+  shadowUrl: '/assets/marker-shadow.png'
 });
 
 type Props = {

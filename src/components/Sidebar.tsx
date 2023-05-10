@@ -702,17 +702,29 @@ export function AddSignModal(props: ModalType) {
     setLongitude(115.8936261719052);
   };
 
+
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    console.log(event.code);
+    if (event.code === "Escape") {
+      props.toggle();
+    }
+  }
+
   return (
     <>
       {props.isOpen && (
-        <div className="z-20">
           <div
-            className="dark:bg-darker/50 absolute bottom-0 left-0 right-0 top-0 z-10 h-full overflow-y-hidden bg-gray-500/50 py-12 transition duration-150 ease-in-out"
+            className="flex justify-center dark:bg-darker/50 absolute bottom-0 left-0 right-0 top-0 z-10 h-full overflow-y-hidden bg-gray-500/50 py-12 transition duration-150 ease-in-out"
             id="modal"
+            onKeyDown={keyDownHandler}
           >
+          <div
+              className={`absolute inset-y-0 z-10 w-full h-full bg-primary-darker opacity-50 `}
+              onClick={()=>handleCancel()}
+          ></div>
             <div
               role="alert"
-              className="mx-auto h-full w-11/12 max-w-lg overflow-y-auto md:w-2/3"
+              className="absolute mx-auto h-5/6 w-11/12 z-20 max-w-lg overflow-y-auto md:w-2/3"
             >
               <div className="dark:bg-dark rounded-md border border-gray-400 bg-white px-5 py-8 shadow-md dark:border-gray-700 md:px-10">
                 <div className=" mb-3 flex w-full justify-start text-gray-600">
@@ -963,7 +975,6 @@ export function AddSignModal(props: ModalType) {
               </div>
             </div>
           </div>
-        </div>
       )}
     </>
   );
@@ -981,6 +992,7 @@ export function AddIntegrationModal(props: ModalTypeIntegration) {
   const handleCancel = () => {
     props.toggleIntegration();
   };
+  
 
   return (
     <>

@@ -9,10 +9,13 @@ type Props = {
 }; 
 
 const DefaultIcon = L.icon({
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
     iconUrl: '/assets/marker-icon.png',
     shadowUrl: '/assets/marker-shadow.png'
-});
- 
+  });
+
+  
 const MapChart: React.FunctionComponent<{latitude: number, longitude: number}>=(props: Props) =>{
 
     const [isOnLineChart] = useState(true);
