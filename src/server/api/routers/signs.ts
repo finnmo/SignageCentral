@@ -28,6 +28,17 @@ export const signRouter = createTRPCRouter({
         orderBy: { number: "desc" },
       });
     }),
+    getByNumber: publicProcedure
+    .input(z.object({ number: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const sign = await ctx.prisma.sign.findUnique({
+        where: { number: input.number },
+      });
+
+      if (!sign) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return (sign);
+    }),
     create: privateProcedure
     .input(
       z.object({

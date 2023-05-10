@@ -11,7 +11,6 @@ export default function useModalIntegration() {
     setIsOpenIntegration(false);
   }
 
-
   return {
     isOpenIntegration,
     toggleIntegration,

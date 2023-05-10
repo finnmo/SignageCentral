@@ -12,6 +12,7 @@ import "leaflet/dist/leaflet.css";
 import useModal from "~/server/helpers/useModal";
 import { type Sign } from "@prisma/client";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { toast } from "react-hot-toast";
 
 const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
@@ -128,14 +129,28 @@ interface ModalType {
 export function EditSign(props: ModalType) {
   const ctx = api.useContext();
 
+  const allSignNumbers = api.sign.getAll.useQuery().data?.map((sign) => sign.number);
+  const allSignNumbersWithoutCurrent = allSignNumbers?.filter((signNumber) => signNumber !== props.data.number);
+
   const { mutate } = api.sign.update.useMutation(
     {
       onSuccess: () => {
           handleCancel();
-          void ctx.sign.invalidate();
+          void ctx.sign.getAll.invalidate();
+          void ctx.sign.getById.invalidate();
+          void ctx.sign.getLastSign.invalidate();
+      },
+      onError: (error) => {
+        console.log(error.data)
+        const errorMessage = error.data?.zodError?.fieldErrors.content;
+        if(errorMessage && errorMessage[0]){
+          toast.error(errorMessage[0]);
+        }else{
+          toast.error("An error occured, failed to update");
+        }
       }
     }
-  );
+    );
     const handleCancel = () => {
       props.toggle();
       if(props.data){
@@ -150,7 +165,7 @@ export function EditSign(props: ModalType) {
       }
     }
 
-    const [signName, setSignName] = useState<string>("");
+    const [signName, setSignName] = useState<string>(props.data.name ? props.data.name : "");
     const [signNumber, setSignNumber] = useState<number>(props.data.number ? props.data.number : 1);
     const [signWidth, setSignWidth] = useState<number>(props.data.width ? props.data.width : 1);
     const [signHeight, setSignHeight] = useState<number>(props.data.height ? props.data.height : 1);
@@ -160,11 +175,19 @@ export function EditSign(props: ModalType) {
     const [customContentEnabled, setCustomContentEnabled] = useState(props.data.customContentEnabled ? props.data.customContentEnabled : false);
     const [emergencyNotificationEnabled, setEmergencyNotificationEnabled] = useState(props.data.emergencyNotificationEnabled ? props.data.emergencyNotificationEnabled : false);
 
+    const [validNumber, setValidNumber] = useState<boolean>(true);
+
     const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value.trim();
       if (value && !isNaN(Number(value))) {
         const numberValue = Number(value);
-        setSignNumber(numberValue);
+        if(allSignNumbersWithoutCurrent && (allSignNumbersWithoutCurrent.indexOf(numberValue) > -1)) {
+          toast.error("Sign number already exists");
+          setValidNumber(false);
+        }else{
+          setSignNumber(numberValue);
+          setValidNumber(true);
+        }
       }
     };
 
@@ -187,6 +210,15 @@ export function EditSign(props: ModalType) {
       const value = e.target.value;
       setSignType(value);
     };
+
+    const handleUpdate = () => {
+    if(!validNumber){
+      toast.error("Invalid sign number");
+    }else{
+        mutate({id:props.data.id, signName, signNumber, signType, signWidth, signHeight, latitude, longitude, customContentEnabled, emergencyNotificationEnabled})
+      }
+    }
+
   
 
     useEffect(() => {
@@ -238,7 +270,7 @@ export function EditSign(props: ModalType) {
                                     </div>
                                     <div>
                                         <label className="text-gray-800 dark:text-light text-sm font-bold leading-tight tracking-normal">Sign Number</label>
-                                        <input id="number" defaultValue={props.data.number} onChange={onNumberChange} className="mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20 focus:outline-none  focus:ring focus:ring-primary font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Number" />
+                                        <input id="number" defaultValue={props.data.number} onChange={onNumberChange} className={`${validNumber ? 'focus:outline-none  focus:ring focus:ring-primary' : 'outline-none ring ring-red-400'} mb-5 mt-2 text-gray-600 dark:bg-primary dark:text-light placeholder-gray-400 dark:placeholder-gray-200 dark:border-gray-700 w-20  font-normal h-10 flex items-center pl-3 text-sm border-gray-300 rounded border`} placeholder="Number" />
                                     </div>
                                 </div>
                                 <label className="text-gray-800 dark:text-light  text-sm font-bold leading-tight tracking-normal">Sign Type</label>
@@ -295,7 +327,7 @@ export function EditSign(props: ModalType) {
                                 
                                 <div className="flex items-center justify-start w-full">
                                 <button
-                                    onClick={() => mutate({id:props.data.id, signName, signNumber, signType, signWidth, signHeight, latitude, longitude, customContentEnabled, emergencyNotificationEnabled})}
+                                    onClick={handleUpdate}
                                     className="px-8 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
                                     >
                                     Update

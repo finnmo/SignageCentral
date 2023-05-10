@@ -15,10 +15,7 @@ type Props = {
    setLongitude: React.Dispatch<React.SetStateAction<number>>,
   }; 
 
-
-
 const MapChartAddSign: React.FunctionComponent<{latitude: number, setLatitude: React.Dispatch<React.SetStateAction<number>> ,longitude: number, setLongitude: React.Dispatch<React.SetStateAction<number>>}>=(props: Props) =>{
-
       function DraggableMarker() {
         L.Marker.prototype.options.icon = DefaultIcon;
         

@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app'
 import "~/styles/globals.css";
 import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import Head from "next/head";
+import { Toaster } from "react-hot-toast";
 
 export type NextPageWithLayout<P = {[k: string | number | symbol]: never}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -24,6 +25,7 @@ function MyApp({
   return (
     
     <ClerkProvider {...pageProps} >
+      <Toaster  />
       <Head>
         <title>Digital Signage Manager</title>
         <meta name="description" content="Made by Finn" />
