@@ -81,7 +81,7 @@ export interface Props {
 
 export const SignStatusOverview: React.FunctionComponent<{ signName: string, signNumber: number, signIpAddress: string, signType: string}> = (props: Props) =>{
 
-    const {data: isOnline} = api.ping.getOnline.useQuery({ip: props.signIpAddress});
+    const {data: isOnline, isLoading} = api.ping.getOnline.useQuery({ip: props.signIpAddress});
     const [onlineText, setOnlineText] = useState("Offline");
     const [onlineBoolean, setOnlineBoolean] = useState(false);
 
@@ -107,8 +107,8 @@ export const SignStatusOverview: React.FunctionComponent<{ signName: string, sig
         Sign {props.signNumber}
         </h6>
         <span className="text-xl font-semibold">{props.signName}</span>
-        <span className={`inline-block px-2 py-px ml-2 text-xs ${onlineBoolean ? "text-green-500 bg-green-100" : "text-red-500 bg-red-200" } rounded-md`}>
-        {onlineText}
+        <span className={`${isLoading ? `` : `inline-block px-2 py-px ml-2 text-xs ${onlineBoolean ? "text-green-500 bg-green-100" : "text-red-500 bg-red-200" } rounded-md`}`}>
+        {isLoading ? '' : onlineText}
         </span>
     </div>
     <div>
