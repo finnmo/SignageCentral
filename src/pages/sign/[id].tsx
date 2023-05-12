@@ -33,7 +33,7 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
       setLatitude(data.latitude);
       setLongitude(data.longitude);
     }
-  },[]);
+  },[data]);
 
   if(isLoading) return <LoadingSpinner></LoadingSpinner>
   if(!data) return <div>404 Not found</div>
