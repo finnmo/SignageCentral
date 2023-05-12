@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc"; 
+import ping from 'ping'
 
 export const pingRouter = createTRPCRouter({  
   getOnline: privateProcedure
@@ -11,7 +12,6 @@ export const pingRouter = createTRPCRouter({
   });
 
   async function checkDeviceOnline(ipAddress: string): Promise<boolean> {
-    const ping = require('ping');
     const pingResult = await ping.promise.probe(ipAddress);
     return pingResult.alive;
   }
