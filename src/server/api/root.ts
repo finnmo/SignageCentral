@@ -1,6 +1,6 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { signRouter } from "./routers/signs";
-
+import { pingRouter } from "./routers/monitor";
 /**
  * This is the primary router for your server.
  *
@@ -8,6 +8,7 @@ import { signRouter } from "./routers/signs";
  */
 export const appRouter = createTRPCRouter({
   sign: signRouter,
+  ping: pingRouter,
 });
 
 // export type definition of API

@@ -6,9 +6,13 @@ import { type Sign } from "@prisma/client";
 
 
 const DefaultIcon = L.icon({
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
     iconUrl: '/assets/marker-icon.png',
     shadowUrl: '/assets/marker-shadow.png'
-});
+  });
+
+  
 type Props = {
     allSigns: Sign[]
 }; 

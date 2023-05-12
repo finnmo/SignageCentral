@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import type { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import ActiveSigns from "~/components/ActiveSigns";
 import AvailablityLineChart from "~/components/AvailbilityLineChart";
 import Layout from "~/layouts/Layout";
@@ -64,7 +64,7 @@ const StatusBlockMap = () => {
         <Link
             href={`/sign/${sign.id}`}
             key={sign.id}>
-          <SignStatusOverview signName={sign.name} signNumber={sign.number} ></SignStatusOverview>
+          <SignStatusOverview signName={sign.name} signNumber={sign.number} signIpAddress={sign.ipAddress} signType={sign.type}></SignStatusOverview>
         </Link>
       ))} 
     </div>
@@ -75,11 +75,30 @@ const StatusBlockMap = () => {
 export interface Props {
     signName: string;
     signNumber: number;
+    signIpAddress: string;
+    signType: string;
 }
 
-export const SignStatusOverview: React.FunctionComponent<{ signName: string, signNumber: number}> = (props: Props) =>{
-    const [isOnline] = useState("Online");
-    
+export const SignStatusOverview: React.FunctionComponent<{ signName: string, signNumber: number, signIpAddress: string, signType: string}> = (props: Props) =>{
+
+    const {data: isOnline} = api.ping.getOnline.useQuery({ip: props.signIpAddress});
+    const [onlineText, setOnlineText] = useState("Offline");
+    const [onlineBoolean, setOnlineBoolean] = useState(false);
+
+    useEffect(() => {
+      console.log(props.signType);
+      if(isOnline !== undefined){
+        setOnlineBoolean(isOnline);
+        if(isOnline){
+          setOnlineText("Online");
+        }else{
+          setOnlineText("Offline");
+        }
+
+      }
+
+    }, [isOnline]);
+
     return (
 <div className="flex items-center justify-between p-4 bg-white rounded-md dark:bg-darker">
     <div>
@@ -89,14 +108,14 @@ export const SignStatusOverview: React.FunctionComponent<{ signName: string, sig
         Sign {props.signNumber}
         </h6>
         <span className="text-xl font-semibold">{props.signName}</span>
-        <span className="inline-block px-2 py-px ml-2 text-xs text-green-500 bg-green-100 rounded-md">
-        {isOnline}
+        <span className={`inline-block px-2 py-px ml-2 text-xs ${onlineBoolean ? "text-green-500 bg-green-100" : "text-red-500 bg-red-200" } rounded-md`}>
+        {onlineText}
         </span>
     </div>
     <div>
         <span>
         <svg
-            className={`w-12 h-12 text-gray-300 dark:text-primary-dark ${props.signNumber==6? "hidden":""}`}
+            className={`w-12 h-12 text-gray-300 dark:text-primary-dark ${props.signType==='general' ? "":"hidden"}`}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 500 500"
@@ -115,7 +134,7 @@ export const SignStatusOverview: React.FunctionComponent<{ signName: string, sig
         <path d="m232.977 327.227 36.209 38.873" className="  stroke-gray-500 fill-transparent"strokeWidth="15" strokeLinejoin="round"strokeLinecap="round"/>
         </svg>
 
-        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 500 500" className={`w-12 h-12 text-gray-300 dark:text-primary-dark ${props.signNumber==6? "":"hidden"}`}>
+        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 500 500" className={`w-12 h-12 text-gray-300 dark:text-primary-dark ${props.signType==='pole_mounted' ? "":"hidden"}`}>
         <path d="m114.443 391.112.654-304.598" strokeWidth="15" className="stroke-gray-500 fill-transparent" />
         <path d="m156.685 393.216.132-38.188" strokeWidth="15" className="stroke-gray-500 fill-transparent" strokeLinecap="round"/>
         <path d="m156.811 331.783-.534-246.079" strokeWidth="15" className="stroke-gray-500 fill-transparent" strokeLinecap="round"/>
