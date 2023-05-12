@@ -11,9 +11,7 @@ export const pingRouter = createTRPCRouter({
   });
 
   async function checkDeviceOnline(ipAddress: string): Promise<boolean> {
-    var ping = require('ping');
-    // Implement your logic to check the device's online status
-    // Example: Use the 'ping' package
+    const ping = require('ping');
     const pingResult = await ping.promise.probe(ipAddress);
     return pingResult.alive;
   }

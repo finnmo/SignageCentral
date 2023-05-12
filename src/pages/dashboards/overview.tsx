@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { ReactElement, useEffect } from "react";
+import { type ReactElement, useEffect } from "react";
 import ActiveSigns from "~/components/ActiveSigns";
 import AvailablityLineChart from "~/components/AvailbilityLineChart";
 import Layout from "~/layouts/Layout";
@@ -86,7 +86,6 @@ export const SignStatusOverview: React.FunctionComponent<{ signName: string, sig
     const [onlineBoolean, setOnlineBoolean] = useState(false);
 
     useEffect(() => {
-      console.log(props.signType);
       if(isOnline !== undefined){
         setOnlineBoolean(isOnline);
         if(isOnline){
