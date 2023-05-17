@@ -22,8 +22,8 @@ const Endpoint: NextPageWithLayout<{ id: string }> = ({ id }) => {
   return  (
   <>
   <div className="fixed block" style={{
-          width: data.width+'px',
-          height: data.height+'px',
+          width: `${data.width}px`,
+          height: `${data.height}px`,
           backgroundColor: 'black',
         }}>
           <div className="w-100 h-100">
