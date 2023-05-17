@@ -12,6 +12,7 @@ import useModalIntegration from "~/server/helpers/useModalIntegration";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { type ChangeEvent } from "react";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 type Props = {
   isDark: boolean;
@@ -26,7 +27,7 @@ const Sidebar: React.FunctionComponent<{
 }> = (props: Props) => {
   const router = useRouter();
 
-  const { data } = api.sign.getAll.useQuery();
+  const { data, isLoading } = api.sign.getAll.useQuery();
 
   const { isOpen, toggle } = useModal();
   const { isOpenIntegration, toggleIntegration } = useModalIntegration();
@@ -193,7 +194,8 @@ const Sidebar: React.FunctionComponent<{
                 role="menu"
                 arial-label="Components"
               >
-                {data?.map((sign) => (
+                {!isLoading ?
+                data?.map((sign) => (
                   <Link
                     href={`/sign/${sign.id}`}
                     className={`${
@@ -202,7 +204,7 @@ const Sidebar: React.FunctionComponent<{
                   >
                     {sign.name}
                   </Link>
-                ))}
+                )) : <div className = 'flex align-center justify-center'> <LoadingSpinner/></div>}
                 <a
                   onClick={toggle}
                   className={`${
