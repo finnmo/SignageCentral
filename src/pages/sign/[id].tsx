@@ -13,6 +13,7 @@ import useModal from "~/server/helpers/useModal";
 import { type Sign } from "@prisma/client";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
@@ -56,6 +57,12 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   <div className="grid p-4 space-y-4 lg:gap-8 lg:space-y-0 lg:grid-cols-3">
   <div className="col-span-1 bg-white rounded-md dark:bg-darker">
       <div className="p-4 border-b dark:border-primary">
+          <Link
+            href={`/sign/${id}/display`}
+            className="float-right px-4 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
+          >
+          Display
+          </Link>
           <h4 className="text-lg font-semibold text-gray-500 dark:text-light">Sign Preview</h4>
       </div>
       <div className="relative p-4"></div>
@@ -161,7 +168,7 @@ export function EditSign(props: ModalType) {
     const [signType, setSignType] = useState<string>(props.data.type ? props.data.type : "general");
     const [customContentEnabled, setCustomContentEnabled] = useState(props.data.customContentEnabled ? props.data.customContentEnabled : false);
     const [emergencyNotificationEnabled, setEmergencyNotificationEnabled] = useState(props.data.emergencyNotificationEnabled ? props.data.emergencyNotificationEnabled : false);
-    const [signIpAdress, setSignIpAdress] = useState("");
+    const [signIpAdress, setSignIpAdress] = useState(props.data.ipAddress ? props.data.ipAddress : "0.0.0.0");
 
 
     const [validNumber, setValidNumber] = useState<boolean>(true);
