@@ -36,10 +36,16 @@ const Sidebar: React.FunctionComponent<{
   const [openSigns, setOpenSigns] = useState(
     router.pathname == "/sign/{id}" ? true : false
   );
-  const [openPages, setOpenPages] = useState(false);
+  const [openRollingImages, setOpenRollingImages] = useState(false);
   const [openAuthentication, setOpenAuthentication] = useState(false);
   const [openLayouts, setOpenLayouts] = useState(false);
   const [openParkingMap, setOpenParkingMap] = useState(false);
+
+  const handleOpenRollingImages = (e: React.MouseEvent<SVGElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setOpenRollingImages(!openRollingImages);
+  } 
 
   useEffect(() => {
     const signRegex = /^[A-Za-z0-9#]+$/; // Regular expression to match the ID pattern
@@ -205,6 +211,8 @@ const Sidebar: React.FunctionComponent<{
                     {sign.name}
                   </Link>
                 )) : <div className = 'flex align-center justify-center'> <LoadingSpinner/></div>}
+                {!isLoading ?
+                <div>
                 <a
                   onClick={toggle}
                   className={`${
@@ -213,20 +221,16 @@ const Sidebar: React.FunctionComponent<{
                 >
                   Add New Sign +
                 </a>
-                <AddSignModal isOpen={isOpen} toggle={toggle}></AddSignModal>
+                <AddSignModal isOpen={isOpen} toggle={toggle}></AddSignModal></div> : <div/>}
               </div>
             </div>
 
             <div>
-              <a
-                href="#"
-                onClick={() => setOpenPages(!openPages)}
+              <Link
+                href="/rollingimages"
                 className={`dark:text-light hover:bg-primary-100 dark:hover:bg-primary flex items-center rounded-md p-2 text-gray-500 transition-colors ${
-                  openPages ? "bg-primary-100 dark:bg-primary" : ""
-                }`}
-                role="button"
-                aria-haspopup="true"
-                //aria-expanded={`${openComponents ? "true" : "false"}`}
+                  openRollingImages ? "bg-primary-100 dark:bg-primary" : ""
+                }`}            
               >
                 <span aria-hidden="true">
                   <svg
@@ -247,8 +251,10 @@ const Sidebar: React.FunctionComponent<{
                 <span className="ml-2 text-sm"> Rolling Images </span>
                 <span aria-hidden="true" className="ml-auto">
                   <svg
+                    onClick={handleOpenRollingImages}
+                    
                     className={`h-4 w-4 transform transition-transform ${
-                      openPages ? "rotate-180" : ""
+                      openRollingImages ? "rotate-180" : ""
                     }`}
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -263,9 +269,9 @@ const Sidebar: React.FunctionComponent<{
                     />
                   </svg>
                 </span>
-              </a>
+              </Link>
               <div
-                className={`mt-2 space-y-2 px-7 ${openPages ? "" : "hidden"}`}
+                className={`mt-2 space-y-2 px-7 ${openRollingImages ? "" : "hidden"}`}
                 role="menu"
                 arial-label="Pages"
               >

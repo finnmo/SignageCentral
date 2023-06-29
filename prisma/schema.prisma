@@ -25,6 +25,13 @@ model Sign {
   ipAddress                    String
 }
 
+model RollingImage {
+  id                           String   @id @default(cuid())
+  createdAt                    DateTime @default(now())
+  uploadedBy                   String
+
+}
+
 model CustomContent {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
