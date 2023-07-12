@@ -32,7 +32,7 @@ const ImagePage: NextPageWithLayout = () => {
       <span className="text-xl pt-20 text-gray-500">Upload New Image</span>
     </div>
     {...data?.map((sign) => (
-    <div className="grid-flow-row auto-rows-max col-span-1 max-w-[315px] min-h-[315px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[40%]">
+    <div key={sign.id} className="grid-flow-row auto-rows-max col-span-1 max-w-[315px] min-h-[315px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[40%]">
     <div className="w-full h-10 pt-2 pb-2 relative">
     <span className="p-4 relative justify-center items-center text-xl ">{sign.name}</span>
       <button className="cursor-pointer absolute right-2 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"  aria-label="close modal" role="button">
