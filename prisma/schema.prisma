@@ -29,7 +29,6 @@ model RollingImage {
   id                           String   @id @default(cuid())
   createdAt                    DateTime @default(now())
   uploadedBy                   String
-
 }
 
 model CustomContent {
