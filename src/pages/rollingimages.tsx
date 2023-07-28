@@ -145,8 +145,8 @@ export function AddImageModal(props: ModalType) {
         if (!firebaseToken) {
           return;
         }
-
-        signInWithCustomToken(auth, firebaseToken)
+        try{
+        await signInWithCustomToken(auth, firebaseToken)
         .then(() => {
           // Signed in
           const storageRef = ref(storage, `files/${imageName}`);
@@ -163,9 +163,8 @@ export function AddImageModal(props: ModalType) {
               alert(error);
             },
             async () => {
-              await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                mutate({ imageName: imageName, imageUrl: downloadURL });
-              });
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              mutate({ imageName: imageName, imageUrl: downloadURL });
             }
           );          // ...
         })
