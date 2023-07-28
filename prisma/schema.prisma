@@ -26,9 +26,11 @@ model Sign {
 }
 
 model RollingImage {
-  id                           String   @id @default(cuid())
+  id                           String   @id @default(cuid()) 
   createdAt                    DateTime @default(now())
   uploadedBy                   String
+  imageUrl                     String   @unique
+  imageName                    String   @unique
 }
 
 model CustomContent {

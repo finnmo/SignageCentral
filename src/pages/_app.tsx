@@ -22,6 +22,7 @@ function MyApp({
 }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const layout = getLayout(<Component {...pageProps} />);
+
   return (
     
     <ClerkProvider {...pageProps} >

@@ -13,7 +13,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 const Page: NextPageWithLayout = () => {
     const {data, isLoading} = api.sign.getAll.useQuery();
 
-  if(isLoading) return <div className="p-5 flex justify-center items-center"><LoadingSpinner></LoadingSpinner></div>
+  if(isLoading) return <div className="p-5 flex flex-row justify-center items-center"><LoadingSpinner></LoadingSpinner></div>
 
   if(!data) return <div className="top-0 right-0 ml-6 mt-3" >Something went wrong...</div>
 

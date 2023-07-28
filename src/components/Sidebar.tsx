@@ -293,34 +293,7 @@ const Sidebar: React.FunctionComponent<{
                 >
                   500
                 </Link>
-                <a
-                  href="#"
-                  role="menuitem"
-                  className="dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400"
-                >
-                  Profile (soon)
-                </a>
-                <a
-                  href="#"
-                  role="menuitem"
-                  className="dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700"
-                >
-                  Pricing (soon)
-                </a>
-                <a
-                  href="#"
-                  role="menuitem"
-                  className="dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700"
-                >
-                  Kanban (soon)
-                </a>
-                <a
-                  href="#"
-                  role="menuitem"
-                  className="dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700"
-                >
-                  Feed (soon)
-                </a>
+
               </div>
             </div>
 

@@ -6,6 +6,12 @@ import Image from 'next/image'
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { api } from "~/utils/api";
 import useModal from "~/server/helpers/useModal";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage"
+import { storage } from "../server/api/firebase";
+import { getAuth, signInWithCustomToken } from "firebase/auth";
+import 'firebase/compat/firestore';
+import { useAuth } from "@clerk/nextjs";
+
 
 const ImagePage: NextPageWithLayout = () => {
   const {data, isLoading} = api.sign.getAll.useQuery();
@@ -13,7 +19,7 @@ const ImagePage: NextPageWithLayout = () => {
   const { isOpen, toggle } = useModal();
   
   if (isLoading) return (
-    <div className="top-0 right-0 ml-6 mt-3">
+    <div className="p-5 flex flex-row justify-center items-center">
     <LoadingSpinner size={40}/>
     </div>
 )
@@ -29,8 +35,8 @@ const ImagePage: NextPageWithLayout = () => {
   <div className="grid p-4 space-y-4 lg:gap-8 lg:space-y-0 lg:grid-cols-4 grid-rows-2 pl-10">
     <div onClick={toggle} className="cursor-pointer col-span-1 border-2 min-h-[315px] max-w-[315px] border-gray-400 rounded-lg dark:bg-darker flex flex-col items-center justify-center h-screen max-h-[40%]">
 
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 25" stroke-width="0.5" stroke="gray" className="w-40 h-40">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M13 0v29m15-15h-30" />
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 25" strokeWidth="0.5" stroke="gray" className="w-40 h-40">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M13 0v29m15-15h-30" />
     </svg>
       <a className="text-xl pt-20 text-gray-500">Upload New Image</a>
     </div>
@@ -72,7 +78,6 @@ const ImagePage: NextPageWithLayout = () => {
 )
 }
 
-
 interface ModalType {
   children?: ReactNode;
   isOpen: boolean;
@@ -81,38 +86,28 @@ interface ModalType {
 
 export function AddImageModal(props: ModalType) {
   const ctx = api.useContext();
-
-  const { mutate } = api.sign.create.useMutation({
+  const { getToken } = useAuth();
+  
+  const { mutate } = api.image.create.useMutation({
     onSuccess: () => {
       handleCancel();
-      void ctx.sign.invalidate();
+      void ctx.image.invalidate();
     },
   });
 
+  const [error, setError] = useState(null);
+
+  const [imageUpload, setImageUpload] = useState<File | null>(null); 
   const [imageName, setImageName] = useState("");
-  const [signNumber, setSignNumber] = useState<number>(0);
-  const [signHeight, setSignHeight] = useState<number>(443);
-  const [signWidth, setSignWidth] = useState<number>(192);
-  const [signType] = useState("general");
-  const [latitude, setLatitude] = useState(-32.005760548213935);
-  const [longitude, setLongitude] = useState(115.8936261719052);
-  const [customContentEnabled, setCustomContentEnabled] = useState(false);
-  const [emergencyNotificationEnabled, setEmergencyNotificationEnabled] = useState(false);
-  const [signIpAdress, setSignIpAdress] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [progresspercent, setProgresspercent] = useState(0);
 
 
 
   const handleCancel = () => {
     props.toggle();
-    setCustomContentEnabled(false);
-    setEmergencyNotificationEnabled(false);
     setImageName("");
-    setSignNumber(1);
-    setSignWidth(192);
-    setSignHeight(443);
-    setLatitude(-32.005760548213935);
-    setLongitude(115.8936261719052);
-    setSignIpAdress("");
+    setImageUrl("");
   };
 
 
@@ -123,6 +118,61 @@ export function AddImageModal(props: ModalType) {
     }
   }
 
+
+  interface FormElements extends HTMLFormControlsCollection {
+    imageInput: HTMLInputElement
+  }
+  interface ImageFormElement extends HTMLFormElement {
+    readonly elements: FormElements
+  }
+
+  const handleSubmit = async (event: React.FormEvent<ImageFormElement>) => {
+    event.preventDefault()
+      if (!imageUpload) { return;}
+      try{
+        const auth = getAuth();
+        const firebaseToken = await getToken({ template: "integration_firebase" });
+        if (!firebaseToken) {
+          return;
+        }
+
+        signInWithCustomToken(auth, firebaseToken)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          const storageRef = ref(storage, `files/${imageUpload}`);
+          const uploadTask = uploadBytesResumable(storageRef, imageUpload);
+
+          uploadTask.on("state_changed",
+            (snapshot) => {
+              const progress =
+                Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+              setProgresspercent(progress);
+            },
+            (error) => {
+              alert(error);
+            },
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setImageUrl(downloadURL)
+                console.log(downloadURL)
+              });
+            }
+          );
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage)
+        });
+      }catch (err: any) {
+      setError(err);
+    }
+    console.log(error)
+  }
+  
+  
   return (
     <>
       {props.isOpen && (
@@ -140,6 +190,7 @@ export function AddImageModal(props: ModalType) {
               className="absolute mx-auto h-5/6 w-11/12 z-20 max-w-lg overflow-y-auto md:w-2/3"
             >
               <div className="dark:bg-dark rounded-md border border-gray-400 bg-white px-5 py-8 shadow-md dark:border-gray-700 md:px-10">
+                <form onSubmit={handleSubmit}>
                 <div className=" mb-3 flex w-full justify-start text-gray-600">
                   <svg
                     className="h-5 w-5"
@@ -175,20 +226,20 @@ export function AddImageModal(props: ModalType) {
           
                 </div>
                 <div></div>
-                <label className="dark:text-light text-sm font-bold leading-tight tracking-normal text-gray-800">
+                <label htmlFor="usernameInput" className="dark:text-light text-sm font-bold leading-tight tracking-normal text-gray-800">
                   Upload Image
                 </label>
                 <div
                   className={`mb-5 pt-3 flex items-center justify-center`}
                 >
                   <div className="space-y-2">
-
                     <label className="group block cursor-pointer rounded-lg border-2 border-dashed border-gray-200 p-4 text-center focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:border-gray-700 sm:p-7">
                       <input
-                        id="af-submit-app-upload-images"
+                        id="imageInput"
                         name="af-submit-app-upload-images"
                         type="file"
                         className="sr-only"
+                        onChange={(e) => setImageUpload(e.target.files?.[0] ?? null)}
                       />
                       <svg
                         className="mx-auto h-10 w-10 text-gray-400 dark:text-gray-600"
@@ -219,20 +270,7 @@ export function AddImageModal(props: ModalType) {
                 
                 <div className="flex w-full items-center justify-start">
                   <button
-                    onClick={() =>
-                      mutate({
-                        signName:imageName,
-                        signNumber,
-                        signWidth,
-                        signHeight,
-                        signType,
-                        latitude,
-                        longitude,
-                        emergencyNotificationEnabled,
-                        customContentEnabled,
-                        signIpAdress,
-                      })
-                    }
+                    type="submit"
                     className="bg-primary hover:bg-primary-dark focus:ring-primary dark:focus:ring-offset-dark rounded-md px-8 py-2 text-sm text-white focus:outline-none focus:ring focus:ring-offset-1 focus:ring-offset-white"
                   >
                     Upload
@@ -244,6 +282,8 @@ export function AddImageModal(props: ModalType) {
                     Cancel
                   </button>
                 </div>
+                </form>
+
                 <button
                   className="absolute right-0 top-0 mr-5 mt-4 cursor-pointer rounded text-gray-400 transition duration-150 ease-in-out hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600"
                   onClick={props.toggle}
