@@ -179,6 +179,9 @@ export function AddImageModal(props: ModalType) {
         }
     }
     console.log(error)
+      }catch (err: unknown) {
+        if(err instanceof Error){}
+    }
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
