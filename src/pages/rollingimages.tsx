@@ -97,7 +97,7 @@ export function AddImageModal(props: ModalType) {
     },
   });
 
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   const [imageUpload, setImageUpload] = useState<File | null>(null); 
   const [imageName, setImageName] = useState("");
@@ -174,8 +174,10 @@ export function AddImageModal(props: ModalType) {
           console.log(errorMessage)
         });
 
-      }catch (err: Error) {
-      setError(err);
+      }catch (err: unknown) {
+        if(err instanceof Error){
+          setError(err.message);
+        }
     }
     console.log(error)
   }
