@@ -97,8 +97,6 @@ export function AddImageModal(props: ModalType) {
     },
   });
 
-  const [error, setError] = useState("");
-
   const [imageUpload, setImageUpload] = useState<File | null>(null); 
   const [imageName, setImageName] = useState("");
   const [progresspercent, setProgresspercent] = useState(0);
@@ -176,14 +174,13 @@ export function AddImageModal(props: ModalType) {
       } catch (error) {
         // Handle the error that occurs during sign-in or upload
         if (error instanceof Error) {
-          setError(error.message);
           console.log(error.message); // Log the error message here
         }
       }
     } catch (err) {
       // Handle any other unexpected errors here if needed
       if (err instanceof Error) {
-        setError(err.message);
+        console.log(err.message); // Log the error message here
       }
     }
   };
