@@ -162,20 +162,19 @@ export function AddImageModal(props: ModalType) {
             (error) => {
               alert(error);
             },
-            () => {
-              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            async () => {
+              await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                 mutate({ imageName: imageName, imageUrl: downloadURL });
               });
             }
           );          // ...
         })
-        .catch((error) => {
-          const errorCode = error.code;
+        .catch((error: Error) => {
           const errorMessage = error.message;
-          console.log(errorCode, errorMessage)
+          console.log(errorMessage)
         });
 
-      }catch (err: any) {
+      }catch (err: Error) {
       setError(err);
     }
     console.log(error)
