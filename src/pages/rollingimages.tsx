@@ -131,58 +131,63 @@ export function AddImageModal(props: ModalType) {
   }
 
   const handleSubmit = async (event: React.FormEvent<ImageFormElement>) => {
-    event.preventDefault()
-      if (!imageUpload) { 
-        toast.error("Please select an image to upload");
-        return;
-      }else if (!imageName) { 
-        toast.error("Please enter an image name");
+    event.preventDefault();
+  
+    if (!imageUpload) {
+      toast.error("Please select an image to upload");
+      return;
+    } else if (!imageName) {
+      toast.error("Please enter an image name");
+      return;
+    }
+  
+    try {
+      const auth = getAuth();
+      const firebaseToken = await getToken({ template: "integration_firebase" });
+  
+      if (!firebaseToken) {
         return;
       }
-      try{
-        const auth = getAuth();
-        const firebaseToken = await getToken({ template: "integration_firebase" });
-        if (!firebaseToken) {
-          return;
+  
+      try {
+        await signInWithCustomToken(auth, firebaseToken);
+  
+        // Signed in
+        const storageRef = ref(storage, `files/${imageName}`);
+        const uploadTask = uploadBytesResumable(storageRef, imageUpload);
+  
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            setProcessingState(true);
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            setProgresspercent(progress);
+          },
+          (error) => {
+            alert(error);
+          },
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            mutate({ imageName: imageName, imageUrl: downloadURL });
+          }
+        );
+      } catch (error) {
+        // Handle the error that occurs during sign-in or upload
+        if (error instanceof Error) {
+          setError(error.message);
+          console.log(error.message); // Log the error message here
         }
-        try{
-        await signInWithCustomToken(auth, firebaseToken)
-        .then(() => {
-          // Signed in
-          const storageRef = ref(storage, `files/${imageName}`);
-          const uploadTask = uploadBytesResumable(storageRef, imageUpload);
-
-          uploadTask.on("state_changed",
-            (snapshot) => {
-              setProcessingState(true);
-              const progress =
-                Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-              setProgresspercent(progress);
-            },
-            (error) => {
-              alert(error);
-            },
-            async () => {
-              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-              mutate({ imageName: imageName, imageUrl: downloadURL });
-            }
-          );          // ...
-        })
-        .catch((error: Error) => {
-          const errorMessage = error.message;
-          console.log(errorMessage)
-        });
-
-      }catch (err: unknown) {
-        if(err instanceof Error){
-          setError(err.message);
-        }
+      }
+    } catch (err) {
+      // Handle any other unexpected errors here if needed
+      if (err instanceof Error) {
+        setError(err.message);
+      }
     }
-    console.log(error)
-      }catch (err: unknown) {
-        if(err instanceof Error){}
-    }
-  }
+  };
+  
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setImageName(event.target.value)
