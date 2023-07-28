@@ -11,10 +11,11 @@ import { storage } from "../server/api/firebase";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import 'firebase/compat/firestore';
 import { useAuth } from "@clerk/nextjs";
+import toast from "react-hot-toast";
 
 
 const ImagePage: NextPageWithLayout = () => {
-  const {data, isLoading} = api.sign.getAll.useQuery();
+  const {data, isLoading} = api.image.getAll.useQuery();
   const [isOn, setIsOn] = useState(true);
   const { isOpen, toggle } = useModal();
   
@@ -41,10 +42,10 @@ const ImagePage: NextPageWithLayout = () => {
       <a className="text-xl pt-20 text-gray-500">Upload New Image</a>
     </div>
     <AddImageModal isOpen={isOpen} toggle={toggle}></AddImageModal>
-    {...data?.map((sign) => (
-    <div key={sign.id} className="grid-flow-row auto-rows-max col-span-1 max-w-[315px] min-h-[315px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[40%]">
+    {...data?.map((image) => (
+    <div key={image.id} className="grid-flow-row auto-rows-max col-span-1 max-w-[315px] min-h-[315px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[40%]">
     <div className="w-full h-10 pt-2 pb-2 relative">
-    <span className="p-4 relative justify-center items-center text-xl ">{sign.name}</span>
+    <span className="p-4 relative justify-center items-center text-xl ">{image.imageName}</span>
       <button className="cursor-pointer absolute right-2 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"  aria-label="close modal" role="button">
           <svg  xmlns="http://www.w3.org/2000/svg"  className="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
               <path stroke="none" d="M0 0h24v24H0z" />
@@ -55,10 +56,10 @@ const ImagePage: NextPageWithLayout = () => {
     </div>
     <div className="flex w-full h-[80%] dark:bg-primary-darker bg-white p-4 border-b border-t border-gray-200 dark:border-primary ">
       <div className="w-full h-full justify-center items-center relative">
-          <Image src="/avatar.jpg" fill={true} alt="rollingimages1" />
+          <Image src={image.imageUrl} fill={true} alt="rollingimages1" />
         </div>
       </div>
-      <div className="flex items-center justify-end h-12  bg-white rounded-lg ">
+      <div className="flex items-center justify-end h-12 bg-white dark:bg-primary-dark rounded-lg ">
         <button className="relative pr-4 focus:outline-none" onClick={() => setIsOn(!isOn)}>
           <div
               className="w-12 h-6 transition rounded-full outline-none bg-primary-100 dark:bg-primary-darker"
@@ -90,6 +91,7 @@ export function AddImageModal(props: ModalType) {
   
   const { mutate } = api.image.create.useMutation({
     onSuccess: () => {
+      toast.success("Image uploaded successfully!");
       handleCancel();
       void ctx.image.invalidate();
     },
@@ -99,15 +101,17 @@ export function AddImageModal(props: ModalType) {
 
   const [imageUpload, setImageUpload] = useState<File | null>(null); 
   const [imageName, setImageName] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
   const [progresspercent, setProgresspercent] = useState(0);
+  const [processingState, setProcessingState] = useState(false);
 
 
 
   const handleCancel = () => {
     props.toggle();
     setImageName("");
-    setImageUrl("");
+    setImageUpload(null);
+    setProgresspercent(0);
+    setProcessingState(false);
   };
 
 
@@ -128,7 +132,13 @@ export function AddImageModal(props: ModalType) {
 
   const handleSubmit = async (event: React.FormEvent<ImageFormElement>) => {
     event.preventDefault()
-      if (!imageUpload) { return;}
+      if (!imageUpload) { 
+        toast.error("Please select an image to upload");
+        return;
+      }else if (!imageName) { 
+        toast.error("Please enter an image name");
+        return;
+      }
       try{
         const auth = getAuth();
         const firebaseToken = await getToken({ template: "integration_firebase" });
@@ -137,14 +147,14 @@ export function AddImageModal(props: ModalType) {
         }
 
         signInWithCustomToken(auth, firebaseToken)
-        .then((userCredential) => {
+        .then(() => {
           // Signed in
-          const user = userCredential.user;
-          const storageRef = ref(storage, `files/${imageUpload}`);
+          const storageRef = ref(storage, `files/${imageName}`);
           const uploadTask = uploadBytesResumable(storageRef, imageUpload);
 
           uploadTask.on("state_changed",
             (snapshot) => {
+              setProcessingState(true);
               const progress =
                 Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
               setProgresspercent(progress);
@@ -154,24 +164,26 @@ export function AddImageModal(props: ModalType) {
             },
             () => {
               getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                setImageUrl(downloadURL)
-                console.log(downloadURL)
+                mutate({ imageName: imageName, imageUrl: downloadURL });
               });
             }
-          );
-          // ...
+          );          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(errorCode, errorMessage)
         });
+
       }catch (err: any) {
       setError(err);
     }
     console.log(error)
   }
-  
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setImageName(event.target.value)
+  }
   
   return (
     <>
@@ -216,7 +228,7 @@ export function AddImageModal(props: ModalType) {
                       Image Name
                     </label>
                     <input
-                      onChange={(e) => setImageName(e.target.value)}
+                      onChange={handleChange}
                       type="text"
                       id="name"
                       className="dark:bg-primary dark:text-light focus:ring-primary mb-5 mr-5 mt-2 flex h-10 w-80 items-center rounded  border border-gray-300 pl-3 text-sm font-normal text-gray-600 placeholder-gray-400 focus:outline-none focus:ring dark:border-gray-700 dark:placeholder-gray-200"
@@ -229,10 +241,21 @@ export function AddImageModal(props: ModalType) {
                 <label htmlFor="usernameInput" className="dark:text-light text-sm font-bold leading-tight tracking-normal text-gray-800">
                   Upload Image
                 </label>
+                <div className={`${processingState ? '' : 'hidden'}`}>
+                <div className={`flex justify-between mb-1`}>
+                  <span className="text-base font-medium text-light dark:text-white"></span>
+                  <span className="text-sm font-medium text-primary-dark dark:text-primary-light">{progresspercent}%</span>
+                </div>
+                
+                <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                  <div className={`bg-primary-light dark:bg-primary-dark h-2.5 rounded-full w-[${progresspercent}%]`}></div>
+                </div>
+                </div>
+
                 <div
                   className={`mb-5 pt-3 flex items-center justify-center`}
                 >
-                  <div className="space-y-2">
+                  <div className={`${processingState ? 'hidden' : ''} space-y-2`}>
                     <label className="group block cursor-pointer rounded-lg border-2 border-dashed border-gray-200 p-4 text-center focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:border-gray-700 sm:p-7">
                       <input
                         id="imageInput"
@@ -255,9 +278,9 @@ export function AddImageModal(props: ModalType) {
                         />
                         <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
                       </svg>
-                      <span className="mt-2 block text-sm text-gray-800 dark:text-gray-200">
+                      <span className="mt-2 block text-sm text-gray-800 dark:text-light">
                         Browse your device or{" "}
-                        <span className="text-blue-600 group-hover:text-blue-700">
+                        <span className="text-primary-light group-hover:text-primary-dark">
                           drag n drop
                         </span>
                       </span>
