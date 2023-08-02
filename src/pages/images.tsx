@@ -147,8 +147,7 @@ export function AddImageModal(props: ModalType) {
     }
   
     try {
-      const auth = getAuth();
-  
+        const auth = getAuth();
         void (async () => {
           const firebaseToken = await getToken({ template: "integration_firebase" });
           if (!firebaseToken) {
@@ -187,7 +186,6 @@ export function AddImageModal(props: ModalType) {
         }
       }
   }
-  
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setImageName(event.target.value)
