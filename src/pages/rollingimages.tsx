@@ -138,15 +138,14 @@ export function AddImageModal(props: ModalType) {
   
     try {
       const auth = getAuth();
-      const firebaseToken = await getToken({ template: "integration_firebase" });
   
-      if (!firebaseToken) {
-        return;
-      }
-  
-      try {
-        await signInWithCustomToken(auth, firebaseToken);
-  
+        void (async () => {
+          const firebaseToken = await getToken({ template: "integration_firebase" });
+          if (!firebaseToken) {
+            return;
+          }
+          await signInWithCustomToken(auth, firebaseToken);
+        })()  
         // Signed in
         const storageRef = ref(storage, `files/${imageName}`);
         const uploadTask = uploadBytesResumable(storageRef, imageUpload);
@@ -176,13 +175,6 @@ export function AddImageModal(props: ModalType) {
 
         }
       }
-    } catch (err) {
-      // Handle any other unexpected errors here if needed
-      if (err instanceof Error) {
-        console.log(err.message); // Log the error message here
-        toast.error("Error uploading image");
-      }
-    }
   }
   
 
