@@ -28,7 +28,7 @@ const Sidebar: React.FunctionComponent<{
   const router = useRouter();
 
   const { data: signs, isLoading: isLoadingSigns } = api.sign.getAll.useQuery();
-  const { data: images, isLoading: isLoadingImages } = api.image.getAll.useQuery();
+  //const { data: images, isLoading: isLoadingImages } = api.image.getAll.useQuery();
 
 
   const { isOpen, toggle } = useModal();
