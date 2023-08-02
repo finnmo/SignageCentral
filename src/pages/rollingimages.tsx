@@ -102,8 +102,6 @@ export function AddImageModal(props: ModalType) {
   const [progresspercent, setProgresspercent] = useState(0);
   const [processingState, setProcessingState] = useState(false);
 
-
-
   const handleCancel = () => {
     props.toggle();
     setImageName("");
@@ -112,14 +110,12 @@ export function AddImageModal(props: ModalType) {
     setProcessingState(false);
   };
 
-
   const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
     console.log(event.code);
     if (event.code === "Escape") {
       props.toggle();
     }
   }
-
 
   interface FormElements extends HTMLFormControlsCollection {
     imageInput: HTMLInputElement
@@ -128,8 +124,9 @@ export function AddImageModal(props: ModalType) {
     readonly elements: FormElements
   }
 
-  const handleSubmit = async (event: React.FormEvent<ImageFormElement>) =>{
+  const onSubmit = async (event: React.FormEvent<ImageFormElement>) =>{
     event.preventDefault();
+    setProcessingState(true);
   
     if (!imageUpload) {
       toast.error("Please select an image to upload");
@@ -157,7 +154,6 @@ export function AddImageModal(props: ModalType) {
         uploadTask.on(
           "state_changed",
           (snapshot) => {
-            setProcessingState(true);
             const progress = Math.round(
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100
             );
@@ -211,7 +207,7 @@ export function AddImageModal(props: ModalType) {
               className="absolute mx-auto h-5/6 w-11/12 z-20 max-w-lg overflow-y-auto md:w-2/3"
             >
               <div className="dark:bg-dark rounded-md border border-gray-400 bg-white px-5 py-8 shadow-md dark:border-gray-700 md:px-10">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={onSubmit}>
                 <div className=" mb-3 flex w-full justify-start text-gray-600">
                   <svg
                     className="h-5 w-5"
