@@ -229,7 +229,7 @@ const Sidebar: React.FunctionComponent<{
 
             <div>
               <Link
-                href="/rollingimages"
+                href="/images"
                 className={`dark:text-light hover:bg-primary-100 dark:hover:bg-primary flex items-center rounded-md p-2 text-gray-500 transition-colors ${
                   openRollingImages ? "bg-primary-100 dark:bg-primary" : ""
                 }`}            

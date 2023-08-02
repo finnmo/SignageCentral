@@ -117,8 +117,12 @@ export function AddImageModal(props: ModalType) {
       handleCancel();
       void ctx.image.invalidate();
     },
+    onError: () => {
+      toast.error("Error occured while adding image");
+    }
   });
 
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageUpload, setImageUpload] = useState<File | null>(null); 
   const [imageName, setImageName] = useState("");
   const [progresspercent, setProgresspercent] = useState(0);
@@ -130,6 +134,7 @@ export function AddImageModal(props: ModalType) {
     setImageUpload(null);
     setProgresspercent(0);
     setProcessingState(false);
+    setImagePreview(null);
   };
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -148,7 +153,6 @@ export function AddImageModal(props: ModalType) {
 
   const onSubmit = (event: React.FormEvent<ImageFormElement>) =>{
     event.preventDefault();
-    setProcessingState(true);
   
     if (!imageUpload) {
       toast.error("Please select an image to upload");
@@ -157,6 +161,7 @@ export function AddImageModal(props: ModalType) {
       toast.error("Please enter an image name");
       return;
     }
+    setProcessingState(true);
   
     try {
         const auth = getAuth();
@@ -194,7 +199,6 @@ export function AddImageModal(props: ModalType) {
         if (error instanceof Error) {
           console.log(error.message); // Log the error message here
           toast.error("Error uploading image");
-
         }
       }
   }
@@ -202,6 +206,26 @@ export function AddImageModal(props: ModalType) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setImageName(event.target.value)
   }
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      // Read the file and set it as the image preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          setImagePreview(e.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+      // Set the uploaded image to state for further processing
+      setImageUpload(file);
+    } else {
+      setImagePreview(null);
+      setImageUpload(null);
+    }
+  };
   
   return (
     <>
@@ -219,7 +243,7 @@ export function AddImageModal(props: ModalType) {
               role="alert"
               className="absolute mx-auto h-5/6 w-11/12 z-20 max-w-lg overflow-y-auto md:w-2/3"
             >
-              <div className="dark:bg-dark rounded-md border border-gray-400 bg-white px-5 py-8 shadow-md dark:border-gray-700 md:px-10">
+              <div className="dark:bg-dark rounded-md border border-gray-400 bg-white px-5 py-8  dark:border-gray-700 md:px-10">
                 <form onSubmit={onSubmit}>
                 <div className=" mb-3 flex w-full justify-start text-gray-600">
                   <svg
@@ -280,8 +304,16 @@ export function AddImageModal(props: ModalType) {
                         name="af-submit-app-upload-images"
                         type="file"
                         className="sr-only"
-                        onChange={(e) => setImageUpload(e.target.files?.[0] ?? null)}
+                        onChange={handleImageChange}
                       />
+                      {imagePreview ? (
+                      <img
+                        src={imagePreview}
+                        alt="Image Preview"
+                        className="mx-auto h-32 object-cover"
+                      />
+                    ) : (
+                      <>
                       <svg
                         className="mx-auto h-10 w-10 text-gray-400 dark:text-gray-600"
                         xmlns="http://www.w3.org/2000/svg"
@@ -305,9 +337,13 @@ export function AddImageModal(props: ModalType) {
                       <span className="mt-1 block text-xs text-gray-500">
                         Maximum file size is 2 MB
                       </span>
+                      </>
+                      )}
                     </label>
                   </div>
+                  
                 </div>
+                
                 
                 <div className="flex w-full items-center justify-start">
                   <button
