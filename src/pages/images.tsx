@@ -26,11 +26,13 @@ const ImagePage: NextPageWithLayout = () => {
 )
   if(!data) return <div className="top-0 right-0 ml-6 mt-3" >Something went wrong...</div>
 
-  const handleOpenModal = async () => {
+  const handleOpenModal = () => {
     try {
-      await openModal({
-        name: 'EditImageModal',
-      });
+      void (async () => {
+        await openModal({
+          name: 'EditImageModal',
+        });
+      })()
       // The code here will only execute after the modal is closed (resolved state)
       console.log('Modal opened.');
     } catch (error) {
@@ -361,12 +363,14 @@ const EditImageModal = () => {
   const [progresspercent, setProgresspercent] = useState(0);
   const [processingState, setProcessingState] = useState(false);
 
-  const handleCancel = async () => {
+  const handleCancel = () => {
     setImageName("");
     setProgresspercent(0);
     setProcessingState(false);
     try {
-      await closeModal();
+      void (async () => {
+        await closeModal();
+      })()
       // The code here will only execute after the modal is closed (resolved state)
       console.log('Modal closed.');
     } catch (error) {
