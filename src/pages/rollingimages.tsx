@@ -1,4 +1,5 @@
 import { type ReactNode, useState, type ReactElement   } from "react";
+import type { SubmitHandler } from "react-hook-form"
 import Layout from "~/layouts/Layout";
 import type { NextPageWithLayout } from "./_app";
 import React from 'react'
@@ -128,7 +129,7 @@ export function AddImageModal(props: ModalType) {
     readonly elements: FormElements
   }
 
-   async function handleSubmit(event: React.FormEvent<ImageFormElement>){
+  const handleSubmit = async (event: React.FormEvent<ImageFormElement>) =>{
     event.preventDefault();
   
     if (!imageUpload) {
@@ -187,7 +188,7 @@ export function AddImageModal(props: ModalType) {
         toast.error("Error uploading image");
       }
     }
-  };
+  }
   
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
