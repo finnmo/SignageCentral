@@ -352,7 +352,7 @@ const EditImageModal = () => {
   const [processingState, setProcessingState] = useState(false);
 
   const handleCancel = () => {
-    closeModal()
+    closeModal();
     setImageName("");
     setProgresspercent(0);
     setProcessingState(false);
