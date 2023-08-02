@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { api } from "~/utils/api";
 import useModal from "~/server/helpers/useModal";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage"
+import { ref, getDownloadURL, uploadBytesResumable, StorageReference } from "firebase/storage"
 import { storage } from "../server/api/firebase";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import 'firebase/compat/firestore';
@@ -167,8 +167,14 @@ export function AddImageModal(props: ModalType) {
             alert(error);
           },
           async () => {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            mutate({ imageName: imageName, imageUrl: downloadURL });
+            try {
+              await handleUploadComplete(uploadTask.snapshot.ref, imageName);
+            } catch (error) {
+              // Handle the error that occurs during upload
+              if (error instanceof Error) {
+                console.log(error.message); // Log the error message here
+              }
+            }
           }
         );
       } catch (error) {
@@ -184,6 +190,12 @@ export function AddImageModal(props: ModalType) {
       }
     }
   };
+
+  // Separate async function to handle upload completion
+async function handleUploadComplete(ref: StorageReference, imageName: string) {
+  const downloadURL = await getDownloadURL(ref);
+  mutate({ imageName: imageName, imageUrl: downloadURL });
+}
   
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

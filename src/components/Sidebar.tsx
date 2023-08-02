@@ -27,7 +27,9 @@ const Sidebar: React.FunctionComponent<{
 }> = (props: Props) => {
   const router = useRouter();
 
-  const { data, isLoading } = api.sign.getAll.useQuery();
+  const { data: signs, isLoading: isLoadingSigns } = api.sign.getAll.useQuery();
+  const { data: images, isLoading: isLoadingImages } = api.image.getAll.useQuery();
+
 
   const { isOpen, toggle } = useModal();
   const { isOpenIntegration, toggleIntegration } = useModalIntegration();
@@ -200,8 +202,8 @@ const Sidebar: React.FunctionComponent<{
                 role="menu"
                 arial-label="Components"
               >
-                {!isLoading ?
-                data?.map((sign) => (
+                {!isLoadingSigns ?
+                signs?.map((sign) => (
                   <Link
                     href={`/sign/${sign.id}`}
                     className={`${
@@ -211,7 +213,7 @@ const Sidebar: React.FunctionComponent<{
                     {sign.name}
                   </Link>
                 )) : <div className = 'flex align-center justify-center'> <LoadingSpinner/></div>}
-                {!isLoading ?
+                {!isLoadingSigns ?
                 <div>
                 <a
                   onClick={toggle}
