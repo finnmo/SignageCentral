@@ -33,8 +33,8 @@ const ImagePage: NextPageWithLayout = () => {
 </div>
 
 <div className="mt-2">
-  <div className="grid p-4 space-y-4 lg:gap-8 lg:space-y-0 lg:grid-cols-4 grid-rows-2 pl-10">
-    <div onClick={toggle} className="cursor-pointer col-span-1 border-2 min-h-[315px] max-w-[315px] border-gray-400 rounded-lg dark:bg-darker flex flex-col items-center justify-center h-screen max-h-[40%]">
+  <div className="grid grid-cols-4 pb-4 ml-10">
+    <div onClick={toggle} className="cursor-pointer col-span-1 ml-4 mb-6 border-2 min-h-[415px] max-w-[315px] border-gray-400 rounded-lg dark:bg-darker flex flex-col items-center justify-center max-h-[40%]">
 
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 25" strokeWidth="0.5" stroke="gray" className="w-40 h-40">
       <path strokeLinecap="round" strokeLinejoin="round" d="M13 0v29m15-15h-30" />
@@ -43,7 +43,7 @@ const ImagePage: NextPageWithLayout = () => {
     </div>
     <AddImageModal isOpen={isOpen} toggle={toggle}></AddImageModal>
     {...data?.map((image) => (
-    <div key={image.id} className="grid-flow-row auto-rows-max col-span-1 max-w-[315px] min-h-[315px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[40%]">
+    <div key={image.id} className="grid-flow-row auto-rows-max ml-4 mb-6 col-span-1 max-w-[315px] min-h-[415px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[40%]">
     <div className="w-full h-10 pt-2 pb-2 relative">
     <span className="p-4 relative justify-center items-center text-xl ">{image.imageName}</span>
       <button className="cursor-pointer absolute right-2 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"  aria-label="close modal" role="button">
