@@ -307,7 +307,7 @@ export function AddImageModal(props: ModalType) {
                         onChange={handleImageChange}
                       />
                       {imagePreview ? (
-                      <img
+                      <Image
                         src={imagePreview}
                         alt="Image Preview"
                         className="mx-auto h-32 object-cover"
