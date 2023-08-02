@@ -128,7 +128,7 @@ export function AddImageModal(props: ModalType) {
     readonly elements: FormElements
   }
 
-  const handleSubmit = async (event: React.FormEvent<ImageFormElement>) => {
+   async function handleSubmit(event: React.FormEvent<ImageFormElement>){
     event.preventDefault();
   
     if (!imageUpload) {
@@ -165,6 +165,7 @@ export function AddImageModal(props: ModalType) {
           },
           (error) => {
             alert(error);
+            toast.error("Error uploading image");
           },
           void (async () => {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
@@ -175,12 +176,15 @@ export function AddImageModal(props: ModalType) {
         // Handle the error that occurs during sign-in or upload
         if (error instanceof Error) {
           console.log(error.message); // Log the error message here
+          toast.error("Error uploading image");
+
         }
       }
     } catch (err) {
       // Handle any other unexpected errors here if needed
       if (err instanceof Error) {
         console.log(err.message); // Log the error message here
+        toast.error("Error uploading image");
       }
     }
   };
