@@ -382,7 +382,16 @@ const EditImageModal = () => {
   const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
     console.log(event.code);
     if (event.code === "Escape") {
-      closeModal();
+      try {
+        void (async () => {
+          await closeModal();
+        })()
+        // The code here will only execute after the modal is closed (resolved state)
+        console.log('Modal closed.');
+      } catch (error) {
+        // Handle any errors that occur during the modal operation (rejected state)
+        console.error('Modal error:', error);
+      }
     }
   }
 
