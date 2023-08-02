@@ -124,7 +124,7 @@ export function AddImageModal(props: ModalType) {
     readonly elements: FormElements
   }
 
-  const onSubmit = async (event: React.FormEvent<ImageFormElement>) =>{
+  const onSubmit = (event: React.FormEvent<ImageFormElement>) =>{
     event.preventDefault();
     setProcessingState(true);
   
@@ -142,6 +142,7 @@ export function AddImageModal(props: ModalType) {
         void (async () => {
           const firebaseToken = await getToken({ template: "integration_firebase" });
           if (!firebaseToken) {
+            toast.error("Authentication Error");
             return;
           }
           await signInWithCustomToken(auth, firebaseToken);
