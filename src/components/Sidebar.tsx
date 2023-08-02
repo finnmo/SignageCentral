@@ -28,7 +28,7 @@ const Sidebar: React.FunctionComponent<{
   const router = useRouter();
 
   const { data: signs, isLoading: isLoadingSigns } = api.sign.getAll.useQuery();
-  //const { data: images, isLoading: isLoadingImages } = api.image.getAll.useQuery();
+  const { data: images, isLoading: isLoadingImages } = api.image.getAll.useQuery();
 
 
   const { isOpen, toggle } = useModal();
@@ -277,6 +277,17 @@ const Sidebar: React.FunctionComponent<{
                 role="menu"
                 arial-label="Pages"
               >
+                {!isLoadingImages ?
+                images?.map((image) => (
+                  <Link
+                    href={`/image/${image.id}`}
+                    className={`${
+                      router.query.id == image.id ? "text-gray-700": ""} dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400`}
+                    key={image.id}
+                  >
+                    {image.imageName}
+                  </Link>
+                )) : <div className = 'flex align-center justify-center'> <LoadingSpinner/></div>}
                 <Link
                   href="/blank"
                   className="dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400"
