@@ -25,6 +25,19 @@ const ImagePage: NextPageWithLayout = () => {
     </div>
 )
   if(!data) return <div className="top-0 right-0 ml-6 mt-3" >Something went wrong...</div>
+
+  const handleOpenModal = async () => {
+    try {
+      await openModal({
+        name: 'EditImageModal',
+      });
+      // The code here will only execute after the modal is closed (resolved state)
+      console.log('Modal opened.');
+    } catch (error) {
+      // Handle any errors that occur during the modal operation (rejected state)
+      console.error('Modal error:', error);
+    }
+  };
   
   return  (
   <>
@@ -48,10 +61,7 @@ const ImagePage: NextPageWithLayout = () => {
     </div>
     <AddImageModal isOpen={isOpen} toggle={toggle}></AddImageModal>
     {...data?.map((image) => (
-    <div onClick={()=>openModal({
-          name: "EditImageModal",
-        })
-      }
+    <div onClick={handleOpenModal}
       key={image.id} className="cursor-pointer grid-flow-row auto-rows-max ml-4 mb-6 col-span-1 max-w-[315px] min-h-[415px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[40%]">
     <div className="w-full h-10 pt-2 pb-2 relative">
     <span className="p-4 relative justify-center items-center text-xl ">{image.imageName}</span>
@@ -351,11 +361,18 @@ const EditImageModal = () => {
   const [progresspercent, setProgresspercent] = useState(0);
   const [processingState, setProcessingState] = useState(false);
 
-  const handleCancel = () => {
-    closeModal();
+  const handleCancel = async () => {
     setImageName("");
     setProgresspercent(0);
     setProcessingState(false);
+    try {
+      await closeModal();
+      // The code here will only execute after the modal is closed (resolved state)
+      console.log('Modal closed.');
+    } catch (error) {
+      // Handle any errors that occur during the modal operation (rejected state)
+      console.error('Modal error:', error);
+    }
   };
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
