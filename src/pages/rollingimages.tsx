@@ -1,5 +1,4 @@
 import { type ReactNode, useState, type ReactElement   } from "react";
-import type { SubmitHandler } from "react-hook-form"
 import Layout from "~/layouts/Layout";
 import type { NextPageWithLayout } from "./_app";
 import React from 'react'
