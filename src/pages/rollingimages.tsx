@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { api } from "~/utils/api";
 import useModal from "~/server/helpers/useModal";
-import { ref, getDownloadURL, uploadBytesResumable, type StorageReference } from "firebase/storage"
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage"
 import { storage } from "../server/api/firebase";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import 'firebase/compat/firestore';
@@ -166,24 +166,10 @@ export function AddImageModal(props: ModalType) {
           (error) => {
             alert(error);
           },
-          await new Promise((resolve, reject) => {
-            uploadTask.on(
-              "state_changed",
-              null,
-              (error) => {
-                reject(error);
-              },
-              async () => {
-                try {
-                  const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                  mutate({ imageName: imageName, imageUrl: downloadURL });
-                  resolve(null); // Resolve the promise to indicate completion
-                } catch (error) {
-                  reject(error); // Reject the promise if there's an error during processing
-                }
-              }
-            );
-          })
+          void (async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            mutate({ imageName: imageName, imageUrl: downloadURL });
+          })()
         );
       } catch (error) {
         // Handle the error that occurs during sign-in or upload
@@ -198,12 +184,6 @@ export function AddImageModal(props: ModalType) {
       }
     }
   };
-
-  // Separate async function to handle upload completion
-async function handleUploadComplete(ref: StorageReference, imageName: string) {
-  const downloadURL = await getDownloadURL(ref);
-  mutate({ imageName: imageName, imageUrl: downloadURL });
-}
   
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
