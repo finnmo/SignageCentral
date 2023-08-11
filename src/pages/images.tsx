@@ -13,7 +13,6 @@ import 'firebase/compat/firestore';
 import { useAuth } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { closeModal, openModal, URLModal } from "react-url-modal";
-import useModalDelete from "~/server/helpers/useModalDelete";
 
 const ImagePage: NextPageWithLayout = () => {
   const {data, isLoading} = api.image.getAll.useQuery();
@@ -58,7 +57,7 @@ const ImagePage: NextPageWithLayout = () => {
         EditImageModal: EditImageModal,
       }}
     />
-  <div className="grid grid-cols-4 mr-10 pb-4 ml-10">
+  <div className="grid grid-flow-row md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2 2xl:grid-cols-4 mr-10 pb-4 ml-10">
     <div onClick={toggle} className="cursor-pointer col-span-1 ml-4 mb-6 border-2 min-h-[315px] max-w-[315px] border-gray-400 rounded-lg dark:bg-darker flex flex-col items-center justify-center max-h-[40%]">
 
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 25" strokeWidth="0.5" stroke="gray" className="w-40 h-40">
@@ -69,7 +68,7 @@ const ImagePage: NextPageWithLayout = () => {
     <AddImageModal isOpen={isOpen} toggle={toggle}></AddImageModal>
     {...data?.map((image) => (
     <div onClick={handleOpenModal}
-      key={image.id} data-key={image.id} className="cursor-pointer grid-flow-row auto-rows-max ml-4 mb-6 col-span-1 max-w-[315px] min-h-[315px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[315px]">
+      key={image.id} data-key={image.id} className="cursor-pointer grid-flow-row auto-rows-max ml-4 mb-10 col-span-1 max-w-[315px] min-w-[215px] min-h-[215px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[315px]">
     <div className="w-full h-10 pt-2 pb-2 relative">
     <span className="p-4 relative justify-center items-center text-xl ">{image.imageName}</span>
       <button className="cursor-pointer absolute right-2 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"  aria-label="close modal" role="button">
@@ -126,9 +125,6 @@ export function AddImageModal(props: ModalType) {
       toast.error("Error occured while adding image");
     }
   });
-
-  const { isOpenDelete, toggleDeleteModal } = useModalDelete();
-
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageUpload, setImageUpload] = useState<File | null>(null); 
@@ -362,7 +358,6 @@ export function AddImageModal(props: ModalType) {
                   </button>
                   <button
                     className="dark:bg-primary-darker dark:text-light hover:text-lighter hover:bg-primary ml-3 rounded border px-8 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                    onClick={toggleDeleteModal}
                   >
                     Cancel
                   </button>
