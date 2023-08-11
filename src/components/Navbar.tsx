@@ -22,7 +22,7 @@ const Navbar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (isDark: b
         <>
         <a
         href="index.html"
-        className="inline-block text-2xl font-bold tracking-wider uppercase text-primary-dark dark:text-light"
+        className="inline-block ml-2 text-2xl font-bold tracking-wider uppercase text-primary-dark dark:text-light"
         >
             Digital Signage Manager
         </a>
