@@ -1,8 +1,14 @@
 
-import React, { type Dispatch, type SetStateAction, useRef, useState } from "react";
+import React, { useEffect, type Dispatch, type SetStateAction, useRef, useState } from "react";
 import Link from "next/link";
 //import { useOnClickOutside } from "usehooks-ts";
-
+import { useRouter } from "next/router";
+import { api } from "~/utils/api";
+import useModal from "~/server/helpers/useModal";
+import useModalIntegration from "~/server/helpers/useModalIntegration";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { AddSignModal } from "./Sidebar";
+import { encodeUrlParams } from "react-url-modal";
 
 type Props = {
     isDark: boolean;
@@ -12,11 +18,42 @@ type Props = {
   }; 
   
 const MobileSidebar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (isDark: boolean) => void, isMobileMainMenuOpen: boolean, openMobileMainMenu: Dispatch<SetStateAction<boolean>>}> = (props: Props) =>{
+    const router = useRouter();
+
+    const { data: signs, isLoading: isLoadingSigns } = api.sign.getAll.useQuery();
+    const { data: images, isLoading: isLoadingImages } = api.image.getAll.useQuery();
+  
+   
+    const { isOpen, toggle } = useModal();
+    const { isOpenIntegration, toggleIntegration } = useModalIntegration();   
+   
     const [openDashboards, setOpenDashboards] = useState(true);
-    const [openComponents, setOpenComponents] = useState(false);
-    const [openPages, setOpenPages] = useState(false);
+    const [openSigns, setOpenSigns] = useState(
+      router.pathname == "/sign/{id}" ? true : false
+    );
+
+    const [openRollingImages, setOpenRollingImages] = useState(false);
     const [openAuthentication, setOpenAuthentication] = useState(false);
     const [openLayouts, setOpenLayouts] = useState(false);
+    const [openParkingMap, setOpenParkingMap] = useState(false);
+
+
+  const handleOpenRollingImages = (e: React.MouseEvent<SVGElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setOpenRollingImages(!openRollingImages);
+  } 
+
+  useEffect(() => {
+    const signRegex = /^[A-Za-z0-9#]+$/; // Regular expression to match the ID pattern
+
+    const id = Array.isArray(router.query.id) ? router.query.id[0] : router.query.id; // Extract the ID from the query parameters
+
+    if (id && signRegex.test(id)) {
+      setOpenSigns(true);
+    }
+  }, [router.query.id]);
+
 
     const ref = useRef<HTMLDivElement>(null);
     // useOnClickOutside(ref, (e) => {
@@ -82,22 +119,15 @@ const MobileSidebar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (is
           >
             Overview
           </Link>
-          <Link
-            href="/"
-            role="menuitem"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700"
-          >
-            TBD (soon)
-          </Link>
         </div>
       </div>
 
       <div x-data="{ isActive: false, open: false }">
         <a
           href="#"
-          onClick={() => setOpenComponents(!openComponents)}
+          onClick={() => setOpenSigns(!openSigns)}
           className={`flex items-center p-2 text-gray-500 transition-colors rounded-md dark:text-light hover:bg-primary-100 dark:hover:bg-primary ${
-            openComponents ? "bg-primary-100 dark:bg-primary" : ""}`}
+            openSigns ? "bg-primary-100 dark:bg-primary" : ""}`}
           role="button"
           aria-haspopup="true"
           ////:aria-expanded="(open || isActive) ? 'true' : 'false'"
@@ -118,11 +148,11 @@ const MobileSidebar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (is
               />
             </svg>
           </span>
-          <span className="ml-2 text-sm"> Components </span>
+          <span className="ml-2 text-sm"> Signs </span>
           <span aria-hidden="true" className="ml-auto">
             <svg
               className={`w-4 h-4 transition-transform transform ${
-                openComponents ? "rotate-180" : ""}`}
+                openSigns ? "rotate-180" : ""}`}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -132,51 +162,38 @@ const MobileSidebar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (is
             </svg>
           </span>
         </a>
-        <div className={`mt-2 space-y-2 px-7 ${openComponents ? "" : "hidden"}`} role="menu" arial-label="Components">
-          <Link
-            href="/sign"
-            role="menuitem"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700"
-          >
-             University Blvd and Hayman Rd (soon)
-          </Link>
-          <a
-            href="#"
-            role="menuitem"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:text-gray-400 dark:hover:text-light hover:text-gray-700"
-          >
-            University Blvd and Kent St (soon)
-          </a>
-          <a
-            href="#"
-            role="menuitem"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700"
-          >
-            Stadium Entrance (soon)
-          </a>
-          <a
-            href="#"
-            role="menuitem"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700"
-          >
-            Beazley Ave and Kent St (soon)
-          </a>
-          <a
-            href="#"
-            role="menuitem"
-            className="block p-2 text-sm text-gray-400 transition-colors duration-200 rounded-md dark:hover:text-light hover:text-gray-700"
-          >
-            South Entrance (soon)
-          </a>
+        <div className={`mt-2 space-y-2 px-7 ${openSigns ? "" : "hidden"}`} role="menu" arial-label="Components">
+            {!isLoadingSigns ?
+                signs?.map((sign) => (
+                  <Link
+                    href={`/sign/${sign.id}`}
+                    className={`${
+                      router.query.id == sign.id ? "text-gray-700": ""} dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400`}
+                    key={sign.id}
+                  >
+                    {sign.name}
+                  </Link>
+                )) : <div className = 'flex align-center justify-center'> <LoadingSpinner/></div>
+              }
+              {!isLoadingSigns ?
+                <div>
+                <a
+                  onClick={toggle}
+                  className={`${
+                    isOpen ? "border-gray-400 text-gray-700" : ""
+                  } dark:hover:text-light block rounded-md border-2 p-2 text-center text-sm text-gray-400 transition-colors duration-200 hover:cursor-pointer hover:border-gray-400 hover:text-gray-700 dark:text-gray-400`}
+                >
+                  Add New Sign +
+                </a>
+                <AddSignModal isOpen={isOpen} toggle={toggle}></AddSignModal></div> : <div/>}
+          </div>
         </div>
-      </div>
 
       <div x-data="{ isActive: false, open: false }">
-        <a
-          href="#"
-          onClick={() => setOpenPages(!openPages)}
+        <Link
+          href="/images"
           className={`flex items-center p-2 text-gray-500 transition-colors rounded-md dark:text-light hover:bg-primary-100 dark:hover:bg-primary ${
-            openPages ? "bg-primary-100 dark:bg-primary" : ""}`}
+            openRollingImages ? "bg-primary-100 dark:bg-primary" : ""}`}
           role="button"
           aria-haspopup="true"
           ////:aria-expanded="(open || isActive) ? 'true' : 'false'"
@@ -197,11 +214,11 @@ const MobileSidebar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (is
               />
             </svg>
           </span>
-          <span className="ml-2 text-sm"> Pages </span>
+          <span className="ml-2 text-sm"> Rolling Images </span>
           <span aria-hidden="true" className="ml-auto">
             <svg
               className={`w-4 h-4 transition-transform transform ${
-                openPages ? "rotate-180" : ""}`}
+                openRollingImages ? "rotate-180" : ""}`}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -210,8 +227,19 @@ const MobileSidebar: React.FunctionComponent<{ isDark: boolean, setDarkMode: (is
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
             </svg>
           </span>
-        </a>
-        <div className={`mt-2 space-y-2 px-7 ${openPages ? "" : "hidden"}`} role="menu" arial-label="Pages">
+        </Link>
+        <div className={`mt-2 space-y-2 px-7 ${openRollingImages ? "" : "hidden"}`} role="menu" arial-label="Pages">
+        {!isLoadingImages ?
+                images?.map((image) => (
+                  <Link
+                    href={`/images?modal=EditImageModal&params=${encodeUrlParams({ imageId: image.id })}`}
+                    className={`${
+                      router.query.id == image.id ? "text-gray-700": ""} dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400`}
+                    key={image.id}
+                  >
+                    {image.imageName}
+                  </Link>
+                )) : <div className = 'flex align-center justify-center'> <LoadingSpinner/></div>}
           <a
             href="pages/blank.html"
             role="menuitem"

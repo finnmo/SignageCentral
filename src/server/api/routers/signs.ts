@@ -109,5 +109,13 @@ export const signRouter = createTRPCRouter({
         },
       });
       return sign;
-    })
+    }),
+    delete: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const sign = await ctx.prisma.sign.delete({
+        where: { id: input.id },
+      });
+      return sign;
+    }),
 });

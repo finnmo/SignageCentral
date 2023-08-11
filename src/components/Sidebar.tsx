@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { type ChangeEvent } from "react";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { encodeUrlParams } from "react-url-modal";
 
 type Props = {
   isDark: boolean;
@@ -280,7 +281,7 @@ const Sidebar: React.FunctionComponent<{
                 {!isLoadingImages ?
                 images?.map((image) => (
                   <Link
-                    href={`/image/${image.id}`}
+                    href={`/images?modal=EditImageModal&params=${encodeUrlParams({ imageId: image.id })}`}
                     className={`${
                       router.query.id == image.id ? "text-gray-700": ""} dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400`}
                     key={image.id}
