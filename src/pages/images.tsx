@@ -13,7 +13,6 @@ import 'firebase/compat/firestore';
 import { useAuth } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { closeModal, openModal, URLModal } from "react-url-modal";
-import useModalIntegration from "~/server/helpers/useModalIntegration";
 import useModalDelete from "~/server/helpers/useModalDelete";
 
 const ImagePage: NextPageWithLayout = () => {
@@ -409,7 +408,7 @@ const EditImageModal = ({
   }) => {
 
 
-  const [imageName, setImageName] = useState("");
+  const [imageName, setImageName] = useState(params.imageName || "");
   const [progresspercent, setProgresspercent] = useState(0);
   const [processingState, setProcessingState] = useState(false);
 
@@ -508,7 +507,7 @@ const EditImageModal = ({
                       type="text"
                       id="name"
                       className="dark:bg-primary dark:text-light focus:ring-primary mb-5 mr-5 mt-2 flex h-10 w-80 items-center rounded  border border-gray-300 pl-3 text-sm font-normal text-gray-600 placeholder-gray-400 focus:outline-none focus:ring dark:border-gray-700 dark:placeholder-gray-200"
-                      placeholder={params.imageId}
+                      placeholder={imageName}
                     />
                   </div>
           
