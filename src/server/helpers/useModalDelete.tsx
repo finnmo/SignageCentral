@@ -1,19 +1,14 @@
 import { useState } from "react";
 
-export default function useModalDelete() {
-  const [isOpenDelete, setIsOpenDelete] = useState(false);
+export default function useModal() {
+  const [isOpenDelete, setisOpenDelete] = useState(false);
 
-  const toggleDeleteModal = () => {
-    setIsOpenDelete(!isOpenDelete);
+  const toggleDelete = () => {
+    setisOpenDelete(!isOpenDelete);
   };
-
-  const closeDeleteModal = () =>{
-    setIsOpenDelete(false);
-  }
 
   return {
     isOpenDelete,
-    toggleDeleteModal,
-    closeDeleteModal,
+    toggleDelete,
   };
 }

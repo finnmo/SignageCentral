@@ -79,7 +79,6 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 )
 }
 
-
 export const getStaticProps: GetStaticProps =  async  (
   context,
 ) => {
@@ -171,12 +170,13 @@ export function EditSign(props: ModalType) {
     const [emergencyNotificationEnabled, setEmergencyNotificationEnabled] = useState(props.data.emergencyNotificationEnabled ? props.data.emergencyNotificationEnabled : false);
     const [signIpAdress, setSignIpAdress] = useState(props.data.ipAddress ? props.data.ipAddress : "0.0.0.0");
 
-    const { isOpenDelete, toggleDeleteModal } = useModalDelete();
+    const { isOpenDelete, toggleDelete } = useModalDelete();
 
     const [validNumber, setValidNumber] = useState<boolean>(true);
 
     const handleCancel = () => {
       props.toggle();
+      
       setValidNumber(true);
       if(props.data){
         setCustomContentEnabled(props.data.customContentEnabled);
@@ -393,17 +393,19 @@ export function EditSign(props: ModalType) {
                           Cancel
                       </button>  
                       <button
-                          onClick={toggleDeleteModal}
+                          onClick={toggleDelete}
                           className="absolute right-0 px-6 py-2 text-sm text-white rounded-md bg-red-400 hover:bg-red-600 focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark"
                           >
                           Delete
                           </button>
                       </div>
+                      {isOpenDelete ? (
                       <DeleteSignModal
                         isOpenDelete={isOpenDelete}
-                        toggleDeleteModal={toggleDeleteModal}
+                        toggleDeleteModal={toggleDelete}
                         data={props.data}
                       ></DeleteSignModal>
+                      ) : null}
                       <button className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onClick={handleCancel} aria-label="close modal" role="button">
                           <svg  xmlns="http://www.w3.org/2000/svg"  className="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                               <path stroke="none" d="M0 0h24v24H0z" />
@@ -421,7 +423,6 @@ export function EditSign(props: ModalType) {
 }
 
 interface ModalTypeDelete {
-  childrenInt?: ReactNode;
   isOpenDelete: boolean;
   toggleDeleteModal: () => void;
   data: Sign;
@@ -451,6 +452,7 @@ export function DeleteSignModal(props: ModalTypeDelete) {
 
     const handleCancel = () => {
       props.toggleDeleteModal();
+      console.log("cancel");
     };
   
   return (
