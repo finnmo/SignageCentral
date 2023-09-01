@@ -647,7 +647,6 @@ interface ModalType {
 
 export function AddSignModal(props: ModalType) {
   const ctx = api.useContext();
-  const router = useRouter();
 
   const { data } = api.sign.getLastSign.useQuery();
 
@@ -655,7 +654,6 @@ export function AddSignModal(props: ModalType) {
     onSuccess: () => {
       handleCancel();
       void ctx.sign.invalidate();
-      router.push(`/signs/${data?.id? data.id : ""}`);
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
