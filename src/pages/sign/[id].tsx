@@ -9,12 +9,12 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { prisma } from "~/server/db";
 import "leaflet/dist/leaflet.css";
-import useModal from "~/server/helpers/useModal";
+import useModal from "~/server/helpers/modals/useModal";
 import { type Sign } from "@prisma/client";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
-import useModalDelete from "~/server/helpers/useModalDelete";
+import useModalDelete from "~/server/helpers/modals/useModalDelete";
 
 const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
@@ -25,6 +25,7 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   const { data, isLoading } = api.sign.getById.useQuery({
     id,
   });
+
 
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
@@ -176,7 +177,6 @@ export function EditSign(props: ModalType) {
 
     const handleCancel = () => {
       props.toggle();
-      
       setValidNumber(true);
       if(props.data){
         setCustomContentEnabled(props.data.customContentEnabled);

@@ -7,13 +7,14 @@ import React, {
 } from "react";
 import Link from "next/link";
 import { api } from "~/utils/api";
-import useModal from "~/server/helpers/useModal";
-import useModalIntegration from "~/server/helpers/useModalIntegration";
+import useModal from "~/server/helpers/modals/useModal";
+import useModalIntegration from "~/server/helpers/modals/useModalIntegration";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { type ChangeEvent } from "react";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { encodeUrlParams } from "react-url-modal";
+import toast from "react-hot-toast";
 
 type Props = {
   isDark: boolean;
@@ -646,6 +647,7 @@ interface ModalType {
 
 export function AddSignModal(props: ModalType) {
   const ctx = api.useContext();
+  const router = useRouter();
 
   const { data } = api.sign.getLastSign.useQuery();
 
@@ -653,7 +655,16 @@ export function AddSignModal(props: ModalType) {
     onSuccess: () => {
       handleCancel();
       void ctx.sign.invalidate();
+      router.push(`/signs${data?.id}`);
     },
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content;
+        if(errorMessage && errorMessage[0]){
+          toast.error(errorMessage[0]);
+        }else{
+          toast.error("An error occured, failed to create sign");
+        }
+      },
   });
 
   const MapChartAddSign = dynamic(
@@ -947,7 +958,7 @@ export function AddSignModal(props: ModalType) {
                     onClick={() =>
                       mutate({
                         signName,
-                        signNumber,
+                        signNumber: (signNumber==0?data!.number:signNumber),
                         signWidth,
                         signHeight,
                         signType,

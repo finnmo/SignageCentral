@@ -78,5 +78,13 @@ export const imageRouter = createTRPCRouter({
         },
       });
       return image;
-    })
+    }),
+    delete: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const image = await ctx.prisma.rollingImage.delete({
+        where: { id: input.id },
+      });
+      return image;
+    }),
 });
