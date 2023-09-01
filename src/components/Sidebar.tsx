@@ -655,7 +655,7 @@ export function AddSignModal(props: ModalType) {
     onSuccess: () => {
       handleCancel();
       void ctx.sign.invalidate();
-      router.push(`/signs${data?.id}`);
+      router.push(`/signs/${data?.id? data.id : ""}`);
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -958,7 +958,7 @@ export function AddSignModal(props: ModalType) {
                     onClick={() =>
                       mutate({
                         signName,
-                        signNumber: (signNumber==0?data!.number:signNumber),
+                        signNumber: (signNumber==0 ? (data?.number ? (data.number + 1) : 0):0),
                         signWidth,
                         signHeight,
                         signType,
