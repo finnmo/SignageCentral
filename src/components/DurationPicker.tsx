@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 export interface Props {
     durationHours: number;
     setDurationHours: (hours: number) => void;
