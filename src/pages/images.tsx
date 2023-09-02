@@ -13,7 +13,6 @@ import 'firebase/compat/firestore';
 import { useAuth } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { closeModal, openModal, URLModal } from "react-url-modal";
-import { TimePicker } from "@mui/x-date-pickers";
 import DurationPicker from "~/components/DurationPicker";
 
 
@@ -161,6 +160,9 @@ export function AddImageModal(props: ModalType) {
   const [imageName, setImageName] = useState("");
   const [progresspercent, setProgresspercent] = useState(0);
   const [processingState, setProcessingState] = useState(false);
+  const [durationHour, setDurationHour] = useState(0);
+  const [durationMinute, setDurationMinute] = useState(0);
+  const [durationSecond, setDurationSecond] = useState(0);
 
   const handleCancel = () => {
     props.toggle();
@@ -169,6 +171,9 @@ export function AddImageModal(props: ModalType) {
     setProgresspercent(0);
     setProcessingState(false);
     setImagePreview(null);
+    setDurationHour(0);
+    setDurationMinute(0);
+    setDurationSecond(0);
   };
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -208,9 +213,9 @@ export function AddImageModal(props: ModalType) {
           await signInWithCustomToken(auth, firebaseToken);
         })()  
         // Signed in
-        const storageRef = ref(storage, `files/${imageName}`);
-        const uploadTask = uploadBytesResumable(storageRef, imageUpload);
-  
+          const storageRef = ref(storage, `files/${imageName}`);
+          const uploadTask = uploadBytesResumable(storageRef, imageUpload);
+
         uploadTask.on(
           "state_changed",
           (snapshot) => {
@@ -224,8 +229,9 @@ export function AddImageModal(props: ModalType) {
             toast.error("Error uploading image");
           },
           void (async () => {
+            await uploadTask;
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            mutate({ imageName: imageName, imageUrl: downloadURL });
+            mutate({ imageName: imageName, imageUrl: downloadURL, durationHour: durationHour, durationMinute: durationMinute, durationSecond: durationSecond });
           })()
         );
       } catch (error) {
@@ -313,7 +319,9 @@ export function AddImageModal(props: ModalType) {
                   </div>
           
                 </div>
+                <DurationPicker durationHours={durationHour} setDurationHours={setDurationHour} durationMinutes={durationMinute} setDurationMinutes={setDurationMinute} durationSeconds={durationSecond} setDurationSeconds={setDurationSecond}></DurationPicker>
                 <div></div>
+
                 <label htmlFor="usernameInput" className="dark:text-light text-sm font-bold leading-tight tracking-normal text-gray-800">
                   Upload Image
                 </label>
@@ -345,6 +353,8 @@ export function AddImageModal(props: ModalType) {
                         src={imagePreview}
                         alt="Image Preview"
                         className="mx-auto h-32 object-cover"
+                        width={128}
+                        height={128}
                       />
                     ) : (
                       <>
@@ -440,6 +450,9 @@ const EditImageModal = ({
 
 
   const [imageName, setImageName] = useState("");
+  const [durationHour, setDurationHour] = useState(0);
+  const [durationMinute, setDurationMinute] = useState(0);
+  const [durationSecond, setDurationSecond] = useState(0);
 
   const { mutate } = api.image.update.useMutation(
     {
@@ -516,6 +529,9 @@ const EditImageModal = ({
           imageUrl: data.imageUrl,
           createdAt: data.createdAt,
           uploadedBy: data.uploadedBy,
+          durationHour: data.durationHour,
+          durationMinute: data.durationMinute,
+          durationSecond: data.durationSecond,
         },
         {
           onSuccess: () => {
@@ -532,6 +548,9 @@ const EditImageModal = ({
     // put the fetchData inside the effect
     if(data?.imageName){
       setImageName(data.imageName)
+      setDurationHour(data.durationHour)
+      setDurationMinute(data.durationMinute)
+      setDurationSecond(data.durationSecond)
     }
   },[data]);
 
@@ -595,7 +614,7 @@ const EditImageModal = ({
                       Playback Duration
                     </label>
                     <div className="flex w-full mt-3 mb-3">
-                    <DurationPicker></DurationPicker>
+                    <DurationPicker durationHours={durationHour} setDurationHours={setDurationHour} durationMinutes={durationMinute} setDurationMinutes={setDurationMinute} durationSeconds={durationSecond} setDurationSeconds={setDurationSecond}></DurationPicker>
                     </div>
                   </div>
                 </div>

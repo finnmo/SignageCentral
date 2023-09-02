@@ -726,6 +726,15 @@ export function AddSignModal(props: ModalType) {
     }
   }
 
+  useEffect(() => {
+    if (data && data.number) {
+      setSignNumber(data.number + 1);
+    }else{
+      setSignNumber(1);
+    }
+  }, [data]);
+
+
   return (
     <>
       {props.isOpen && (
@@ -784,9 +793,7 @@ export function AddSignModal(props: ModalType) {
                       type="number"
                       id="number"
                       className="dark:bg-primary dark:text-light focus:ring-primary mb-5 mt-2 flex h-10 w-24 items-center rounded  border border-gray-300 pl-3 text-sm font-normal text-gray-600 placeholder-gray-400 focus:outline-none focus:ring dark:border-gray-700 dark:placeholder-gray-200"
-                      placeholder={
-                        data?.number ? (data.number + 1).toString() : ""
-                      }
+                      value={signNumber}
                     />
                   </div>
                 </div>
@@ -956,7 +963,7 @@ export function AddSignModal(props: ModalType) {
                     onClick={() =>
                       mutate({
                         signName,
-                        signNumber: (signNumber==0 ? (data?.number ? (data.number + 1) : 0):0),
+                        signNumber,
                         signWidth,
                         signHeight,
                         signType,

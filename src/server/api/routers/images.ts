@@ -43,6 +43,9 @@ export const imageRouter = createTRPCRouter({
       z.object({
         imageName: z.string().min(1).max(280),
         imageUrl: z.string().min(1).max(280),
+        durationHour: z.number().min(0).max(24),
+        durationMinute: z.number().min(0).max(60),
+        durationSecond: z.number().min(0).max(60),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -52,6 +55,9 @@ export const imageRouter = createTRPCRouter({
           imageUrl: input.imageUrl,
           createdAt: new Date(),
           uploadedBy: "admin",
+          durationHour: input.durationHour,
+          durationMinute: input.durationMinute,
+          durationSecond:  input.durationSecond,
         },
       });
       return image;
@@ -64,6 +70,9 @@ export const imageRouter = createTRPCRouter({
         imageUrl: z.string().min(1).max(280),
         createdAt: z.date(),
         uploadedBy: z.string().min(1).max(280),
+        durationHour: z.number().min(0).max(24),
+        durationMinute: z.number().min(0).max(60),
+        durationSecond: z.number().min(0).max(60),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -75,6 +84,9 @@ export const imageRouter = createTRPCRouter({
           imageUrl: input.imageUrl,
           createdAt: input.createdAt,
           uploadedBy: input.uploadedBy,
+          durationHour: input.durationHour,
+          durationMinute: input.durationMinute,
+          durationSecond:  input.durationSecond,
         },
       });
       return image;
