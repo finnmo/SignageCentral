@@ -14,11 +14,11 @@ import { useAuth } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { closeModal, openModal, URLModal } from "react-url-modal";
 import DurationPicker from "~/components/DurationPicker";
+import { RollingImage } from "@prisma/client";
 
 
 const ImagePage: NextPageWithLayout = () => {
   const {data, isLoading} = api.image.getAll.useQuery();
-  const [isOn, setIsOn] = useState(true);
   const { isOpen, toggle } = useModal();
   
   if (isLoading) return (
@@ -46,26 +46,6 @@ const ImagePage: NextPageWithLayout = () => {
       console.error('Modal error:', error);
     }
   };
-  const handleOpenDeleteModal = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('data-key'))
-    try {
-      void (async () => {
-        await openModal({
-          name: 'DeleteImageModal',
-          params: {
-            imageId: e.currentTarget.getAttribute('data-key')
-          },
-        });
-      })()
-      // The code here will only execute after the modal is closed (resolved state)
-      console.log('Modal opened.');
-    } catch (error) {
-      // Handle any errors that occur during the modal operation (rejected state)
-      console.error('Modal error:', error);
-    }
-  };
-
   
   return  (
   <>
@@ -90,8 +70,47 @@ const ImagePage: NextPageWithLayout = () => {
     </div>
     <AddImageModal isOpen={isOpen} toggle={toggle}></AddImageModal>
     {...data?.map((image) => (
-    <div onClick={handleOpenModal}
-      key={image.id} data-key={image.id} className="cursor-pointer grid-flow-row auto-rows-max ml-4 mb-10 col-span-1 max-w-[315px] min-w-[215px] min-h-[430px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[430px]">
+      <div onClick={handleOpenModal} key={image.id} data-key={image.id} className="cursor-pointer grid-flow-row auto-rows-max ml-4 mb-10 col-span-1 max-w-[315px] min-w-[215px] min-h-[430px] dark:bg-primary-dark bg-white rounded-lg dark:bg-darker pb-5 max-h-[430px]">
+    <ImageCard  image={image}/>
+    </div>
+    ))}
+  </div>
+</div>
+</>
+)
+}
+
+const ImageCard: React.FunctionComponent<{ image: RollingImage }> = ({ image }) => {
+  const [isOn, setIsOn] = useState(true);
+
+  const handleOpenDeleteModal = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    console.log(e.currentTarget.getAttribute('data-key'))
+    try {
+      void (async () => {
+        await openModal({
+          name: 'DeleteImageModal',
+          params: {
+            imageId: e.currentTarget.getAttribute('data-key')
+          },
+        });
+      })()
+      // The code here will only execute after the modal is closed (resolved state)
+      console.log('Modal opened.');
+    } catch (error) {
+      // Handle any errors that occur during the modal operation (rejected state)
+      console.error('Modal error:', error);
+    }
+  };
+
+  
+  return(
+    <>
+     <URLModal
+      modals={{
+        DeleteImageModal: DeleteImageModal,
+      }}
+    />
     <div className="w-full h-10 pt-2 pb-2 relative">
     <span className="p-4 relative justify-center items-center text-xl ">{image.imageName}</span>
       <button  key={image.id} data-key={image.id} className=" cursor-pointer absolute right-2 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"  aria-label="close modal" role="button"
@@ -106,6 +125,7 @@ const ImagePage: NextPageWithLayout = () => {
     </div>
     <div className="flex w-full h-[80%] dark:bg-primary-darker bg-white p-4 border-b border-t border-gray-200 dark:border-primary ">
       <div className="w-full h-full justify-center items-center relative">
+
           <Image src={image.imageUrl} fill={true} alt="rollingimages1" />
         </div>
       </div>
@@ -125,14 +145,10 @@ const ImagePage: NextPageWithLayout = () => {
         </button>
       </div>
     </div>
-  </div>
-    ))}
-  </div>
-</div>
-</>
-)
-}
+    </>
+  )
 
+}
 interface ModalType {
   children?: ReactNode;
   isOpen: boolean;

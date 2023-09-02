@@ -677,6 +677,8 @@ const ImagesListView: React.FunctionComponent<{
 };
 
 const ImageCard: React.FunctionComponent<{ id: string }> = ({ id }) => {
+  const [isImageReady, setIsImageReady] = useState(false);
+
   const { data, isLoading } = api.image.getById.useQuery({
     id,
   });
@@ -684,15 +686,21 @@ const ImageCard: React.FunctionComponent<{ id: string }> = ({ id }) => {
   if (isLoading) return <LoadingSpinner />;
   if (!data) return <div>Error Loading Image</div>;
 
+  const onLoadCallBack = ()=>{
+    setIsImageReady(true)
+  }
+
   return (
     <>
         <div className="dark:bg-darker col-span-1 mt-4 mb-4 ml-4 flex max-h-[30%] min-h-[260px] min-w-[215px] max-w-[115px] cursor-pointer items-center justify-center rounded-lg border-2 border-gray-400">
+            {isImageReady ? 
             <Image
+            onLoadingComplete={onLoadCallBack} 
               src={data.imageUrl}
               width={200}
               height={200}
               alt="rollingimages1"
-            />
+            /> : <LoadingSpinner />}
             </div>
         
     </>
