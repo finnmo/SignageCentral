@@ -15,6 +15,9 @@ export const signRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const sign = await ctx.prisma.sign.findUnique({
         where: { id: input.id },
+        include: {
+          images: true,
+        },
       });
 
       if (!sign) throw new TRPCError({ code: "NOT_FOUND" });

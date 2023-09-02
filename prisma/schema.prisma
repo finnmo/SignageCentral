@@ -23,6 +23,7 @@ model Sign {
   latitude                     Float
   longitude                    Float
   ipAddress                    String
+  images                       SignToRollingImage[] // Nullable field
 }
 
 model RollingImage {
@@ -31,7 +32,21 @@ model RollingImage {
   uploadedBy                   String
   imageUrl                     String   @unique
   imageName                    String   @unique
+  signs                        SignToRollingImage[] // Nullable field, Define the relation
 }
+
+model SignToRollingImage {
+  id        String   @id @default(cuid())
+  sign      Sign     @relation(fields: [signId], references: [id])
+  signId    String
+  rollingImage   RollingImage   @relation(fields: [rollingImageId], references: [id])
+  rollingImageId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([signId, rollingImageId])
+  @@index([rollingImageId])
+} 
 
 model CustomContent {
   id        String   @id @default(cuid())
