@@ -6,6 +6,9 @@ import "~/styles/globals.css";
 import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import Head from "next/head";
 import { Toaster } from "react-hot-toast";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+
 
 export type NextPageWithLayout<P = {[k: string | number | symbol]: never}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -26,6 +29,7 @@ function MyApp({
   return (
     
     <ClerkProvider {...pageProps} >
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Toaster  />
       <Head>
         <title>Digital Signage Manager</title>
@@ -39,6 +43,7 @@ function MyApp({
       <SignedOut>
         <RedirectToSignIn />
       </SignedOut>
+      </LocalizationProvider>
     </ClerkProvider>
   );
 }

@@ -32,6 +32,7 @@ model RollingImage {
   uploadedBy                   String
   imageUrl                     String   @unique
   imageName                    String   @unique
+  duration                     Int
   signs                        SignToRollingImage[] // Nullable field, Define the relation
 }
 

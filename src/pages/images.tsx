@@ -13,6 +13,9 @@ import 'firebase/compat/firestore';
 import { useAuth } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { closeModal, openModal, URLModal } from "react-url-modal";
+import { TimePicker } from "@mui/x-date-pickers";
+import DurationPicker from "~/components/DurationPicker";
+
 
 const ImagePage: NextPageWithLayout = () => {
   const {data, isLoading} = api.image.getAll.useQuery();
@@ -107,19 +110,23 @@ const ImagePage: NextPageWithLayout = () => {
           <Image src={image.imageUrl} fill={true} alt="rollingimages1" />
         </div>
       </div>
-      <div className="flex items-center justify-end h-12 bg-white dark:bg-primary-dark rounded-lg ">
+      <div className="flex w-full h-12">
+        <div className="flex justify-start m-5 items-center w-full bg-white dark:bg-primary-dark rounded-lg text-md">
+          00:00:30
+        </div>
+      <div className="flex justify-end items-center  w-full h-12 bg-white dark:bg-primary-dark rounded-lg">
         <button className="relative pr-4 focus:outline-none" onClick={() => setIsOn(!isOn)}>
           <div
-              className="w-12 h-6 transition rounded-full outline-none bg-primary-100 dark:bg-primary-darker"
-          ></div>
-          <div
-              className={`absolute top-0 left-0 inline-flex items-center justify-center w-6 h-6 transition-all duration-200 ease-in-out transform scale-110 rounded-full shadow-lg ${
+              className="w-12 h-6 transition rounded-full outline-none bg-primary-100 dark:bg-primary-darker"></div>
+
+          <div className={`absolute top-0 left-0 inline-flex items-center justify-center w-6 h-6 transition-all duration-200 ease-in-out transform scale-110 rounded-full shadow-lg ${
                 isOn ? "translate-x-6 bg-primary-light dark:bg-primary" : "translate-x-0  bg-white dark:bg-primary-100"
               }`}   
           ></div>
         </button>
       </div>
     </div>
+  </div>
     ))}
   </div>
 </div>
@@ -570,6 +577,8 @@ const EditImageModal = ({
                     <label className="dark:text-light text-sm font-bold leading-tight tracking-normal text-gray-800">
                       Image Name
                     </label>
+                    <div className="flex w-full">
+                    </div>
                     <input
                       onChange={handleChange}
                       type="text"
@@ -577,6 +586,17 @@ const EditImageModal = ({
                       className="dark:bg-primary dark:text-light focus:ring-primary mb-5 mr-5 mt-2 flex h-10 w-80 items-center rounded  border border-gray-300 pl-3 text-sm font-normal text-gray-600 placeholder-gray-400 focus:outline-none focus:ring dark:border-gray-700 dark:placeholder-gray-200"
                       defaultValue={imageName}
                     />
+                  </div>
+                </div>
+                <div></div>
+                <div className="flex flex-row">
+                  <div>
+                    <label className="dark:text-light text-sm font-bold leading-tight tracking-normal text-gray-800">
+                      Playback Duration
+                    </label>
+                    <div className="flex w-full mt-3 mb-3">
+                    <DurationPicker></DurationPicker>
+                    </div>
                   </div>
                 </div>
                 <div></div>
