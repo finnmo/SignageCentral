@@ -16,7 +16,7 @@ import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { prisma } from "~/server/db";
 import "leaflet/dist/leaflet.css";
 import useModal from "~/server/helpers/modals/useModal";
-import { SignToRollingImage, type Sign } from "@prisma/client";
+import type { SignToRollingImage, Sign } from "@prisma/client";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
@@ -670,7 +670,7 @@ const ImagesListView: React.FunctionComponent<{
       </div>
 
       <div className="ml-10 mr-10 flex overflow-auto ">
-          {...images?.map((image) => <ImageCard id={image.rollingImageId} />)}
+          {...images?.map((image) => <ImageCard key={image.rollingImageId} id={image.rollingImageId} />)}
         </div>
       </div>
   );
