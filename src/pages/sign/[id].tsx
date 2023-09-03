@@ -16,7 +16,7 @@ import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { prisma } from "~/server/db";
 import "leaflet/dist/leaflet.css";
 import useModal from "~/server/helpers/modals/useModal";
-import type {Sign, SignToRollingImage } from "@prisma/client";
+import type { Sign, SignToRollingImage } from "@prisma/client";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
@@ -677,7 +677,7 @@ const ImagesListView: React.FunctionComponent<{
         <h4 className="dark:text-light text-lg font-semibold text-gray-500">
           Images Playlist
         </h4>
-        <button onClick={()=> setIsAddMenuShowing(true)} type="button" className="text-white bg-primary hover:bg-primary-dark focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-0.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <button onClick={()=> setIsAddMenuShowing(true)} type="button" className="text-white bg-primary hover:bg-primary-dark focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-0.5 text-center inline-flex items-center mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-8 h-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
         </svg>
@@ -686,39 +686,100 @@ const ImagesListView: React.FunctionComponent<{
       </div>
 
       <div className="ml-3 mr-10 flex overflow-auto ">
-          {...sign.images?.map((image) => <ImageCard key={image.rollingImageId} id={image.rollingImageId} />)}
+          {...sign.images?.map((image) => <ImageCard key={image.rollingImageId} signImage={image}/>)}
         </div>
       </div>
   );
 };
 
-const ImageCard: React.FunctionComponent<{ id: string }> = ({ id }) => {
+interface ImageCardProps {
+  signImage: SignToRollingImage;
+}
+
+
+function ImageCard(props: ImageCardProps) {
+
+  const ctx = api.useContext();
+
+  const { mutate } = api.signToImage.delete.useMutation(
+    {
+      
+      onSuccess: () => {
+          void ctx.sign.getById.invalidate();
+          void ctx.image.getAll.invalidate();
+          void ctx.image.getById.invalidate();
+          void ctx.signToImage.getById.invalidate();
+          toast.success("Image deleted");
+      },
+      onError: (error) => {
+        console.log(error.data)
+        const errorMessage = error.data?.zodError?.fieldErrors.content;
+        if(errorMessage && errorMessage[0]){
+          toast.error(errorMessage[0]);
+        }else{
+          toast.error("An error occured, failed to delete");
+        }
+      },
+    }
+    );
 
   const { data, isLoading } = api.image.getById.useQuery({
-    id,
+    id: props.signImage.rollingImageId
   });
+
+  const handleDelete = () => {
+    mutate({
+      id: props.signImage.id,
+    });
+  };
 
   if (isLoading) return <LoadingSpinner />;
   if (!data) return <div>Error Loading Image</div>;
 
-
+  
   return (
     <>
-        <div className="dark:bg-darker col-span-1 mt-4 mb-4 ml-4 flex max-h-[30%] min-h-[260px] min-w-[215px] max-w-[115px] cursor-pointer items-center justify-center rounded-lg border-2 border-gray-400">
-            
+    <div className="block tmr-5 rounded-lg border-2 border-gray-400 col-span-1 mt-4 mb-4 ml-4 max-h-[30%] min-h-[260px] min-w-[215px] max-w-[115px] ">
+        <div className="flex justify-end">
+          <button
+              className=" mr-2 mt-2 cursor-pointer rounded text-gray-400 transition duration-150 ease-in-out hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600"
+              aria-label="close modal"
+              role="button"
+              onClick={handleDelete}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="icon icon-tabler icon-tabler-x"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                strokeWidth="2.5"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+        <div className="dark:bg-darker cursor-pointer mt-5 flex items-center p-5 justify-center ">
+        
             <Image
               src={data.imageUrl}
               width={200}
               height={200}
               alt="rollingimages1"
             /> 
-            </div>
-        
+            
+        </div>
+
+        </div>
     </>
   );
 };
-
-
 
 const AddImageToSignModal: React.FunctionComponent<{
   sign: Sign;

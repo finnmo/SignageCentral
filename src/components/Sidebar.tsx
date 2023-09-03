@@ -682,7 +682,6 @@ export function AddSignModal(props: ModalType) {
     setSignIpAdress("");
   };
 
-
   const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
     console.log(event.code);
     if (event.code === "Escape") {
