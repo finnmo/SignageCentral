@@ -2,6 +2,7 @@ import { createTRPCRouter } from "~/server/api/trpc";
 import { signRouter } from "./routers/signs";
 import { imageRouter } from "./routers/images";
 import { pingRouter } from "./routers/monitor";
+import { signToImageRouter } from "./routers/signToImage";
 /**
  * This is the primary router for your server.
  *
@@ -10,6 +11,7 @@ import { pingRouter } from "./routers/monitor";
 export const appRouter = createTRPCRouter({
   sign: signRouter,
   image: imageRouter,
+  signToImage: signToImageRouter,
   ping: pingRouter,
 });
 

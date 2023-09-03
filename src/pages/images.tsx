@@ -14,7 +14,7 @@ import { useAuth } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { closeModal, openModal, URLModal } from "react-url-modal";
 import DurationPicker from "~/components/DurationPicker";
-import { RollingImage } from "@prisma/client";
+import type { RollingImage } from "@prisma/client";
 
 
 const ImagePage: NextPageWithLayout = () => {
