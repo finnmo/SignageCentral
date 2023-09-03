@@ -22,7 +22,6 @@ import { toast } from "react-hot-toast";
 import Link from "next/link";
 import useModalDelete from "~/server/helpers/modals/useModalDelete";
 import Image from "next/image";
-import { sign } from "crypto";
 
 const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   const MapChart = dynamic(() => import("~/components/MapChart"), {
