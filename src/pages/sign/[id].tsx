@@ -779,7 +779,7 @@ function ImageCard(props: ImageCardProps) {
         </div>
     </>
   );
-};
+}
 
 const AddImageToSignModal: React.FunctionComponent<{
   sign: Sign;
