@@ -413,6 +413,7 @@ export function AddImageModal(props: ModalType) {
                     Upload
                   </button>
                   <button
+                  onClick={handleCancel}
                     className="dark:bg-primary-darker dark:text-light hover:text-lighter hover:bg-primary ml-3 rounded border px-8 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2"
                   >
                     Cancel

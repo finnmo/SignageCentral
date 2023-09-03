@@ -22,6 +22,7 @@ import { toast } from "react-hot-toast";
 import Link from "next/link";
 import useModalDelete from "~/server/helpers/modals/useModalDelete";
 import Image from "next/image";
+import { sign } from "crypto";
 
 const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   const MapChart = dynamic(() => import("~/components/MapChart"), {
@@ -61,8 +62,13 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
       </div>
       <EditSign data={data} isOpen={isOpen} toggle={toggle}></EditSign>
 
-      <div className="mt-2">
-        <h1 className="text-1xl px-4 font-semibold text-gray-500">Signs</h1>
+      <div className="mt-3">
+        <div className="">
+          <h1 className="flex float-left text-1xl px-4 font-semibold text-gray-500">Details</h1>
+          <h1 className="flex float-right text-1xl px-4 font-semibold text-gray-500">{`${data.width}x${data.height}px`}</h1>
+          <div className="clear-both"></div> {/* Use clear-both utility class */}
+
+        </div>
         <div className="grid space-y-4 p-4 lg:grid-cols-3 lg:gap-8 lg:space-y-0">
           <div className="dark:bg-darker col-span-1 rounded-md bg-white">
             <div className="dark:border-primary border-b p-4">

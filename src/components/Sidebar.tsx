@@ -125,29 +125,12 @@ const Sidebar: React.FunctionComponent<{
                 <Link
                   href="/"
                   className={`${
-                    router.pathname == "/" ? "text-gray-700" : ""
-                  } dark:text-light dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700`}
-                  //if active: text-gray-700
-                >
-                  Dashboard Template
-                </Link>
-                <Link
-                  href="/dashboards/overview"
-                  className={`${
-                    router.pathname == "/dashboards/overview"
+                    router.pathname == "/"
                       ? "text-gray-700"
                       : ""
                   } dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700`}
                 >
                   Overview
-                </Link>
-                <Link
-                  href="/dashboard/tbd"
-                  className={`${
-                    router.pathname == "/dashboard/TBD" ? "text-gray-700" : ""
-                  } dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700`}
-                >
-                  TBD (soon)
                 </Link>
               </div>
             </div>
@@ -290,25 +273,6 @@ const Sidebar: React.FunctionComponent<{
                     {image.imageName}
                   </Link>
                 )) : <div className = 'flex align-center justify-center'> <LoadingSpinner/></div>}
-                <Link
-                  href="/blank"
-                  className="dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400"
-                >
-                  Blank
-                </Link>
-                <Link
-                  href="/404"
-                  className="dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400"
-                >
-                  404
-                </Link>
-                <Link
-                  href="/500"
-                  className="dark:hover:text-light block rounded-md p-2 text-sm text-gray-400 transition-colors duration-200 hover:text-gray-700 dark:text-gray-400"
-                >
-                  500
-                </Link>
-
               </div>
             </div>
 

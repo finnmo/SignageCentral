@@ -1,10 +1,10 @@
 import type { ReactElement } from "react";
-import Dashboards from "~/components/Dashboards";
 import Layout from "~/layouts/Layout";
+import Overview from "./dashboards/overview";
 import type { NextPageWithLayout } from "./_app";
 
 const Page: NextPageWithLayout = () => {
-  return <Dashboards></Dashboards>
+  return <Overview></Overview>
 }
 
 
