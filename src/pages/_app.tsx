@@ -3,7 +3,7 @@ import type { ReactElement, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import "~/styles/globals.css";
-import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import Head from "next/head";
 import { Toaster } from "react-hot-toast";
 import { LocalizationProvider } from "@mui/x-date-pickers";

@@ -4,7 +4,6 @@ import {
   useState,
   useEffect,
   type ChangeEvent,
-  MouseEventHandler,
 } from "react";
 import Layout from "~/layouts/Layout";
 import type { NextPageWithLayout } from "../_app";
@@ -681,7 +680,7 @@ const ImagesListView: React.FunctionComponent<{
         </button>
       </div>
 
-      <div className="ml-10 mr-10 flex overflow-auto ">
+      <div className="ml-3 mr-10 flex overflow-auto ">
           {...sign.images?.map((image) => <ImageCard key={image.rollingImageId} id={image.rollingImageId} />)}
         </div>
       </div>
@@ -701,6 +700,7 @@ const ImageCard: React.FunctionComponent<{ id: string }> = ({ id }) => {
   return (
     <>
         <div className="dark:bg-darker col-span-1 mt-4 mb-4 ml-4 flex max-h-[30%] min-h-[260px] min-w-[215px] max-w-[115px] cursor-pointer items-center justify-center rounded-lg border-2 border-gray-400">
+            
             <Image
               src={data.imageUrl}
               width={200}
@@ -791,7 +791,7 @@ return(
                 <p className="text-sm font-normal text-gray-500 dark:text-gray-400">Select from one of the images below to add it to the sign.</p>
                 <ul className="my-4 space-y-3">
                   {imagesNotInSign.length === 0 ? <div className="text-gray-500 flex justify-center">No Images to Add</div> :
-                  {...imagesNotInSign?.map((image) => 
+                  (imagesNotInSign.map((image) => (
                   <li key={image.id}>
                     <div onClick={handleAdd} id={image.id}>
                     <a href="#" className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
@@ -801,7 +801,8 @@ return(
                     </a>
                     </div>
                  </li>
-                  )}}
+                  )
+                  ))}
                 </ul>
             </div>
         </div>
