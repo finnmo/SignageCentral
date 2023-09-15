@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import Pusher from 'pusher-js';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -17,24 +17,25 @@ const Display = () => {
     cluster: "ap4",
   });
 
-  var channel = pusher.subscribe("my-channel");
+  const channel = pusher.subscribe("my-channel");
 
   channel.bind("my-event", (data: string) => {
     // Method to be dispatched on trigger.
     setPusherText(data);
   });
 
-  async function getData() {
+  const getData = useCallback(async () => {
     try {
       const response: AxiosResponse = await axios.get(`http://localhost:3001/api/sign/${id}/currentImage`);
       setCurrentImage(response.data);
-
     } catch (error) {
       console.error(error);
     }
-  }
+  }, [id]);
+  
+  
 
-  const handleClick = async () => {
+  const handleClick = async (): Promise<void> => {
     try {
       await getData();
     } catch (error) {
@@ -42,10 +43,11 @@ const Display = () => {
       console.error(error);
     }
   };
-
+  
   useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
+  
 
   if(!currentImage) return null;
 

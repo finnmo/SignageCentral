@@ -1,6 +1,6 @@
 
-import * as express from 'express'
-const Pusher = require("pusher");
+import  { Response, Request } from 'express'
+import Pusher from 'pusher';
 
 const pusher = new Pusher({
   appId: "1664796",
@@ -10,11 +10,11 @@ const pusher = new Pusher({
   useTLS: true
 });
 
-module.exports = (req: express.Request, res: express.Response) => {
+module.exports = (req: Request, res: Response) => {
     const data = req.body;
-    pusher.trigger('my-channel', 'hello', data, () => {
+    pusher.trigger('my-channel', 'hello', data), () => {
       res.status(200).end('sent event successfully');
-    });
+    };
   };
 
 
