@@ -11,7 +11,7 @@ const pusher = new Pusher({
 });
 
 module.exports = (req: Request, res: Response) => {
-    const data = req.body;
+    const data: Request = req.body;
     pusher.trigger('my-channel', 'hello', data), () => {
       res.status(200).end('sent event successfully');
     };
