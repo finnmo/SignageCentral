@@ -1,5 +1,3 @@
-
-import  type { Response, Request } from 'express'
 import Pusher from 'pusher';
 
 const pusher = new Pusher({
@@ -9,13 +7,5 @@ const pusher = new Pusher({
   cluster: "ap4",
   useTLS: true
 });
-
-module.exports = (req: Request, res: Response) => {
-    const data: Request = req.body;
-    pusher.trigger('my-channel', 'hello', data), () => {
-      res.status(200).end('sent event successfully');
-    };
-  };
-
 
 export default pusher;
