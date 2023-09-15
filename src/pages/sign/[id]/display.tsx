@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, {type  AxiosResponse } from 'axios';
 import Pusher from 'pusher-js';
 import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -26,8 +26,7 @@ const Display = () => {
 
   const getData = useCallback(async () => {
     try {
-      const response: AxiosResponse = await axios.get(`http://localhost:3001/api/sign/${id}/currentImage`);
-      setCurrentImage(response.data);
+      setCurrentImage(await axios.get(`http://localhost:3001/api/sign/${id}/currentImage`));
     } catch (error) {
       console.error(error);
     }
@@ -45,8 +44,19 @@ const Display = () => {
   };
   
   useEffect(() => {
-    getData();
+    async function fetchData() {
+      try {
+        await getData();
+        // Any additional logic you want to perform after getData() completes successfully.
+      } catch (error) {
+        // Handle errors from getData() here.
+        console.error(error);
+      }
+    }
+  
+    fetchData();
   }, [getData]);
+  
   
 
   if(!currentImage) return null;
