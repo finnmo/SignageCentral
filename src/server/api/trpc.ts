@@ -33,7 +33,6 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
     userId,
   };
 };
-
 /**
  * 2. INITIALIZATION
  *

@@ -38,6 +38,21 @@ export const imageRouter = createTRPCRouter({
 
       return (image);
     }),
+    getByIds: publicProcedure
+    .input(z.object({ ids: z.array(z.string()) }))
+    .query(async ({ ctx, input }) => {
+      const image = await ctx.prisma.rollingImage.findMany({
+        where: {
+          id: {
+            in: input.ids,
+          },
+        },
+      });
+      if (!image) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return (image);
+    }),
+    
     create: privateProcedure
     .input(
       z.object({

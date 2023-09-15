@@ -1,10 +1,10 @@
-# Create T3 App
+# Signage Central
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This is a front-end [T3 Stack](https://create.t3.gg/) project to manage digital signage content
 
-## What's next? How do I make an app with this?
+## Whats inside?
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+I try to keep this project as simple as possible, the front-end is made to be serverless, uploading and managing content through NextJS, stored connection with prismaDB and API through TRPC.
 
 If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
 
@@ -14,15 +14,29 @@ If you are not familiar with the different technologies used in this project, pl
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
-## Learn More
+## Accomplished
+- 
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## To-Do
+- Parking Map home page 
+- Create parking map object in prisma CRUD
+- Upload parking map images modal
+- Add editable text for parking pages
+- Add image type for scheduled and rolling
+- Fix duration selection in images
+- Add integration connection to text on map
+- Connect disabled or enabled buttton to images in DB
+- Fire Alert disable/trigger button
+- Integration with ParKam
+- Action section of overview for action buttons 
+- API to trigger fire display + button
+- API to trigger disable Parking Map/Rolling Images + Button
+- Create better loading static pages
+- WebSocket connection online/offline status
+- Save theme and dark/light mode to cache
+- Parking Map Sidebar Icon Fix
 
-## How do I deploy this?
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- BACKEND

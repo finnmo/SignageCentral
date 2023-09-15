@@ -15,3 +15,4 @@ export const pingRouter = createTRPCRouter({
     const pingResult = await ping.promise.probe(ipAddress);
     return pingResult.alive;
   }
+

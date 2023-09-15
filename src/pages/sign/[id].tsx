@@ -72,7 +72,9 @@ const SignPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
           <div className="dark:bg-darker col-span-1 rounded-md bg-white">
             <div className="dark:border-primary border-b p-4">
               <Link
-                href={`/sign/${id}/display`}
+                href="/sign/[id]/display"
+                as={`/sign/${id}/display`}
+                
                 className="bg-primary hover:bg-primary-dark focus:ring-primary dark:focus:ring-offset-dark float-right rounded-md px-4 py-2 text-sm text-white focus:outline-none focus:ring focus:ring-offset-1 focus:ring-offset-white"
               >
                 Display
@@ -678,8 +680,8 @@ const ImagesListView: React.FunctionComponent<{
           Images Playlist
         </h4>
         <button onClick={()=> setIsAddMenuShowing(true)} type="button" className="text-white bg-primary hover:bg-primary-dark focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-0.5 text-center inline-flex items-center mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-8 h-8">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
         </svg>
           <span className="sr-only">Add Images</span>
         </button>
@@ -695,7 +697,6 @@ const ImagesListView: React.FunctionComponent<{
 interface ImageCardProps {
   signImage: SignToRollingImage;
 }
-
 
 function ImageCard(props: ImageCardProps) {
 
@@ -844,7 +845,7 @@ return(
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <button onClick={()=> setIsAddMenuShowing(false)} type="button" className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="crypto-modal">
                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
                 <span className="sr-only">Close modal</span>
             </button>

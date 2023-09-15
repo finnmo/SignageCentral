@@ -20,6 +20,7 @@
     "paths": {
       "~/*": ["./src/*"]
     }
+    
   },
   "include": [
     ".eslintrc.cjs",
@@ -28,6 +29,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs"
-  ],
+, "src/server/api/apiClient.ts"  ],
   "exclude": ["node_modules"]
 }

@@ -1,76 +1,59 @@
-import type { NextPageWithLayout } from "../../_app";
-import React from 'react'
-import { api } from "~/utils/api";
-import type { GetStaticPaths, GetStaticProps } from "next";
-import { generateSSGHelper } from "~/server/helpers/ssgHelper";
-import { prisma } from "~/server/db";
-import "leaflet/dist/leaflet.css";
-import { LoadingSpinner } from "~/components/LoadingSpinner";
-import Image from 'next/image'
+import { RollingImage } from '@prisma/client';
+import axios from 'axios';
+import Pusher from 'pusher-js';
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-const Endpoint: NextPageWithLayout<{ id: string }> = ({ id }) => {
+const Display = () => {
 
-  const { data, isLoading } = api.sign.getById.useQuery({
-    id,
+  const router = useRouter();
+  const { id } = router.query;
+  const [currentImage, setCurrentImage] = useState("");
+  const [pusherText, setPusherText] = useState("");
+
+  Pusher.logToConsole = true;
+
+  var pusher = new Pusher("78f4b7bfbca901f54507", {
+    cluster: "ap4",
   });
 
+  var channel = pusher.subscribe("my-channel");
 
+  channel.bind("my-event", (data: string) => {
+    // Method to be dispatched on trigger.
+    setPusherText(data);
+  });
 
-  if(isLoading) return <LoadingSpinner></LoadingSpinner>
-  if(!data) return <div>404 Not found</div>
+  async function getData() {
+    try {
+      const response = await axios.get(`http://localhost:3001/api/sign/${id}/currentImage`);
+      setCurrentImage(response.data);
 
-  return  (
-  <>
-  <div className="fixed block" style={{
-          width: `${data.width}px`,
-          height: `${data.height}px`,
-          backgroundColor: 'black',
-        }}>
-          <div className="w-100 h-100">
-            <Image style={{objectFit: "fill"}} fill={true} alt="" src="/avatar.jpg"></Image>
-          </div>
-
-
-  </div>
-</>
-)
-}
-
-export const getStaticProps: GetStaticProps =  async  (
-  context,
-) => {
-  const ssg = generateSSGHelper();
-
-  const id = context.params?.id as string;
-
-  if(typeof id !== "string") throw new Error("Invalid id");
-
-  await ssg.sign.getById.prefetch({ id }); 
-  
-  return {
-    props: {
-      trpcState: JSON.parse(JSON.stringify(ssg.dehydrate())) as string,
-      id,
-    },
-    revalidate: 1,
+    } catch (error) {
+      console.error(error);
+    }
   }
-}
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const signs = await prisma.sign.findMany({
-    select: { 
-      id: true,
-    },
-  });
-  return {
-    paths: signs.map((sign) => ({
-      params: {
-        id: sign.id,
-      },
-    })),
-    fallback: 'blocking',
+  const handleClick = () => {
+    getData();
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  if(!currentImage) return null;
+
+  return (
+    <div onClick={handleClick} className="flex w-full h-full justify-center align-middle border">
+      <div className='flex'>
+        <h2 className="p-10 border-4 border-black">Notifications</h2>
+      </div>
+          <Image src={currentImage} width={200} height={100} alt="image" />
+          {pusherText}
+    </div>
+  );
 };
 
-
-export default Endpoint;
+export default Display;

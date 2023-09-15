@@ -9,47 +9,48 @@ datasource db {
 }
 
 model Sign {
-  id                           String   @id @default(cuid())
-  createdAt                    DateTime @default(now())
-  updatedAt                    DateTime @updatedAt
-  name                         String   @unique
-  number                       Int      @unique
+  id                           String               @id @default(cuid())
+  createdAt                    DateTime             @default(now())
+  updatedAt                    DateTime             @updatedAt
+  name                         String               @unique
+  number                       Int                  @unique
   type                         String
   width                        Int
   height                       Int
-  customContentEnabled         Boolean  @default(false)
-  emergencyNotificationEnabled Boolean  @default(false)
+  customContentEnabled         Boolean              @default(false)
+  emergencyNotificationEnabled Boolean              @default(false)
   customContentId              String
   latitude                     Float
   longitude                    Float
   ipAddress                    String
-  images                       SignToRollingImage[] // Nullable field
+  currentRollingImageIndex     Int                  @default(0)
+  images                       SignToRollingImage[]
 }
 
 model RollingImage {
-  id                           String   @id @default(cuid()) 
-  createdAt                    DateTime @default(now())
-  uploadedBy                   String
-  imageUrl                     String   @unique
-  imageName                    String   @unique
-  signs                        SignToRollingImage[] // Nullable field, Define the relation
-  durationHour                 Int
-  durationMinute               Int
-  durationSecond               Int
+  id             String               @id @default(cuid())
+  createdAt      DateTime             @default(now())
+  uploadedBy     String
+  imageUrl       String               @unique
+  imageName      String               @unique
+  durationHour   Int
+  durationMinute Int
+  durationSecond Int
+  signs          SignToRollingImage[]
 }
 
 model SignToRollingImage {
-  id        String   @id @default(cuid())
-  sign      Sign     @relation(fields: [signId], references: [id])
-  signId    String
-  rollingImage   RollingImage   @relation(fields: [rollingImageId], references: [id])
+  id             String       @id @default(cuid())
+  signId         String
   rollingImageId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  sign           Sign         @relation(fields: [signId], references: [id])
+  rollingImage   RollingImage @relation(fields: [rollingImageId], references: [id])
 
   @@unique([signId, rollingImageId])
   @@index([rollingImageId])
-} 
+}
 
 model CustomContent {
   id        String   @id @default(cuid())
