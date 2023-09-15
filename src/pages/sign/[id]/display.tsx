@@ -1,5 +1,4 @@
-import { RollingImage } from '@prisma/client';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Pusher from 'pusher-js';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -14,7 +13,7 @@ const Display = () => {
 
   Pusher.logToConsole = true;
 
-  var pusher = new Pusher("78f4b7bfbca901f54507", {
+  const pusher = new Pusher("78f4b7bfbca901f54507", {
     cluster: "ap4",
   });
 
@@ -27,7 +26,7 @@ const Display = () => {
 
   async function getData() {
     try {
-      const response = await axios.get(`http://localhost:3001/api/sign/${id}/currentImage`);
+      const response: AxiosResponse = await axios.get(`http://localhost:3001/api/sign/${id}/currentImage`);
       setCurrentImage(response.data);
 
     } catch (error) {
@@ -35,8 +34,13 @@ const Display = () => {
     }
   }
 
-  const handleClick = () => {
-    getData();
+  const handleClick = async () => {
+    try {
+      await getData();
+    } catch (error) {
+      // Handle the error here, e.g., log it or display an error message.
+      console.error(error);
+    }
   };
 
   useEffect(() => {

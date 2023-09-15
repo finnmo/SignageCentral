@@ -1,4 +1,5 @@
 
+import * as express from 'express'
 const Pusher = require("pusher");
 
 const pusher = new Pusher({
@@ -9,7 +10,7 @@ const pusher = new Pusher({
   useTLS: true
 });
 
-module.exports = (req: {body: string}, res: any) => {
+module.exports = (req: express.Request, res: express.Response) => {
     const data = req.body;
     pusher.trigger('my-channel', 'hello', data, () => {
       res.status(200).end('sent event successfully');
